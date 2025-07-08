@@ -1,41 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mock Test 1 – Differential Equation</title>
-  <link rel="stylesheet" href="../assets/style.css">
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Differential Equations Quiz</title>
+    <!-- Tailwind CSS CDN for modern styling and responsiveness -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to ensure MathJax elements inherit text color and display correctly */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .MathJax_Display, .MathJax {
+            color: inherit !important;
+            display: inline-block !important; /* Adjust as needed for inline vs block equations */
+        }
+    </style>
+    <script>
+        // MathJax configuration for rendering LaTeX equations
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']], // Delimiters for inline math
+                displayMath: [['$$', '$$'], ['\\[', '\\]']] // Delimiters for display math
+            },
+            svg: { fontCache: 'global' } // Use SVG for rendering, cache fonts globally for performance
+        };
+    </script>
+    <!-- MathJax CDN - loaded synchronously to ensure it's ready before DOMContentLoaded -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
-<body>
-  <div class="question">
-    <h1>📘 Mock Test 1</h1>
-    <h2>Differential Equation</h2>
+<body class="bg-gray-100 p-4 text-gray-800 flex items-center justify-center min-h-screen">
+    <div class="quiz-container bg-white p-6 rounded-lg shadow-xl max-w-3xl w-full my-8">
+        <h1 class="text-center text-3xl font-bold text-blue-700 mb-6">Differential Equations Quiz</h1>
+        <div id="timer" class="text-center text-xl font-semibold text-red-600 mb-6">
+            Time Remaining: <span id="time">30:00</span>
+        </div>
 
-    <div class="question">
-      <p><strong>Q1.</strong> If \( a = 3 \), \( b = 4 \), then find \( a^2 + b^2 \).</p>
-      <div class="options">
-        <label><input type="radio" name="q1"> (A) 12</label><br>
-        <label><input type="radio" name="q1"> (B) 16</label><br>
-        <label><input type="radio" name="q1"> (C) 25</label><br>
-        <label><input type="radio" name="q1"> (D) 7</label>
-      </div>
+        <div id="questions">
+            <!-- Questions will be dynamically loaded here by JavaScript -->
+        </div>
+
+        <button id="submit-quiz-btn" class="block mx-auto mt-8 bg-green-600 text-white py-3 px-6 rounded-md cursor-pointer text-xl font-semibold transition-colors duration-300 hover:bg-green-700 shadow-md">
+            Submit Quiz
+        </button>
+        <div id="results-summary" class="text-center mt-6 text-2xl font-bold text-blue-700">
+            <!-- Quiz results will be displayed here -->
+        </div>
     </div>
 
-    <div class="question">
-      <p><strong>Q2.</strong> Solve: \( x^2 - 5x + 6 = 0 \)</p>
-      <div class="options">
-        <label><input type="radio" name="q2"> (A) 2 and 3</label><br>
-        <label><input type="radio" name="q2"> (B) -2 and -3</label><br>
-        <label><input type="radio" name="q2"> (C) 1 and 6</label><br>
-        <label><input type="radio" name="q2"> (D) 0 and 6</label>
-      </div>
+    <!-- Custom Modal for alerts (replaces window.alert for better UI) -->
+    <div id="custom-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 id="modal-title" class="text-xl font-bold mb-4"></h2>
+            <p id="modal-message" class="mb-6"></p>
+            <button id="modal-close-btn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300">
+                Close
+            </button>
+        </div>
     </div>
 
-    <footer>
-      © 2025 Raj Sir's Academy | <a href="../index.html">Back to Home</a>
-    </footer>
-  </div>
+    <script>
+        // Array containing all quiz questions, options, rationales, and hints.
+        // LaTeX syntax is used for mathematical expressions, which will be rendered by MathJax.
+        const questionData = [
+            // Order, Degree, and Solution
+            {
+                question: "What is the order and degree of the differential equation $(\\frac{d^3y}{dx^3})^2 + x^2 (\\frac{dy}{dx})^4 - y = 0$?",
+                options: [
+                    { text: "Order 3, Degree 2", correct: true },
+                    { text: "Order 4, Degree 2", correct: false },
+                    { text: "Order 3, Degree 4", correct: false },
+                    { text: "Order 2, Degree 3", correct: false }
+                ],
+                rationale: "The order is the highest derivative present, which is $d^3y/dx^3$, so order is 3. The degree is the power of the highest order derivative, which is 2.",
+                hint: "Order is the highest derivative, degree is its power."
+            },
+            {
+                question: "If $y = Ae^{2x} + Be^{-3x}$ is a solution to a differential equation, what is its order?",
+                options: [
+                    { text: "2", correct: true },
+                    { text: "1", correct: false },
+                    { text: "3", correct: false },
+                    { text: "Depends on A and B", correct: false }
+                ],
+                rationale: "The number of arbitrary constants (A and B) in the general solution indicates the order of the differential equation. Here, there are two arbitrary constants, so the order is 2.",
+                hint: "Count the arbitrary constants."
+            },
+            {
+                question: "Which of the following equations is a first-order, non-linear ODE?",
+                options: [
+                    { text: "$(\\frac{dy}{dx})^2 + y = x$", correct: true },
+                    { text: "$\\frac{dy}{dx} + y = x$", correct: false },
+                    { text: "$\\frac{d^2y}{dx^2} + y = 0$", correct: false },
+                    { text: "$x\\frac{dy}{dx} = y$", correct: false }
+                ],
+                rationale: "The presence of $(\\frac{dy}{dx})^2$ makes it non-linear. The highest derivative is the first, so it's first-order.",
+                hint: "Non-linearity comes from products of dependent variables/derivatives, or powers of derivatives."
+            },
+            {
+                question: "The solution $y = c_1 \\cos x + c_2 \\sin x$ represents the general solution of which ODE?",
+                options: [
+                    { text: "$y'' + y = 0$", correct: true },
+                    { text: "$y' + y = 0$", correct: false },
+                    { text: "$y'' - y = 0$", correct: false },
+                    { text: "$y' - y = 0$", correct: false }
+                ],
+                rationale: "The characteristic equation for $y''+y=0$ is $m^2+1=0$, which gives $m = \\pm i$. The general solution for complex roots $a \\pm bi$ is $e^{ax}(c_1 \\cos(bx) + c_2 \\sin(bx))$. Here $a=0, b=1$.",
+                hint: "Consider the characteristic equation for second-order linear homogeneous ODEs with constant coefficients."
+            },
+
+            // Formulation of ODE
+            {
+                question: "Formulate the differential equation for the family of circles $x^2 + y^2 = a^2$.",
+                options: [
+                    { text: "$x + y\\frac{dy}{dx} = 0$", correct: true },
+                    { text: "$2x + 2y\\frac{dy}{dx} = a$", correct: false },
+                    { text: "$x^2 + y^2 = (\\frac{dy}{dx})^2$", correct: false },
+                    { text: "$x\\frac{dy}{dx} = y$", correct: false }
+                ],
+                rationale: "Differentiate $x^2 + y^2 = a^2$ with respect to $x$: $2x + 2y\\frac{dy}{dx} = 0$. Dividing by 2 gives $x + y\\frac{dy}{dx} = 0$. The arbitrary constant $a$ is eliminated.",
+                hint: "Differentiate the given equation with respect to $x$ and eliminate the arbitrary constant."
+            },
+            {
+                question: "Formulate the ODE for the family of straight lines $y = mx + c$, where $m$ and $c$ are arbitrary constants.",
+                options: [
+                    { text: "$\\frac{d^2y}{dx^2} = 0$", correct: true },
+                    { text: "$\\frac{dy}{dx} = m$", correct: false },
+                    { text: "$y = x\\frac{dy}{dx} + c$", correct: false },
+                    { text: "$y'' + y = 0$", correct: false }
+                ],
+                rationale: "First derivative: $dy/dx = m$. Second derivative: $d^2y/dx^2 = 0$. This eliminates both arbitrary constants.",
+                hint: "Differentiate twice to eliminate both arbitrary constants."
+            },
+
+            // First Order Equations: Variable Separable
+            {
+                question: "Solve the differential equation $\\frac{dy}{dx} = e^{x-y}$.",
+                options: [
+                    { text: "$e^y = e^x + C$", correct: true },
+                    { text: "$e^y = -e^x + C$", correct: false },
+                    { text: "$e^{-y} = e^x + C$", correct: false },
+                    { text: "$e^y = e^{x-y} + C$", correct: false }
+                ],
+                rationale: "Rewrite as $\\frac{dy}{dx} = e^x e^{-y} \\Rightarrow e^y dy = e^x dx$. Integrate both sides: $\\int e^y dy = \\int e^x dx \\Rightarrow e^y = e^x + C$.",
+                hint: "Separate variables by moving all $y$ terms to one side and $x$ terms to the other."
+            },
+            {
+                question: "Find the general solution of $y \\ln y \\, dx - x \\, dy = 0$.",
+                options: [
+                    { text: "$x = C \\ln y$", correct: true },
+                    { text: "$y = C \\ln x$", correct: false },
+                    { text: "$\\ln y = Cx$", correct: false },
+                    { text: "$x \\ln y = C$", correct: false }
+                ],
+                rationale: "Separate variables: $\\frac{dx}{x} = \\frac{dy}{y \\ln y}$. Integrate both sides: $\\int \\frac{1}{x} dx = \\int \\frac{1}{y \\ln y} dy$. Let $u = \\ln y$, then $du = \\frac{1}{y} dy$. So $\\ln|x| = \\ln|\\ln y| + C_1 \\Rightarrow \\ln|x| = \\ln|C \\ln y| \\Rightarrow x = C \\ln y$.",
+                hint: "Use substitution for integration on the $y$ side."
+            },
+
+            // Homogeneous equation and equations reduced to homogeneous form
+            {
+                question: "Which substitution is appropriate for solving the homogeneous differential equation $\\frac{dy}{dx} = \\frac{x^2 + y^2}{2xy}$?",
+                options: [
+                    { text: "$y = vx$", correct: true },
+                    { text: "$x = vy$", correct: false },
+                    { text: "$y = u+v$", correct: false },
+                    { text: "$y = ax+b$", correct: false }
+                ],
+                rationale: "A homogeneous equation can be written as $dy/dx = f(y/x)$. The substitution $y=vx$ (or $x=vy$) transforms it into a separable equation.",
+                hint: "Homogeneous equations are solved by substituting $y=vx$ or $x=vy$."
+            },
+            {
+                question: "Solve the differential equation $\\frac{dy}{dx} = \\frac{x+y+1}{x+y-1}$.",
+                options: [
+                    { text: "$x-y+2\\ln|x+y| = C$", correct: true },
+                    { text: "$x+y+2\\ln|x-y| = C$", correct: false },
+                    { text: "$x+y+\\ln|x+y| = C$", correct: false },
+                    { text: "$x-y+\\ln|x+y| = C$", correct: false }
+                ],
+                rationale: "Let $u = x+y$. Then $\\frac{du}{dx} = 1 + \\frac{dy}{dx} \\Rightarrow \\frac{dy}{dx} = \\frac{du}{dx} - 1$. Substitute into the equation: $\\frac{du}{dx} - 1 = \\frac{u+1}{u-1} \\Rightarrow \\frac{du}{dx} = 1 + \\frac{u+1}{u-1} = \\frac{u-1+u+1}{u-1} = \\frac{2u}{u-1}$. Separate variables: $\\frac{u-1}{2u} du = dx \\Rightarrow (\\frac{1}{2} - \\frac{1}{2u}) du = dx$. Integrate: $\\frac{1}{2}u - \\frac{1}{2}\\ln|u| = x + C_1 \\Rightarrow u - \\ln|u| = 2x + C_2$. Substitute back $u=x+y$: $(x+y) - \\ln|x+y| = 2x + C_2 \\Rightarrow y-x - \\ln|x+y| = C_2 \\Rightarrow x-y+\\ln|x+y| = C$.",
+                hint: "Use the substitution $u = x+y$ to reduce it to a separable form."
+            },
+
+            // Euler's and Bernoulli's equation (Linear)
+            {
+                question: "Which of the following is a Bernoulli's equation?",
+                options: [
+                    { text: "$\\frac{dy}{dx} + P(x)y = Q(x)y^n$", correct: true },
+                    { text: "$\\frac{dy}{dx} + P(x)y = Q(x)$", correct: false },
+                    { text: "$y = p x + f(p)$", correct: false },
+                    { text: "$x^2\\frac{d^2y}{dx^2} + xy\\frac{dy}{dx} + y = 0$", correct: false }
+                ],
+                rationale: "A Bernoulli's equation is of the form $\\frac{dy}{dx} + P(x)y = Q(x)y^n$, where $n$ is a real number not equal to 0 or 1.",
+                hint: "Look for a power of the dependent variable on the right-hand side."
+            },
+            {
+                question: "To solve the Bernoulli's equation $\\frac{dy}{dx} + y = xy^3$, what substitution should be used?",
+                options: [
+                    { text: "$v = y^{-2}$", correct: true },
+                    { text: "$v = y^2$", correct: false },
+                    { text: "$v = y^{-3}$", correct: false },
+                    { text: "$v = y^{1/2}$", correct: false }
+                ],
+                rationale: "For a Bernoulli's equation $\\frac{dy}{dx} + P(x)y = Q(x)y^n$, the substitution is $v = y^{1-n}$. Here $n=3$, so $1-n = 1-3 = -2$. Thus, $v = y^{-2}$.",
+                hint: "The standard substitution for Bernoulli's equation is $v = y^{1-n}$."
+            },
+            {
+                question: "Solve the linear differential equation $\\frac{dy}{dx} + \\frac{y}{x} = x^2$.",
+                options: [
+                    { text: "$y = \\frac{x^3}{4} + \\frac{C}{x}$", correct: true },
+                    { text: "$y = \\frac{x^3}{3} + \\frac{C}{x}$", correct: false },
+                    { text: "$y = x^3 + C$", correct: false },
+                    { text: "$y = x^2 + C/x$", correct: false }
+                ],
+                rationale: "This is a linear first-order ODE with $P(x) = 1/x$ and $Q(x) = x^2$. The integrating factor is $e^{\\int (1/x) dx} = e^{\\ln x} = x$. Multiply by $x$: $x\\frac{dy}{dx} + y = x^3 \\Rightarrow \\frac{d}{dx}(xy) = x^3$. Integrate: $xy = \\int x^3 dx = \\frac{x^4}{4} + C \\Rightarrow y = \\frac{x^3}{4} + \\frac{C}{x}$.",
+                hint: "Find the integrating factor $e^{\\int P(x) dx}$."
+            },
+
+            // Clairaut's equation
+            {
+                question: "Which of the following is a Clairaut's equation?",
+                options: [
+                    { text: "$y = p x + \\ln p$", correct: true },
+                    { text: "$y = p^2 x + p$", correct: false },
+                    { text: "$y = x\\frac{dy}{dx} + y$", correct: false },
+                    { text: "$\\frac{dy}{dx} = x + y$", correct: false }
+                ],
+                rationale: "A Clairaut's equation is of the form $y = px + f(p)$, where $p = dy/dx$. Option A fits this form with $f(p) = \\ln p$.",
+                hint: "Look for the specific form $y = px + f(p)$."
+            },
+            {
+                question: "For the Clairaut's equation $y = px + p^2$, what is its general solution?",
+                options: [
+                    { text: "$y = Cx + C^2$", correct: true },
+                    { text: "$y = Cx + C$", correct: false },
+                    { text: "$y = x^2 + C$", correct: false },
+                    { text: "$y = x + C^2$", correct: false }
+                ],
+                rationale: "The general solution of a Clairaut's equation $y = px + f(p)$ is obtained by replacing $p$ with an arbitrary constant $C$, i.e., $y = Cx + C^2$.",
+                hint: "Replace $p$ with an arbitrary constant $C$ for the general solution."
+            },
+            {
+                question: "What is the singular solution of the Clairaut's equation $y = px + p^2$?",
+                options: [
+                    { text: "$y = -x^2/4$", correct: true },
+                    { text: "$y = x^2/4$", correct: false },
+                    { text: "$y = -x^2$", correct: false },
+                    { text: "$y = x^2$", correct: false }
+                ],
+                rationale: "To find the singular solution, differentiate $y = px + p^2$ with respect to $p$: $0 = x + 2p \\Rightarrow p = -x/2$. Substitute this back into the original equation: $y = (-x/2)x + (-x/2)^2 = -x^2/2 + x^2/4 = -x^2/4$.",
+                hint: "Differentiate the Clairaut's equation with respect to $p$ and eliminate $p$ between the original equation and the new one."
+            },
+
+            // General and singular solutions
+            {
+                question: "A singular solution to a differential equation is a solution that:",
+                options: [
+                    { text: "Cannot be obtained from the general solution by assigning a specific value to the arbitrary constant(s).", correct: true },
+                    { text: "Is obtained by setting the arbitrary constant(s) to zero.", correct: false },
+                    { text: "Is valid only at a single point.", correct: false },
+                    { text: "Is always a trivial solution (e.g., $y=0$).", correct: false }
+                ],
+                rationale: "A singular solution is an envelope of the family of curves represented by the general solution and cannot be derived from it by simply changing the constant(s).",
+                hint: "Think about the geometric interpretation of singular solutions as envelopes."
+            },
+
+            // Second Order Linear Differential Equation: With constant coefficients
+            {
+                question: "Find the general solution of $y'' - 5y' + 6y = 0$.",
+                options: [
+                    { text: "$y = C_1 e^{2x} + C_2 e^{3x}$", correct: true },
+                    { text: "$y = C_1 e^{-2x} + C_2 e^{-3x}$", correct: false },
+                    { text: "$y = C_1 e^{x} + C_2 e^{6x}$", correct: false },
+                    { text: "$y = C_1 e^{5x} + C_2 e^{6x}$", correct: false }
+                ],
+                rationale: "The characteristic equation is $m^2 - 5m + 6 = 0 \\Rightarrow (m-2)(m-3) = 0$. So $m_1 = 2, m_2 = 3$. The general solution is $y = C_1 e^{2x} + C_2 e^{3x}$.",
+                hint: "Solve the characteristic equation $am^2 + bm + c = 0$."
+            },
+            {
+                question: "What is the general solution of $y'' + 4y' + 4y = 0$?",
+                options: [
+                    { text: "$y = C_1 e^{-2x} + C_2 x e^{-2x}$", correct: true },
+                    { text: "$y = C_1 e^{-2x} + C_2 e^{-2x}$", correct: false },
+                    { text: "$y = C_1 \\cos(2x) + C_2 \\sin(2x)$", correct: false },
+                    { text: "$y = C_1 e^{2x} + C_2 x e^{2x}$", correct: false }
+                ],
+                rationale: "The characteristic equation is $m^2 + 4m + 4 = 0 \\Rightarrow (m+2)^2 = 0$. So $m_1 = m_2 = -2$ (repeated root). The general solution is $y = C_1 e^{mx} + C_2 x e^{mx}$.",
+                hint: "For repeated roots $m$, the solution form is $C_1 e^{mx} + C_2 x e^{mx}$."
+            },
+            {
+                question: "Find the general solution of $y'' + 9y = 0$.",
+                options: [
+                    { text: "$y = C_1 \\cos(3x) + C_2 \\sin(3x)$", correct: true },
+                    { text: "$y = C_1 e^{3x} + C_2 e^{-3x}$", correct: false },
+                    { text: "$y = C_1 \\cos(9x) + C_2 \\sin(9x)$", correct: false },
+                    { text: "$y = C_1 e^{9x} + C_2 x e^{9x}$", correct: false }
+                ],
+                rationale: "The characteristic equation is $m^2 + 9 = 0 \\Rightarrow m^2 = -9 \\Rightarrow m = \\pm 3i$. For complex roots $a \\pm bi$, the solution is $e^{ax}(C_1 \\cos(bx) + C_2 \\sin(bx))$. Here $a=0, b=3$.",
+                hint: "For complex conjugate roots $a \\pm bi$, the solution involves sine and cosine functions."
+            },
+            {
+                question: "What is the particular solution for $y'' - y = e^x$ using the method of undetermined coefficients?",
+                options: [
+                    { text: "$y_p = \\frac{1}{2}xe^x$", correct: true },
+                    { text: "$y_p = xe^x$", correct: false },
+                    { text: "$y_p = \\frac{1}{2}e^x$", correct: false },
+                    { text: "$y_p = x^2e^x$", correct: false }
+                ],
+                rationale: "The homogeneous solution is $y_h = C_1 e^x + C_2 e^{-x}$. Since $e^x$ is part of $y_h$, we try $y_p = Axe^x$. Then $y_p' = A(e^x + xe^x)$ and $y_p'' = A(2e^x + xe^x)$. Substitute into the ODE: $A(2e^x + xe^x) - Axe^x = e^x \\Rightarrow 2Ae^x = e^x \\Rightarrow A = 1/2$. So $y_p = \\frac{1}{2}xe^x$.",
+                hint: "If the forcing term is a solution to the homogeneous equation, multiply your guess by $x$ (or $x^2$ if necessary)."
+            },
+            {
+                question: "The method of variation of parameters is generally used when:",
+                options: [
+                    { text: "The forcing function $F(x)$ is not a simple exponential, polynomial, or trigonometric function.", correct: true },
+                    { text: "The characteristic equation has complex roots.", correct: false },
+                    { text: "The characteristic equation has repeated roots.", correct: false },
+                    { text: "The equation is homogeneous.", correct: false }
+                ],
+                rationale: "Variation of parameters is a more general method for finding particular solutions when the method of undetermined coefficients is not applicable (i.e., when $F(x)$ is not of the specific forms required by undetermined coefficients).",
+                hint: "Consider the limitations of the method of undetermined coefficients."
+            },
+
+            // Euler's Homogeneous equations
+            {
+                question: "Which substitution transforms Euler's homogeneous equation $ax^2y'' + bxy' + cy = 0$ into a linear ODE with constant coefficients?",
+                options: [
+                    { text: "$x = e^t$", correct: true },
+                    { text: "$y = e^{mt}$", correct: false },
+                    { text: "$y = vx$", correct: false },
+                    { text: "$x = t$", correct: false }
+                ],
+                rationale: "The substitution $x = e^t$ (or $t = \\ln x$) converts $x \\frac{dy}{dx}$ to $\\frac{dy}{dt}$ and $x^2 \\frac{d^2y}{dx^2}$ to $\\frac{d^2y}{dt^2} - \\frac{dy}{dt}$, resulting in a linear ODE with constant coefficients in terms of $t$.",
+                hint: "Think about how derivatives with respect to $x$ relate to derivatives with respect to $t = \\ln x$."
+            },
+            {
+                question: "Find the general solution of $x^2y'' + 3xy' + y = 0$.",
+                options: [
+                    { text: "$y = C_1 \\frac{1}{x} + C_2 \\frac{\\ln x}{x}$", correct: true },
+                    { text: "$y = C_1 x^{-1} + C_2 x^{-2}$", correct: false },
+                    { text: "$y = C_1 x + C_2 x \\ln x$", correct: false },
+                    { text: "$y = C_1 e^{-x} + C_2 x e^{-x}$", correct: false } // Added a more distinct wrong option
+                ],
+                rationale: "Assume $y = x^m$. Substitute into the equation: $m(m-1)x^m + 3mx^m + x^m = 0 \\Rightarrow m(m-1) + 3m + 1 = 0 \\Rightarrow m^2 - m + 3m + 1 = 0 \\Rightarrow m^2 + 2m + 1 = 0 \\Rightarrow (m+1)^2 = 0$. So $m = -1$ (repeated root). The solution is $y = C_1 x^{-1} + C_2 x^{-1} \\ln x$.",
+                hint: "Assume a solution of the form $y = x^m$ and solve the auxiliary equation."
+            },
+            {
+                question: "What is the general solution of $x^2y'' - xy' + y = 0$?",
+                options: [
+                    { text: "$y = C_1 x + C_2 x \\ln x$", correct: true },
+                    { text: "$y = C_1 x + C_2 x^2$", correct: false },
+                    { text: "$y = C_1 e^x + C_2 e^{x \\ln x}$", correct: false },
+                    { text: "$y = C_1 x^{-1} + C_2 x \\ln x$", correct: false }
+                ],
+                rationale: "Assume $y = x^m$. Substitute: $m(m-1)x^m - mx^m + x^m = 0 \\Rightarrow m^2 - m - m + 1 = 0 \\Rightarrow m^2 - 2m + 1 = 0 \\Rightarrow (m-1)^2 = 0$. So $m = 1$ (repeated root). The solution is $y = C_1 x^1 + C_2 x^1 \\ln x$.",
+                hint: "Remember the form of the solution for repeated roots in Euler's equations."
+            },
+            {
+                question: "Find the general solution of $x^2y'' + xy' + 4y = 0$.",
+                options: [
+                    { text: "$y = C_1 \\cos(2 \\ln x) + C_2 \\sin(2 \\ln x)$", correct: true },
+                    { text: "$y = C_1 x^2 + C_2 x^{-2}$", correct: false },
+                    { text: "$y = C_1 \\cos(2x) + C_2 \\sin(2x)$", correct: false },
+                    { text: "$y = C_1 e^{2x} + C_2 e^{-2x}$", correct: false }
+                ],
+                rationale: "Assume $y = x^m$. Substitute: $m(m-1)x^m + mx^m + 4x^m = 0 \\Rightarrow m^2 - m + m + 4 = 0 \\Rightarrow m^2 + 4 = 0 \\Rightarrow m = \\pm 2i$. For complex roots $a \\pm bi$, the solution is $x^a(C_1 \\cos(b \\ln x) + C_2 \\sin(b \\ln x))$. Here $a=0, b=2$.",
+                hint: "Complex roots in Euler's equations lead to trigonometric functions of $\\ln x$."
+            },
+
+            // More advanced First Order ODEs
+            {
+                question: "Solve the exact differential equation $(2xy + y^2)dx + (x^2 + 2xy)dy = 0$.",
+                options: [
+                    { text: "$x^2y + xy^2 = C$", correct: true },
+                    { text: "$x^2y - xy^2 = C$", correct: false },
+                    { text: "$xy + y^2 = C$", correct: false },
+                    { text: "$x^2 + y^2 = C$", correct: false }
+                ],
+                rationale: "Let $M = 2xy + y^2$ and $N = x^2 + 2xy$. Check for exactness: $\\frac{\\partial M}{\\partial y} = 2x + 2y$ and $\\frac{\\partial N}{\\partial x} = 2x + 2y$. Since they are equal, the equation is exact. Integrate $M$ with respect to $x$: $\\int (2xy + y^2) dx = x^2y + xy^2 + g(y)$. Differentiate with respect to $y$: $x^2 + 2xy + g'(y) = N = x^2 + 2xy$. So $g'(y) = 0 \\Rightarrow g(y) = C_0$. The solution is $x^2y + xy^2 = C$.",
+                hint: "Check for exactness ($\\partial M / \\partial y = \\partial N / \\partial x$) and then integrate."
+            },
+            {
+                question: "Find the integrating factor for the differential equation $(y^2 - x)dx + 2y dy = 0$.",
+                options: [
+                    { text: "$e^x$", correct: true },
+                    { text: "$e^{-x}$", correct: false },
+                    { text: "$e^y$", correct: false },
+                    { text: "$x$", correct: false }
+                ],
+                rationale: "Here $M = y^2 - x$ and $N = 2y$. $\\frac{\\partial M}{\\partial y} = 2y$, $\\frac{\\partial N}{\\partial x} = 0$. Not exact. Consider $\\frac{1}{N}(\\frac{\\partial M}{\\partial y} - \\frac{\\partial N}{\\partial x}) = \\frac{1}{2y}(2y - 0) = 1$. Since this is a function of $x$ only, the integrating factor is $e^{\\int 1 dx} = e^x$.",
+                hint: "If not exact, check for integrating factors of the form $e^{\\int f(x) dx}$ or $e^{\\int g(y) dy}$."
+            },
+            {
+                question: "Solve the initial value problem $\\frac{dy}{dx} = y \\tan x$, with $y(0) = 1$.",
+                options: [
+                    { text: "$y = \\sec x$", correct: true },
+                    { text: "$y = \\cos x$", correct: false },
+                    { text: "$y = \\sin x + 1$", correct: false },
+                    { text: "$y = \\tan x + 1$", correct: false }
+                ],
+                rationale: "Separate variables: $\\frac{dy}{y} = \\tan x dx$. Integrate: $\\ln|y| = \\int \\tan x dx = \\ln|\\sec x| + C_1 \\Rightarrow y = C \\sec x$. Use $y(0)=1$: $1 = C \\sec(0) \\Rightarrow 1 = C \\cdot 1 \\Rightarrow C = 1$. So $y = \\sec x$.",
+                hint: "Solve as a separable equation first, then apply the initial condition."
+            },
+            {
+                question: "The solution to $y' = (x+y)^2$ can be found using the substitution:",
+                options: [
+                    { text: "$u = x+y$", correct: true },
+                    { text: "$u = x-y$", correct: false },
+                    { text: "$u = y/x$", correct: false },
+                    { text: "$u = xy$", correct: false }
+                ],
+                rationale: "This is a form that can be reduced to separable by substituting $u = x+y$. Then $u' = 1+y'$, so $y' = u'-1$. The equation becomes $u'-1 = u^2 \\Rightarrow u' = 1+u^2$, which is separable.",
+                hint: "Look for repeated expressions like $(ax+by+c)$."
+            },
+            {
+                question: "Consider the differential equation $\\frac{dy}{dx} = \\frac{x+y-2}{x-y}$. What type of equation is it?",
+                options: [
+                    { text: "Reducible to homogeneous", correct: true },
+                    { text: "Homogeneous", correct: false },
+                    { text: "Exact", correct: false },
+                    { text: "Linear", correct: false }
+                ],
+                rationale: "Since the constants in the numerator and denominator are not zero, and the lines $x+y-2=0$ and $x-y=0$ intersect (at $(1,1)$), it is reducible to homogeneous form by a translation of axes $x=X+1, y=Y+1$.",
+                hint: "Check if the lines formed by setting numerator and denominator to zero intersect."
+            },
+            {
+                question: "Which of the following is an integrating factor for $y \\, dx - x \\, dy = 0$?",
+                options: [
+                    { text: "$1/y^2$", correct: false },
+                    { text: "$1/x^2$", correct: false },
+                    { text: "$1/(xy)$", correct: false },
+                    { text: "All of the above", correct: true } // Corrected this to 'true' as all are valid.
+                ],
+                rationale: "This is a homogeneous equation. It can be made exact by several integrating factors. For example, dividing by $y^2$ gives $\\frac{y \\, dx - x \\, dy}{y^2} = 0 \\Rightarrow d(x/y) = 0$. Dividing by $x^2$ gives $d(y/x) = 0$. Dividing by $xy$ gives $d(\\ln(y/x)) = 0$.",
+                hint: "Consider different ways to make the equation exact, especially for homogeneous forms."
+            },
+
+            // More advanced Second Order ODEs
+            {
+                question: "For the differential equation $y'' - 2y' + y = e^x$, the form of the particular solution $y_p$ using undetermined coefficients should be:",
+                options: [
+                    { text: "$Ax^2e^x$", correct: true },
+                    { text: "$Axe^x$", correct: false },
+                    { text: "$Ae^x$", correct: false },
+                    { text: "$A \\cos x$", correct: false }
+                ],
+                rationale: "The characteristic equation is $m^2 - 2m + 1 = 0 \\Rightarrow (m-1)^2 = 0$, so $m=1$ is a repeated root. The homogeneous solution is $y_h = C_1 e^x + C_2 x e^x$. Since $e^x$ and $xe^x$ are part of the homogeneous solution, we must multiply the standard guess $Ae^x$ by $x^2$.",
+                hint: "If the forcing term is a part of the homogeneous solution (or a multiple of it), you need to multiply by $x$ or $x^2$."
+            },
+            {
+                question: "If the characteristic equation of a second-order linear homogeneous ODE has roots $m = \\pm 2i$, what is the general solution?",
+                options: [
+                    { text: "$y = C_1 \\cos(2x) + C_2 \\sin(2x)$", correct: true },
+                    { text: "$y = C_1 e^{2x} + C_2 e^{-2x}$", correct: false },
+                    { text: "$y = C_1 e^{2x} \\cos(2x) + C_2 e^{2x} \\sin(2x)$", correct: false },
+                    { text: "$y = C_1 x \\cos(2x) + C_2 x \\sin(2x)$", correct: false }
+                ],
+                rationale: "For complex conjugate roots $m = a \\pm bi$, the general solution is $y = e^{ax}(C_1 \\cos(bx) + C_2 \\sin(bx))$. Here, $a=0$ and $b=2$, so $y = e^{0x}(C_1 \\cos(2x) + C_2 \\sin(2x)) = C_1 \\cos(2x) + C_2 \\sin(2x)$.",
+                hint: "Remember the form of the general solution for complex conjugate roots of the characteristic equation."
+            }
+        ];
+
+        let userAnswers = new Array(questionData.length).fill(null); // Stores the index of the user's selected option for each question
+        let timerInterval; // Variable to hold the timer interval ID
+        let timeInSeconds = 1800; // 30 minutes (30 questions * 1 minute per question)
+
+        /**
+         * Displays a custom modal message to the user.
+         * Replaces standard `alert()` calls for better UI control.
+         * @param {string} title - The title of the modal.
+         * @param {string} message - The message content of the modal.
+         */
+        function showCustomModal(title, message) {
+            const modal = document.getElementById('custom-modal');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            modal.classList.remove('hidden'); // Show the modal
+            modal.classList.add('flex'); // Ensure flexbox for centering
+        }
+
+        /**
+         * Hides the custom modal.
+         */
+        function hideCustomModal() {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.add('hidden'); // Hide the modal
+            modal.classList.remove('flex');
+        }
+
+        /**
+         * Updates the timer display every second.
+         * Automatically submits the quiz when time runs out.
+         */
+        function updateTimer() {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            // Format time with leading zero for seconds if less than 10
+            document.getElementById('time').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeInSeconds > 0) {
+                timeInSeconds--; // Decrement time
+            } else {
+                clearInterval(timerInterval); // Stop the timer
+                showCustomModal('Time is Up!', 'Your time for the quiz has expired. Your answers have been automatically submitted.');
+                submitQuiz(); // Automatically submit the quiz
+            }
+        }
+
+        /**
+         * Renders all questions from the questionData array into the HTML.
+         * Sets up event listeners for option selection.
+         */
+        function renderQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questionsContainer.innerHTML = ''; // Clear any previously rendered questions
+
+            questionData.forEach((q, idx) => {
+                const block = document.createElement('div');
+                block.className = 'question-block mb-8 pb-6 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0'; // Tailwind classes for styling
+                block.dataset.questionIndex = idx; // Store question index for reference
+
+                const questionText = document.createElement('p');
+                questionText.className = 'question-text text-lg font-semibold mb-4 leading-relaxed'; // Tailwind classes
+                questionText.innerHTML = `${idx + 1}. ${q.question}`; // Use innerHTML for MathJax rendering
+                block.appendChild(questionText);
+
+                const ul = document.createElement('ul');
+                ul.className = 'options-list list-none p-0 mt-4'; // Tailwind classes
+                q.options.forEach((opt, optIdx) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = opt.text; // Use innerHTML for MathJax rendering
+                    li.dataset.optionIndex = optIdx; // Store option index
+                    li.className = 'bg-gray-100 p-3 rounded-md mb-3 cursor-pointer transition-colors duration-300 hover:bg-gray-200 border border-transparent'; // Tailwind classes
+                    
+                    // Add event listener for option selection
+                    li.addEventListener('click', function () {
+                        // Remove 'selected' class and its associated Tailwind classes from all options within the current question block
+                        ul.querySelectorAll('li').forEach(item => {
+                            item.classList.remove('selected', 'bg-blue-100', 'border-blue-500', 'text-blue-800');
+                        });
+                        // Add 'selected' class and its associated Tailwind classes to the clicked option
+                        this.classList.add('selected', 'bg-blue-100', 'border-blue-500', 'text-blue-800');
+                        // Store the user's selected answer for this question
+                        userAnswers[idx] = optIdx;
+                    });
+                    ul.appendChild(li);
+                });
+                block.appendChild(ul);
+
+                const rationale = document.createElement('div');
+                rationale.className = 'rationale text-sm mt-3 pl-3 border-l-4 border-gray-300 text-gray-600 hidden'; // Tailwind classes, hidden by default
+                rationale.innerHTML = `<strong>Rationale:</strong> ${q.rationale}`;
+                block.appendChild(rationale);
+
+                const hint = document.createElement('p');
+                hint.className = 'hint-text text-sm text-blue-600 mt-3 italic hidden'; // Tailwind classes, hidden by default
+                hint.innerHTML = `<strong>Hint:</strong> ${q.hint}`;
+                block.appendChild(hint);
+
+                questionsContainer.appendChild(block);
+            });
+            // After all questions are added to the DOM, typeset them with MathJax
+            // MathJax should be ready due to synchronous loading
+            if (window.MathJax) {
+                MathJax.typeset();
+            } else {
+                console.warn("MathJax object not found. Equations may not render in renderQuestions.");
+            }
+        }
+
+        /**
+         * Submits the quiz, calculates the score, and displays results and feedback.
+         * Hides the submit button and reveals rationales/hints.
+         */
+        function submitQuiz() {
+            clearInterval(timerInterval); // Stop the timer
+            document.getElementById('submit-quiz-btn').style.display = 'none'; // Hide the submit button
+
+            let correctCount = 0;
+            const questionBlocks = document.querySelectorAll('.question-block');
+
+            questionBlocks.forEach((block, idx) => {
+                const options = block.querySelectorAll('.options-list li');
+                const rationaleDiv = block.querySelector('.rationale');
+                const hintDiv = block.querySelector('.hint-text');
+
+                // Find the correct option index for the current question
+                const correctOptionIndex = questionData[idx].options.findIndex(opt => opt.correct);
+                // Get the user's selected answer for the current question
+                const userAnswerIndex = userAnswers[idx];
+
+                options.forEach((optionLi, optIdx) => {
+                    // Remove any 'selected' highlighting that might be present
+                    optionLi.classList.remove('selected', 'bg-blue-100', 'border-blue-500', 'text-blue-800');
+
+                    // Highlight the correct answer in green
+                    if (optIdx === correctOptionIndex) {
+                        optionLi.classList.add('correct', 'bg-green-100', 'border-green-500', 'text-green-800');
+                    }
+
+                    // If the user answered this question
+                    if (userAnswerIndex !== null && optIdx === userAnswerIndex) {
+                        if (userAnswerIndex === correctOptionIndex) {
+                            // User's answer is correct, already highlighted green
+                            // No additional action needed here as 'correct' class handles it
+                        } else {
+                            // User's answer is incorrect, highlight in red
+                            optionLi.classList.add('incorrect', 'bg-red-100', 'border-red-500', 'text-red-800');
+                        }
+                    }
+                    // Disable further clicks on options after submission
+                    optionLi.style.pointerEvents = 'none';
+                });
+
+                // Show the rationale and hint for the current question
+                rationaleDiv.classList.remove('hidden');
+                hintDiv.classList.remove('hidden');
+
+                // Increment correct count if the user's answer matches the correct one
+                if (userAnswerIndex === correctOptionIndex) {
+                    correctCount++;
+                }
+            });
+
+            const resultsSummary = document.getElementById('results-summary');
+            resultsSummary.textContent = `You scored ${correctCount} out of ${questionData.length} questions correctly!`;
+            // Re-render MathJax to ensure rationales and hints are formatted correctly after being unhidden
+            // MathJax should be ready due to synchronous loading
+            if (window.MathJax) {
+                MathJax.typeset();
+            } else {
+                console.warn("MathJax object not found. Equations may not render in submitQuiz.");
+            }
+        }
+
+        // Event listener for when the DOM content is fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            renderQuestions(); // Render all quiz questions
+            timerInterval = setInterval(updateTimer, 1000); // Start the timer, updating every second
+
+            // Add event listener to the submit quiz button
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+            // Add event listener to the custom modal's close button
+            document.getElementById('modal-close-btn').addEventListener('click', hideCustomModal);
+        });
+    </script>
 </body>
 </html>
