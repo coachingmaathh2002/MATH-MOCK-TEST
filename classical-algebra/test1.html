@@ -1,41 +1,647 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mock Test 1 – Classical Algebra</title>
-  <link rel="stylesheet" href="../assets/style.css">
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classical Algebra Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            color: #333;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #timer {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #d9534f;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .options-list li {
+            margin-bottom: 10px;
+            background-color: #e9e9e9;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .options-list li:hover {
+            background-color: #dcdcdc;
+        }
+        .options-list li.selected {
+            background-color: #cce5ff; /* Highlight selected option */
+            border: 1px solid #007bff;
+        }
+        .options-list li.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .options-list li.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .rationale {
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding-left: 10px;
+            border-left: 3px solid #ccc;
+            color: #555;
+            display: none;
+        }
+        .hint-text {
+            font-size: 0.9em;
+            color: #007bff;
+            margin-top: 10px;
+            font-style: italic;
+            display: none; /* Hide hints by default in single submit mode */
+        }
+        #submit-quiz-btn {
+            display: block;
+            margin: 30px auto 0;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+        #submit-quiz-btn:hover {
+            background-color: #218838;
+        }
+        #results-summary {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0056b3;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 </head>
 <body>
-  <div class="question">
-    <h1>📘 Mock Test 1</h1>
-    <h2>Classical Algebra</h2>
+    <div class="quiz-container">
+        <h1>Classical Algebra: Complex Numbers Quiz</h1>
+        <div id="timer">Time Remaining: <span id="time">30:00</span></div>
 
-    <div class="question">
-      <p><strong>Q1.</strong> If \( a = 3 \), \( b = 4 \), then find \( a^2 + b^2 \).</p>
-      <div class="options">
-        <label><input type="radio" name="q1"> (A) 12</label><br>
-        <label><input type="radio" name="q1"> (B) 16</label><br>
-        <label><input type="radio" name="q1"> (C) 25</label><br>
-        <label><input type="radio" name="q1"> (D) 7</label>
-      </div>
+        <div id="questions"></div>
+
+        <button id="submit-quiz-btn">Submit Quiz</button>
+        <div id="results-summary"></div>
     </div>
 
-    <div class="question">
-      <p><strong>Q2.</strong> Solve: \( x^2 - 5x + 6 = 0 \)</p>
-      <div class="options">
-        <label><input type="radio" name="q2"> (A) 2 and 3</label><br>
-        <label><input type="radio" name="q2"> (B) -2 and -3</label><br>
-        <label><input type="radio" name="q2"> (C) 1 and 6</label><br>
-        <label><input type="radio" name="q2"> (D) 0 and 6</label>
-      </div>
-    </div>
+    <script>
+        const questionData = [
+            {
+                question: "Let $z = 3 + 4i$. What is $|z|$?",
+                options: [
+                    { text: "5", correct: true },
+                    { text: "7", correct: false },
+                    { text: "1", correct: false },
+                    { text: "6", correct: false }
+                ],
+                rationale: "The modulus is $|z| = \\sqrt{3^2 + 4^2} = 5$.",
+                hint: "Use $|a + bi| = \\sqrt{a^2 + b^2}$."
+            },
+            {
+                question: "What is $\\text{Arg}(1 + i)$ in radians?",
+                options: [
+                    { text: "$\\pi/4$", correct: true },
+                    { text: "$\\pi/2$", correct: false },
+                    { text: "$\\pi/3$", correct: false },
+                    { text: "$1$", correct: false }
+                ],
+                rationale: "$\\tan^{-1}(1) = \\pi/4$.",
+                hint: "Use the inverse tangent of $b/a$."
+            },
+            {
+                question: "Evaluate $(1 + i)^8$ using De Moivre’s Theorem.",
+                options: [
+                    { text: "16", correct: true },
+                    { text: "8i", correct: false },
+                    { text: "0", correct: false },
+                    { text: "16i", correct: false }
+                ],
+                rationale: "Convert $1+i$ to polar form: $r = \\sqrt{1^2+1^2} = \\sqrt{2}$, $\\theta = \\pi/4$. So $(1+i)^8 = (\\sqrt{2})^8 (\\cos(8 \\cdot \\pi/4) + i\\sin(8 \\cdot \\pi/4)) = 16 (\\cos(2\\pi) + i\\sin(2\\pi)) = 16(1+0i) = 16$.",
+                hint: "$(r \\text{cis} \\theta)^n = r^n \\text{cis}(n\\theta)$."
+            },
+            {
+                question: "Find the principal value of $\\log(i)$.",
+                options: [
+                    { text: "$i\\pi/2$", correct: true },
+                    { text: "$0$", correct: false },
+                    { text: "$\\pi$", correct: false },
+                    { text: "$-i\\pi/2$", correct: false }
+                ],
+                rationale: "$\\log(i) = \\ln|i| + i\\text{Arg}(i) = \\ln(1) + i\\pi/2 = 0 + i\\pi/2 = i\\pi/2$.",
+                hint: "Use $\\log z = \\ln|z| + i\\text{Arg}(z)$."
+            },
+            {
+                question: "If $z = x + iy$, what is $z \\bar{z}$?",
+                options: [
+                    { text: "$x^2 + y^2$", correct: true },
+                    { text: "$x^2 - y^2$", correct: false },
+                    { text: "$(x+y)^2$", correct: false },
+                    { text: "$x^2 + y^2 + 2xyi$", correct: false }
+                ],
+                rationale: "$z \\bar{z} = (x+iy)(x-iy) = x^2 - (iy)^2 = x^2 - i^2y^2 = x^2 + y^2$. This is also equal to $|z|^2$.",
+                hint: "Recall the definition of the conjugate $\\bar{z}$."
+            },
+            {
+                question: "What is the imaginary part of $e^{i\\theta}$?",
+                options: [
+                    { text: "$\\sin \\theta$", correct: true },
+                    { text: "$\\cos \\theta$", correct: false },
+                    { text: "$\\theta$", correct: false },
+                    { text: "$1$", correct: false }
+                ],
+                rationale: "By Euler's formula, $e^{i\\theta} = \\cos \\theta + i\\sin \\theta$. The imaginary part is $\\sin \\theta$.",
+                hint: "Remember Euler's formula."
+            },
+            {
+                question: "Solve for $z$: $z^2 = -1$.",
+                options: [
+                    { text: "$i, -i$", correct: true },
+                    { text: "$1, -1$", correct: false },
+                    { text: "$0$", correct: false },
+                    { text: "$i$", correct: false }
+                ],
+                rationale: "By definition, $i^2 = -1$. So, the square roots of $-1$ are $i$ and $-i$.",
+                hint: "Consider the definition of the imaginary unit."
+            },
+            {
+                question: "Which of the following is equivalent to $i^{2025}$?",
+                options: [
+                    { text: "$i$", correct: true },
+                    { text: "$-i$", correct: false },
+                    { text: "$1$", correct: false },
+                    { text: "$-1$", correct: false }
+                ],
+                rationale: "The powers of $i$ cycle in a pattern of $i, -1, -i, 1$. Since $2025 \\div 4 = 506$ with a remainder of $1$, $i^{2025} = i^1 = i$.",
+                hint: "Look for the pattern in powers of $i$ ($i^1, i^2, i^3, i^4$). Divide the exponent by 4 and use the remainder."
+            },
+            {
+                question: "What is the sum of the $n$-th roots of unity?",
+                options: [
+                    { text: "$0$", correct: true },
+                    { text: "$1$", correct: false },
+                    { text: "$n$", correct: false },
+                    { text: "$-1$", correct: false }
+                ],
+                rationale: "For $n > 1$, the sum of the $n$-th roots of unity is $0$. This can be shown by summing a geometric series.",
+                hint: "Consider the roots of unity graphically or as a geometric series."
+            },
+            {
+                question: "If $z = r(\\cos \\theta + i\\sin \\theta)$, what is $1/z$?",
+                options: [
+                    { text: "$(1/r)(\\cos \\theta - i\\sin \\theta)$", correct: true },
+                    { text: "$(1/r)(\\cos \\theta + i\\sin \\theta)$", correct: false },
+                    { text: "$r(\\cos \\theta - i\\sin \\theta)$", correct: false },
+                    { text: "$r(\\cos \\theta + i\\sin \\theta)$", correct: false }
+                ],
+                rationale: "$1/z = 1/(r e^{i\\theta}) = (1/r)e^{-i\\theta} = (1/r)(\\cos(-\\theta) + i\\sin(-\\theta)) = (1/r)(\\cos \\theta - i\\sin \\theta)$.",
+                hint: "Recall that $1/e^{i\\theta} = e^{-i\\theta}$."
+            },
+            {
+                question: "Find the value of $i^i$.",
+                options: [
+                    { text: "$e^{-\\pi/2}$", correct: true },
+                    { text: "$e^{\\pi/2}$", correct: false },
+                    { text: "$\\pi/2$", correct: false },
+                    { text: "$0$", correct: false }
+                ],
+                rationale: "We know $i = e^{i\\pi/2}$. So $i^i = (e^{i\\pi/2})^i = e^{i^2\\pi/2} = e^{-\\pi/2}$.",
+                hint: "Use Euler's formula and the property $(a^b)^c = a^{bc}$."
+            },
+            {
+                question: "What is the argument of $z = -1 - i$?",
+                options: [
+                    { text: "$-3\\pi/4$ (or $5\\pi/4$)", correct: true },
+                    { text: "$\\pi/4$", correct: false },
+                    { text: "$- \\pi/4$", correct: false },
+                    { text: "$3\\pi/4$", correct: false }
+                ],
+                rationale: "$z$ is in the third quadrant. $\\tan^{-1}((-1)/(-1)) = \\tan^{-1}(1) = \\pi/4$. The argument is $\\pi + \\pi/4 = 5\\pi/4$ or $-\\pi + \\pi/4 = -3\\pi/4$ for the principal argument.",
+                hint: "Pay attention to the quadrant of the complex number when finding the argument."
+            },
+            {
+                question: "Which of the following is an identity?",
+                options: [
+                    { text: "$|z_1 z_2| = |z_1| |z_2|$", correct: true },
+                    { text: "$|z_1 + z_2| = |z_1| + |z_2|$", correct: false },
+                    { text: "$\\text{Arg}(z_1 z_2) = \\text{Arg}(z_1) \\text{Arg}(z_2)$", correct: false },
+                    { text: "$|z^n| = |z|^n$", correct: false }
+                ],
+                rationale: "The modulus of a product is the product of the moduli. The triangle inequality states $|z_1 + z_2| \\le |z_1| + |z_2|$. The argument of a product is the sum of the arguments (modulo $2\\pi$). The last option $|z^n| = |z|^n$ is also true, but it's usually derived from the first identity.",
+                hint: "Recall properties of complex number operations and their moduli/arguments."
+            },
+            {
+                question: "What are the square roots of $2i$?",
+                options: [
+                    { text: "$1+i, -1-i$", correct: true },
+                    { text: "$1-i, -1+i$", correct: false },
+                    { text: "$i, -i$", correct: false },
+                    { text: "$2, -2$", correct: false }
+                ],
+                rationale: "Let $(x+iy)^2 = 2i$. Then $x^2 - y^2 + 2xyi = 2i$. So $x^2 - y^2 = 0 \\Rightarrow x = \\pm y$. And $2xy = 2 \\Rightarrow xy = 1$. If $x=y$, then $x^2=1 \\Rightarrow x=\\pm 1$. So $(1,1)$ or $(-1,-1)$, giving $1+i$ and $-1-i$. If $x=-y$, then $-x^2=1$, which has no real solutions for $x$.",
+                hint: "Assume the square root is $x+iy$ and square it."
+            },
+            {
+                question: "Find the general solution to $e^z = 1$.",
+                options: [
+                    { text: "$z = 2k\\pi i$ for $k \\in \\mathbb{Z}$", correct: true },
+                    { text: "$z = k\\pi i$ for $k \\in \\mathbb{Z}$", correct: false },
+                    { text: "$z = 0$", correct: false },
+                    { text: "$z = 2\\pi i$", correct: false }
+                ],
+                rationale: "If $e^z = 1$, then $e^{x+iy} = e^x(\\cos y + i\\sin y) = 1$. This implies $e^x=1$ (so $x=0$) and $\\cos y = 1, \\sin y = 0$. This occurs when $y = 2k\\pi$ for any integer $k$. Thus $z = 2k\\pi i$.",
+                hint: "Remember the periodicity of the exponential function in the complex plane."
+            },
+            {
+                question: "What is the geometric interpretation of multiplying a complex number by $i$?",
+                options: [
+                    { text: "Rotation by $90^\\circ$ counter-clockwise", correct: true },
+                    { text: "Rotation by $90^\\circ$ clockwise", correct: false },
+                    { text: "Reflection across the real axis", correct: false },
+                    { text: "Scaling by a factor of $i$", correct: false }
+                ],
+                rationale: "Multiplying by $i$ (which has modulus 1 and argument $\\pi/2$) rotates the complex number by $90^\\circ$ counter-clockwise.",
+                hint: "Consider the effect of multiplying complex numbers in polar form."
+            },
+            {
+                question: "If $z$ is a non-zero complex number, what is $\\text{Re}(z + 1/z)$ if $|z|=1$?",
+                options: [
+                    { text: "$2 \\text{Re}(z)$", correct: true },
+                    { text: "$0$", correct: false },
+                    { text: "$1$", correct: false },
+                    { text: "$|z|^2$", correct: false }
+                ],
+                rationale: "If $|z|=1$, then $z\\bar{z} = |z|^2 = 1$, so $\\bar{z} = 1/z$. Therefore, $z + 1/z = z + \\bar{z} = 2\\text{Re}(z)$.",
+                hint: "If $|z|=1$, what is the relationship between $z$ and its conjugate $\\bar{z}$?"
+            },
+            {
+                question: "Find the real part of $\\cos(iz)$.",
+                options: [
+                    { text: "$\\cosh z$", correct: true },
+                    { text: "$\\cos z$", correct: false },
+                    { text: "$\\sinh z$", correct: false },
+                    { text: "$i\\sin z$", correct: false }
+                ],
+                rationale: "$\\cos(iz) = (e^{i(iz)} + e^{-i(iz)})/2 = (e^{-z} + e^z)/2 = \\cosh z$. The real part is $\\cosh z$.",
+                hint: "Express cosine in terms of exponentials."
+            },
+            {
+                question: "What is the value of $\\sum_{k=0}^{3} i^k$?",
+                options: [
+                    { text: "$0$", correct: true },
+                    { text: "$1$", correct: false },
+                    { text: "$i$", correct: false },
+                    { text: "$-1$", correct: false }
+                ],
+                rationale: "$i^0 + i^1 + i^2 + i^3 = 1 + i - 1 - i = 0$.",
+                hint: "Recall the cycle of powers of $i$."
+            },
+            {
+                question: "If $z = e^{i\\pi/3}$, what is $z^6$?",
+                options: [
+                    { text: "$1$", correct: true },
+                    { text: "$-1$", correct: false },
+                    { text: "$i$", correct: false },
+                    { text: "$-i$", correct: false }
+                ],
+                rationale: "$z^6 = (e^{i\\pi/3})^6 = e^{i(6\\pi/3)} = e^{i2\\pi} = \\cos(2\\pi) + i\\sin(2\\pi) = 1 + 0i = 1$.",
+                hint: "Apply De Moivre's Theorem or properties of exponentials."
+            },
+            {
+                question: "Which of the following describes the set of points $|z - 2i| = 3$?",
+                options: [
+                    { text: "A circle with center $(0,2)$ and radius $3$", correct: true },
+                    { text: "A circle with center $(2,0)$ and radius $3$", correct: false },
+                    { text: "A line passing through $(0,2)$", correct: false },
+                    { text: "An ellipse", correct: false }
+                ],
+                rationale: "$|z - z_0| = r$ represents a circle with center $z_0$ and radius $r$. Here, $z_0 = 2i = 0 + 2i$, so the center is $(0,2)$ and radius is $3$.",
+                hint: "Recall the geometric interpretation of the modulus of a difference between two complex numbers."
+            },
+            {
+                question: "Evaluate $\\sqrt{-16}$.",
+                options: [
+                    { text: "$4i$", correct: true },
+                    { text: "$-4i$", correct: false },
+                    { text: "$4$", correct: false },
+                    { text: "$-4$", correct: false }
+                ],
+                rationale: "$\\sqrt{-16} = \\sqrt{16 \\cdot (-1)} = \\sqrt{16} \\cdot \\sqrt{-1} = 4i$. Note that technically $\\pm 4i$ are the square roots, but the principal square root is usually taken as positive imaginary.",
+                hint: "Remember that $\\sqrt{-1} = i$."
+            },
+            {
+                question: "If $z = x+iy$, what is $\\text{Im}(z^2)$?",
+                options: [
+                    { text: "$2xy$", correct: true },
+                    { text: "$x^2 - y^2$", correct: false },
+                    { text: "$x^2 + y^2$", correct: false },
+                    { text: "$xy$", correct: false }
+                ],
+                rationale: "$z^2 = (x+iy)^2 = x^2 + 2xyi + (iy)^2 = x^2 - y^2 + 2xyi$. The imaginary part is $2xy$.",
+                hint: "Expand the square of the complex number."
+            },
+            {
+                question: "What is the general form of the $n$-th roots of a complex number $w = re^{i\\phi}$?",
+                options: [
+                    { text: "$r^{1/n} e^{i(\\phi + 2k\\pi)/n}$ for $k=0, 1, \\dots, n-1$", correct: true },
+                    { text: "$r e^{i\\phi/n}$", correct: false },
+                    { text: "$r^{1/n} e^{i\\phi/n}$", correct: false },
+                    { text: "$r^{1/n} e^{i(2k\\pi)/n}$", correct: false }
+                ],
+                rationale: "The $n$-th roots are found by taking the $n$-th root of the modulus and dividing the argument by $n$, plus adding multiples of $2\\pi/n$ to account for all roots.",
+                hint: "De Moivre's Theorem for roots involves adding $2k\\pi$ to the argument."
+            },
+            {
+                question: "Simplify $\\frac{1}{1+i}$.",
+                options: [
+                    { text: "$1/2 - i/2$", correct: true },
+                    { text: "$1 - i$", correct: false },
+                    { text: "$1/2 + i/2$", correct: false },
+                    { text: "$-i$", correct: false }
+                ],
+                rationale: "Multiply the numerator and denominator by the conjugate of the denominator: $\\frac{1}{1+i} \\cdot \\frac{1-i}{1-i} = \\frac{1-i}{1^2 + 1^2} = \\frac{1-i}{2} = 1/2 - i/2$.",
+                hint: "Multiply by the conjugate of the denominator."
+            },
+            {
+                question: "What is the argument of $z = -5$?",
+                options: [
+                    { text: "$\\pi$", correct: true },
+                    { text: "$0$", correct: false },
+                    { text: "$\\pi/2$", correct: false },
+                    { text: "$-\\pi$", correct: false }
+                ],
+                rationale: "A negative real number lies on the negative real axis. Its angle with the positive real axis is $\\pi$ radians.",
+                hint: "Visualize the complex number on the Argand plane."
+            },
+            {
+                question: "If $z_1 = 2+3i$ and $z_2 = 1-i$, what is $z_1 + z_2$?",
+                options: [
+                    { text: "$3+2i$", correct: true },
+                    { text: "$1+4i$", correct: false },
+                    { text: "$3-2i$", correct: false },
+                    { text: "$5i$", correct: false }
+                ],
+                rationale: "Add the real parts and the imaginary parts separately: $(2+1) + (3-1)i = 3+2i$.",
+                hint: "Add real parts to real parts and imaginary parts to imaginary parts."
+            },
+            {
+                question: "What is the value of $\\text{Arg}(z)$ for $z = -2i$?",
+                options: [
+                    { text: "$-\\pi/2$", correct: true },
+                    { text: "$\\pi/2$", correct: false },
+                    { text: "$\\pi$", correct: false },
+                    { text: "$0$", correct: false }
+                ],
+                rationale: "$z = -2i$ lies on the negative imaginary axis. The principal argument is $ -\\pi/2$.",
+                hint: "Plot the complex number on the Argand plane to determine its angle."
+            },
+            {
+                question: "Find the general solution to $\\sin z = 0$.",
+                options: [
+                    { text: "$z = k\\pi$ for $k \\in \\mathbb{Z}$", correct: true },
+                    { text: "$z = 2k\\pi$ for $k \\in \\mathbb{Z}$", correct: false },
+                    { text: "$z = \\pi/2 + k\\pi$ for $k \\in \\mathbb{Z}$", correct: false },
+                    { text: "$z = 0$", correct: false }
+                ],
+                rationale: "The sine function is zero at integer multiples of $\\pi$. This holds for complex sine as well.",
+                hint: "Recall the zeroes of the real sine function and extend to complex numbers."
+            },
+            {
+                question: "If $z = r e^{i\\theta}$, what is $\\text{Re}(z)$?",
+                options: [
+                    { text: "$r\\cos \\theta$", correct: true },
+                    { text: "$r\\sin \\theta$", correct: false },
+                    { text: "$r$", correct: false },
+                    { text: "$\\theta$", correct: false }
+                ],
+                rationale: "By Euler's formula, $z = r(\\cos \\theta + i\\sin \\theta) = r\\cos \\theta + i r\\sin \\theta$. The real part is $r\\cos \\theta$.",
+                hint: "Convert from polar form to rectangular form."
+            },
+            {
+                question: "What is the conjugate of $3 - 2i$?",
+                options: [
+                    { text: "$3 + 2i$", correct: true },
+                    { text: "$-3 - 2i$", correct: false },
+                    { text: "$2i - 3$", correct: false },
+                    { text: "$2 - 3i$", correct: false }
+                ],
+                rationale: "The conjugate of $a+bi$ is $a-bi$. So the conjugate of $3-2i$ is $3-(-2i) = 3+2i$.",
+                hint: "Change the sign of the imaginary part."
+            },
+            {
+                question: "Solve for $z$: $iz = 5$.",
+                options: [
+                    { text: "$-5i$", correct: true },
+                    { text: "$5i$", correct: false },
+                    { text: "$5$", correct: false },
+                    { text: "$-5$", correct: false }
+                ],
+                rationale: "$iz = 5 \\Rightarrow z = 5/i$. Multiply by $i/i$: $z = 5i/i^2 = 5i/(-1) = -5i$.",
+                hint: "Remember that $1/i = -i$."
+            },
+            {
+                question: "What is the principal value of $\\sqrt{-9}$?",
+                options: [
+                    { text: "$3i$", correct: true },
+                    { text: "$-3i$", correct: false },
+                    { text: "$3$", correct: false },
+                    { text: "$-3$", correct: false }
+                ],
+                rationale: "The principal square root of a negative real number $-x$ (where $x>0$) is $i\\sqrt{x}$. Thus, $\\sqrt{-9} = i\\sqrt{9} = 3i$.",
+                hint: "The principal square root of a negative number is usually defined with a positive imaginary part."
+            },
+            {
+                question: "Given $z_1 = 4e^{i\\pi/2}$ and $z_2 = 2e^{i\\pi/6}$, what is $z_1 z_2$?",
+                options: [
+                    { text: "$8e^{i2\\pi/3}$", correct: true },
+                    { text: "$6e^{i\\pi/12}$", correct: false },
+                    { text: "$2e^{i\\pi/3}$", correct: false },
+                    { text: "$8e^{i\\pi/12}$", correct: false }
+                ],
+                rationale: "When multiplying complex numbers in polar form, multiply the moduli and add the arguments: $4 \\cdot 2 = 8$, and $\\pi/2 + \\pi/6 = 3\\pi/6 + \\pi/6 = 4\\pi/6 = 2\\pi/3$. So $8e^{i2\\pi/3}$.",
+                hint: "Multiply moduli, add arguments."
+            },
+            {
+                question: "What is the result of $(\\cos \\theta + i\\sin \\theta)^{-1}$?",
+                options: [
+                    { text: "$\\cos \\theta - i\\sin \\theta$", correct: true },
+                    { text: "$-\\cos \\theta + i\\sin \\theta$", correct: false },
+                    { text: "$\\sin \\theta + i\\cos \\theta$", correct: false },
+                    { text: "$1$", correct: false }
+                ],
+                rationale: "Using De Moivre's Theorem, $(\\cos \\theta + i\\sin \\theta)^{-1} = \\cos(-\\theta) + i\\sin(-\\theta) = \\cos \\theta - i\\sin \\theta$. Alternatively, $e^{-i\\theta}$ is the conjugate of $e^{i\\theta}$.",
+                hint: "Use De Moivre's Theorem with $n=-1$ or recall the reciprocal of a complex number with unit modulus."
+            }
+        ];
 
-    <footer>
-      © 2025 Raj Sir's Academy | <a href="../index.html">Back to Home</a>
-    </footer>
-  </div>
+        let userAnswers = new Array(questionData.length).fill(null);
+        let timerInterval;
+        let timeInSeconds = 1800; // 30 minutes for 30 questions
+
+        function updateTimer() {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeInSeconds > 0) {
+                timeInSeconds--;
+            } else {
+                clearInterval(timerInterval);
+                alert('⏰ Time is up! Submitting your answers automatically.');
+                submitQuiz();
+            }
+        }
+
+        function renderQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questionsContainer.innerHTML = ''; // Clear previous questions
+
+            questionData.forEach((q, idx) => {
+                const block = document.createElement('div');
+                block.className = 'question-block';
+                block.dataset.questionIndex = idx; // Store index for answers
+
+                const questionText = document.createElement('p');
+                questionText.className = 'question-text';
+                questionText.innerHTML = `${idx + 1}. ${q.question}`;
+                block.appendChild(questionText);
+
+                const ul = document.createElement('ul');
+                ul.className = 'options-list';
+                q.options.forEach((opt, optIdx) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = opt.text; // Use innerHTML for MathJax rendering
+                    li.dataset.optionIndex = optIdx; // Store option index
+                    li.addEventListener('click', function () {
+                        // Remove 'selected' from all options for this question
+                        ul.querySelectorAll('li').forEach(item => item.classList.remove('selected'));
+                        // Add 'selected' to the clicked option
+                        this.classList.add('selected');
+                        // Store the user's answer
+                        userAnswers[idx] = optIdx;
+                    });
+                    ul.appendChild(li);
+                });
+                block.appendChild(ul);
+
+                const rationale = document.createElement('div');
+                rationale.className = 'rationale';
+                rationale.innerHTML = `Rationale: ${q.rationale}`;
+                block.appendChild(rationale);
+
+                const hint = document.createElement('p');
+                hint.className = 'hint-text';
+                hint.innerHTML = `Hint: ${q.hint}`;
+                block.appendChild(hint);
+
+                questionsContainer.appendChild(block);
+            });
+            MathJax.typeset(); // Render MathJax after questions are added
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval); // Stop the timer
+            document.getElementById('submit-quiz-btn').style.display = 'none'; // Hide submit button
+
+            let correctCount = 0;
+            const questionBlocks = document.querySelectorAll('.question-block');
+
+            questionBlocks.forEach((block, idx) => {
+                const options = block.querySelectorAll('.options-list li');
+                const rationaleDiv = block.querySelector('.rationale');
+                const hintDiv = block.querySelector('.hint-text'); // Show hints after submission
+
+                const correctOptionIndex = questionData[idx].options.findIndex(opt => opt.correct);
+                const userAnswerIndex = userAnswers[idx];
+
+                options.forEach((optionLi, optIdx) => {
+                    // Remove any 'selected' highlighting
+                    optionLi.classList.remove('selected');
+
+                    if (optIdx === correctOptionIndex) {
+                        optionLi.classList.add('correct'); // Highlight correct answer
+                    }
+
+                    if (userAnswerIndex !== null && optIdx === userAnswerIndex) {
+                        if (userAnswerIndex === correctOptionIndex) {
+                            // Already marked correct, nothing more to do
+                        } else {
+                            optionLi.classList.add('incorrect'); // Mark user's incorrect choice
+                        }
+                    }
+                });
+
+                // Show rationale and hint for all questions
+                rationaleDiv.style.display = 'block';
+                hintDiv.style.display = 'block';
+
+                if (userAnswerIndex === correctOptionIndex) {
+                    correctCount++;
+                }
+            });
+
+            const resultsSummary = document.getElementById('results-summary');
+            resultsSummary.textContent = `You scored ${correctCount} out of ${questionData.length} questions correctly!`;
+            MathJax.typeset(); // Re-render MathJax to ensure rationales are formatted
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            renderQuestions();
+            timerInterval = setInterval(updateTimer, 1000); // Start the timer
+
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        });
+    </script>
 </body>
 </html>
