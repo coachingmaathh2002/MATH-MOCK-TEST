@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Math MCQ Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .question { margin-bottom: 20px; }
+    .timer { font-weight: bold; color: red; }
+    .panel { display: flex; flex-wrap: wrap; margin-bottom: 20px; }
+    .panel button {
+      width: 40px; height: 40px; margin: 5px;
+      border-radius: 5px; border: 1px solid #ccc;
+    }
+    .answered { background-color: #d1e7dd; }
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h2>Math MCQ Test</h2>
+<div class="timer" id="timer">TIME LEFT: 20:00</div>
+
+<div class="panel" id="questionPanel">
+  <button onclick="jumpTo(1)" id="btn1">1</button>
+</div>
+
+<div class="question" id="q1">
+  <p><strong>Question 1</strong></p>
+  <p>If \( z = x\sqrt{y} + \frac{y}{x^3} \), then \( \frac{\partial z}{\partial y} = \) ?</p>
+  <label><input type="radio" name="q1" value="A" onchange="markAnswered(1)"> A) 0</label><br>
+  <label><input type="radio" name="q1" value="B" onchange="markAnswered(1)"> B) \( \frac{x}{2\sqrt{y}} + \frac{1}{x^3} \)</label><br>
+  <label><input type="radio" name="q1" value="C" onchange="markAnswered(1)"> C) -1</label><br>
+  <label><input type="radio" name="q1" value="D" onchange="markAnswered(1)"> D) 1</label><br>
+</div>
+
+<br>
+<button onclick="submitTest()">Submit Test</button>
+<div id="result"></div>
+
+<script>
+  let timeLeft = 20 * 60; // 20 minutes
+
+  function updateTimer() {
+    let mins = Math.floor(timeLeft / 60);
+    let secs = timeLeft % 60;
+    document.getElementById('timer').textContent = `TIME LEFT: ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    if (timeLeft === 0) {
+      alert("Time's up! Submitting test...");
+      submitTest();
+    }
+    timeLeft--;
+  }
+  setInterval(updateTimer, 1000);
+
+  function markAnswered(qNo) {
+    document.getElementById('btn' + qNo).classList.add('answered');
+  }
+
+  function jumpTo(qNo) {
+    document.getElementById('q' + qNo).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function submitTest() {
+    let correct = 0;
+    let total = 1;
+
+    // Correct answer for Question 1 is B
+    let ans1 = document.querySelector('input[name="q1"]:checked');
+    if (ans1 && ans1.value === 'B') correct++;
+
+    document.getElementById('result').innerHTML = `<h3>You scored ${correct} out of ${total}</h3>`;
+  }
+</script>
+
+</body>
+</html>
