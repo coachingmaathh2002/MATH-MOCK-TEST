@@ -14,23 +14,39 @@
             max-height: 200px;
             overflow-y: auto;
         }
+        #main-content {
+            display: none;
+        }
+        #login-modal {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+        }
     </style>
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 </head>
 <body class="bg-slate-50 dark:bg-slate-900">
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
-        <header class="mb-12">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 dark:text-white">
-                    <span role="img" aria-label="abacus">🧮</span> Welcome to Pijus Sir's Math Mock Test Portal
-                </h1>
-                <div class="flex space-x-4">
-                    <a href="login.html" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Log In</a>
-                    <a href="signup.html" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Sign Up</a>
-                </div>
-            </div>
-            <p class="text-center text-lg text-slate-600 dark:text-slate-400">Practice. Perform. Perfect.</p>
+
+    <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 w-full max-w-sm text-center">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Student Login</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-6">Please enter the password to access the tests.</p>
+            <form id="login-form">
+                <input type="password" id="password-input" placeholder="Enter Password" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
+                <button type="submit" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                    Login
+                </button>
+            </form>
+            <p id="error-message" class="text-red-500 mt-4 h-4"></p>
+        </div>
+    </div>
+
+    <div id="main-content" class="container mx-auto px-4 py-8 max-w-5xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 dark:text-white">
+                <span role="img" aria-label="abacus">🧮</span> Welcome to Pijus Sir's Math Mock Test Portal
+            </h1>
+            <p class="mt-4 text-lg text-slate-600 dark:text-slate-400">Practice. Perform. Perfect.</p>
         </header>
 
         <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -324,26 +340,26 @@
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">🏆 Full Mock Test</h2>
                 <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="full-mock-tests/test1.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="full-mock-tests/test2.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="full-mock-tests/test3.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="full-mock-tests/test4.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="full-mock-tests/test5.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="full-mock-tests/test6.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="full-mock-tests/test7.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="full-mock-tests/test8.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="full-mock-tests/test9.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="full-mock-tests/test10.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="full-mock-tests/test11.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="full-mock-tests/test12.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="full-mock-tests/test13.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="full-mock-tests/test14.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="full-mock-tests/test15.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="full-mock-tests/test16.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="full-mock-tests/test17.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="full-mock-tests/test18.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="full-mock-tests/test19.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="full-mock-tests/test20.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 20</a></li>
+                    <li><a href="full-mock-test/test1.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 1</a></li>
+                    <li><a href="full-mock-test/test2.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 2</a></li>
+                    <li><a href="full-mock-test/test3.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 3</a></li>
+                    <li><a href="full-mock-test/test4.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 4</a></li>
+                    <li><a href="full-mock-test/test5.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 5</a></li>
+                    <li><a href="full-mock-test/test6.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 6</a></li>
+                    <li><a href="full-mock-test/test7.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 7</a></li>
+                    <li><a href="full-mock-test/test8.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 8</a></li>
+                    <li><a href="full-mock-test/test9.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 9</a></li>
+                    <li><a href="full-mock-test/test10.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 10</a></li>
+                    <li><a href="full-mock-test/test11.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 11</a></li>
+                    <li><a href="full-mock-test/test12.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 12</a></li>
+                    <li><a href="full-mock-test/test13.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 13</a></li>
+                    <li><a href="full-mock-test/test14.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 14</a></li>
+                    <li><a href="full-mock-test/test15.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 15</a></li>
+                    <li><a href="full-mock-test/test16.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 16</a></li>
+                    <li><a href="full-mock-test/test17.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 17</a></li>
+                    <li><a href="full-mock-test/test18.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 18</a></li>
+                    <li><a href="full-mock-test/test19.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 19</a></li>
+                    <li><a href="full-mock-test/test20.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">Mock Test 20</a></li>
                 </ul>
             </div>
         </main>
@@ -352,5 +368,61 @@
             <p>&copy; 2025 Pijus Sir's Academy | Designed for student success</p>
         </footer>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const CORRECT_PASSWORD = 'pijus_sir_math'; // You can change this password
+
+            const loginModal = document.getElementById('login-modal');
+            const mainContent = document.getElementById('main-content');
+            const loginForm = document.getElementById('login-form');
+            const passwordInput = document.getElementById('password-input');
+            const errorMessage = document.getElementById('error-message');
+
+            const showContent = () => {
+                loginModal.style.display = 'none';
+                mainContent.style.display = 'block';
+            };
+
+            // Check if user is already logged in via sessionStorage
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                showContent();
+            }
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const enteredPassword = passwordInput.value;
+
+                if (enteredPassword === CORRECT_PASSWORD) {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    showContent();
+                } else {
+                    errorMessage.textContent = 'Incorrect password. Please try again.';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    // Add a shake animation for effect
+                    loginModal.querySelector('div').classList.add('animate-shake');
+                    setTimeout(() => {
+                        loginModal.querySelector('div').classList.remove('animate-shake');
+                    }, 500);
+                }
+            });
+
+            // Add keyframe animation for the shake effect
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes shake {
+                    10%, 90% { transform: translate3d(-1px, 0, 0); }
+                    20%, 80% { transform: translate3d(2px, 0, 0); }
+                    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+                    40%, 60% { transform: translate3d(4px, 0, 0); }
+                }
+                .animate-shake {
+                    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
 </body>
 </html>
