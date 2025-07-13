@@ -6,7 +6,9 @@ const path = require('path');
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/mathportal', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/mathportal', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // User model
 const User = mongoose.model('User', { name: String, email: String, password: String });
@@ -14,28 +16,30 @@ const User = mongoose.model('User', { name: String, email: String, password: Str
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'your-secret-key', // Change to a secure random string
+  secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Set secure: true in production with HTTPS
+  cookie: { secure: false }
 }));
 
-// Global authentication middleware: Protect all routes except login/signup
+// Global auth middleware
 app.use((req, res, next) => {
-  const publicPaths = ['/login.html', '/signup.html', '/login', '/signup']; // Allow these without login
-  if (publicPaths.includes(req.path) || req.path.startsWith('/static/')) { // Optional: if you have unprotected static assets
+  console.log(`Request to: ${req.path}, Session user: ${req.session.user ? 'Yes' : 'No'}`);
+  const publicPaths = ['/login.html', '/signup.html', '/login', '/signup'];
+  if (publicPaths.includes(req.path)) {
     return next();
   }
   if (!req.session.user) {
+    console.log(`Redirecting to login from ${req.path}`);
     return res.redirect('/login.html');
   }
   next();
 });
 
-// Serve static files from 'public' folder (now protected by the middleware above)
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files (protected)
+app.use(express.static(path.join(__dirname, 'public'))));
 
-// Routes
+// Routes (same as before)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -49,6 +53,7 @@ app.post('/signup', async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ name, email, password: hashedPassword });
   await user.save();
+  console.log('User signed up:', email);
   res.redirect('/login.html');
 });
 
@@ -56,9 +61,11 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user && await bcrypt.compare(password, user.password)) {
-    req.session.user = { email: user.email }; // Set session
-    res.redirect('/'); // Redirect to main portal after login
+    req.session.user = { email: user.email };
+    console.log('Login successful:', email);
+    res.redirect('/');
   } else {
+    console.log('Login failed for:', email);
     res.send('Invalid credentials. <a href="/login.html">Try again</a>');
   }
 });
@@ -66,12 +73,6 @@ app.post('/login', async (req, res) => {
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/login.html');
-});
-
-// Optional: Protected download route (if you have PDFs)
-app.get('/download/:category/:test', (req, res) => {
-  const filePath = path.join(__dirname, 'public', req.params.category, `${req.params.test}.pdf`);
-  res.download(filePath);
 });
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
