@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Operations and Algebraic Structures Quiz</title>
+    <style>
+        /* Basic Reset & Box-Sizing */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body & General Typography */
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border: 1px solid #e0e6ed;
+        }
+
+        /* Headings */
+        h1 {
+            text-align: center;
+            color: #2c3e50; /* Dark blue */
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        h2 {
+            text-align: center;
+            color: #34495e; /* Slightly lighter dark blue */
+            margin-bottom: 35px;
+            font-size: 1.2em;
+            font-weight: 400;
+            border-bottom: 1px solid #e0e6ed;
+            padding-bottom: 15px;
+        }
+
+        /* Question Blocks */
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #e0e6ed;
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none; /* No border after the last question */
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        /* Options Styling */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Space between options */
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            background-color: #f8fcff; /* Very light blue */
+            border: 1px solid #d0e0f0; /* Light blue border */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            position: relative; /* For custom radio button */
+            font-size: 1em;
+            color: #4a6572; /* Darker gray-blue text */
+        }
+
+        .options label:hover {
+            background-color: #eaf3fd; /* Slightly darker light blue on hover */
+            border-color: #a7d0f7; /* More prominent blue border on hover */
+        }
+
+        /* Hide default radio button */
+        .options input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none; /* Make sure it doesn't interfere with label click */
+        }
+
+        /* Custom radio button appearance */
+        .options label::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #9bbcdc; /* Blue-gray border */
+            border-radius: 50%;
+            margin-right: 12px;
+            background-color: #ffffff;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            flex-shrink: 0; /* Prevent it from shrinking */
+        }
+
+        /* Checked state for custom radio button */
+        .options input[type="radio"]:checked + label::before {
+            border-color: #3498db; /* Blue border when checked */
+            background-color: #3498db; /* Blue fill when checked */
+            box-shadow: inset 0 0 0 4px #ffffff; /* Inner white circle */
+        }
+
+        /* Button Styling */
+        .show-answers-btn {
+            display: block;
+            margin: 40px auto 20px auto;
+            padding: 15px 30px;
+            background-color: #3498db; /* Professional blue */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #cccccc; /* Gray when disabled */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Correct Answer Highlighting */
+        .correct-answer {
+            background-color: #d4edda !important; /* Light green */
+            border-color: #28a745 !important; /* Green border */
+            font-weight: 600;
+            color: #155724 !important; /* Dark green text */
+        }
+        /* Hide the custom radio button for the correct answer labels */
+        .correct-answer::before {
+            content: none !important; /* Hide the custom radio button circle */
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Binary Operations and Algebraic Structures Quiz</h1>
+        <h2>Test your knowledge on fundamental concepts in abstract algebra. Select your answers and then click "Show Answers".</h2>
+
+        <div id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p class="question-text">1. A binary operation `*` on a set `S` is formally defined as:</p>
+                <div class="options">
+                    <input type="radio" id="q1_a" name="q1" value="a">
+                    <label for="q1_a">A) A function `*: S → S`</label><br>
+                    <input type="radio" id="q1_b" name="q1" value="b">
+                    <label for="q1_b" data-correct="true">B) A function `*: S × S → S`</label><br>
+                    <input type="radio" id="q1_c" name="q1" value="c">
+                    <label for="q1_c">C) A function `*: S → S × S`</label><br>
+                    <input type="radio" id="q1_d" name="q1" value="d">
+                    <label for="q1_d">D) A relation `R ⊆ S × S`</label><br>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p class="question-text">2. Which of the following statements about a semigroup `(S, *)` is true?</p>
+                <div class="options">
+                    <input type="radio" id="q2_a" name="q2" value="a">
+                    <label for="q2_a">A) Every element in `S` has an inverse.</label><br>
+                    <input type="radio" id="q2_b" name="q2" value="b">
+                    <label for="q2_b" data-correct="true">B) The operation `*` is associative.</label><br>
+                    <input type="radio" id="q2_c" name="q2" value="c">
+                    <label for="q2_c">C) There exists an identity element in `S`.</label><br>
+                    <input type="radio" id="q2_d" name="q2" value="d">
+                    <label for="q2_d">D) The operation `*` is commutative.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p class="question-text">3. A monoid is a semigroup `(M, *)` that additionally possesses:</p>
+                <div class="options">
+                    <input type="radio" id="q3_a" name="q3" value="a">
+                    <label for="q3_a">A) An inverse element for every element.</label><br>
+                    <input type="radio" id="q3_b" name="q3" value="b">
+                    <label for="q3_b">C) Commutativity of the operation.</label><br>
+                    <input type="radio" id="q3_c" name="q3" value="c">
+                    <label for="q3_c" data-correct="true">C) An identity element.</label><br>
+                    <input type="radio" id="q3_d" name="q3" value="d">
+                    <label for="q3_d">D) Finite order.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p class="question-text">4. Which of the following is NOT a necessary condition for a set `G` with a binary operation `*` to form a group `(G, *)`?</p>
+                <div class="options">
+                    <input type="radio" id="q4_a" name="q4" value="a">
+                    <label for="q4_a">A) Closure under `*`.</label><br>
+                    <input type="radio" id="q4_b" name="q4" value="b">
+                    <label for="q4_b">B) Associativity of `*`.</label><br>
+                    <input type="radio" id="q4_c" name="q4" value="c">
+                    <label for="q4_c">C) Existence of an identity element.</label><br>
+                    <input type="radio" id="q4_d" name="q4" value="d">
+                    <label for="q4_d" data-correct="true">D) Commutativity of `*`.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p class="question-text">5. Consider the set of integers `Z` under the operation of multiplication (`*`). Which algebraic structure does `(Z, *)` form?</p>
+                <div class="options">
+                    <input type="radio" id="q5_a" name="q5" value="a">
+                    <label for="q5_a">A) A group</label><br>
+                    <input type="radio" id="q5_b" name="q5" value="b">
+                    <label for="q5_b">B) An abelian group</label><br>
+                    <input type="radio" id="q5_c" name="q5" value="c">
+                    <label for="q5_c" data-correct="true">C) A monoid</label><br>
+                    <input type="radio" id="q5_d" name="q5" value="d">
+                    <label for="q5_d">D) A field</label><br>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p class="question-text">6. According to Lagrange's Theorem, if `H` is a subgroup of a finite group `G`, then:</p>
+                <div class="options">
+                    <input type="radio" id="q6_a" name="q6" value="a">
+                    <label for="q6_a">A) `|G|` divides `|H|`.</label><br>
+                    <input type="radio" id="q6_b" name="q6" value="b">
+                    <label for="q6_b" data-correct="true">B) `|H|` divides `|G|`.</label><br>
+                    <input type="radio" id="q6_c" name="q6" value="c">
+                    <label for="q6_c">C) `|G| = |H|`.</label><br>
+                    <input type="radio" id="q6_d" name="q6" value="d">
+                    <label for="q6_d">D) `|G|` is prime.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p class="question-text">7. Let `φ: G → H` be a group homomorphism. The kernel of `φ`, denoted `Ker(φ)`, is defined as:</p>
+                <div class="options">
+                    <input type="radio" id="q7_a" name="q7" value="a">
+                    <label for="q7_a" data-correct="true">A) `{g ∈ G | φ(g) = e_H}` (where `e_H` is the identity in `H`)</label><br>
+                    <input type="radio" id="q7_b" name="q7" value="b">
+                    <label for="q7_b">B) `{h ∈ H | h = φ(g) for some g ∈ G}`</label><br>
+                    <input type="radio" id="q7_c" name="q7" value="c">
+                    <label for="q7_c">C) `{g ∈ G | φ(g) = g}`</label><br>
+                    <input type="radio" id="q7_d" name="q7" value="d">
+                    <label for="q7_d">D) `{e_G}` (where `e_G` is the identity in `G`)</label><br>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p class="question-text">8. Which of the following statements about normal subgroups is true?</p>
+                <div class="options">
+                    <input type="radio" id="q8_a" name="q8" value="a">
+                    <label for="q8_a">A) Every subgroup of an abelian group is normal.</label><br>
+                    <input type="radio" id="q8_b" name="q8" value="b">
+                    <label for="q8_b">B) The center of any group is always a normal subgroup.</label><br>
+                    <input type="radio" id="q8_c" name="q8" value="c">
+                    <label for="q8_c">C) The kernel of any group homomorphism is always a normal subgroup.</label><br>
+                    <input type="radio" id="q8_d" name="q8" value="d">
+                    <label for="q8_d" data-correct="true">D) All of the above.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p class="question-text">9. A group `G` is cyclic if:</p>
+                <div class="options">
+                    <input type="radio" id="q9_a" name="q9" value="a">
+                    <label for="q9_a">A) It is isomorphic to `Z_n` for some `n`.</label><br>
+                    <input type="radio" id="q9_b" name="q9" value="b">
+                    <label for="q9_b">B) It is abelian.</label><br>
+                    <input type="radio" id="q9_c" name="q9" value="c">
+                    <label for="q9_c" data-correct="true">C) There exists an element `a ∈ G` such that every element of `G` can be written as `a^n` for some integer `n`.</label><br>
+                    <input type="radio" id="q9_d" name="q9" value="d">
+                    <label for="q9_d">D) Its order is a prime number.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p class="question-text">10. The set of matrices `GL_n(R)` (invertible `n x n` matrices with real entries) under matrix multiplication forms:</p>
+                <div class="options">
+                    <input type="radio" id="q10_a" name="q10" value="a">
+                    <label for="q10_a">A) A commutative group.</label><br>
+                    <input type="radio" id="q10_b" name="q10" value="b">
+                    <label for="q10_b" data-correct="true">B) A non-abelian group.</label><br>
+                    <input type="radio" id="q10_c" name="q10" value="c">
+                    <label for="q10_c">C) A ring.</label><br>
+                    <input type="radio" id="q10_d" name="q10" value="d">
+                    <label for="q10_d">D) A field.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p class="question-text">11. Which of the following is an example of a ring but not an integral domain?</p>
+                <div class="options">
+                    <input type="radio" id="q11_a" name="q11" value="a">
+                    <label for="q11_a">A) `(Z, +, *)` (integers)</label><br>
+                    <input type="radio" id="q11_b" name="q11" value="b">
+                    <label for="q11_b">B) `(Q, +, *)` (rational numbers)</label><br>
+                    <input type="radio" id="q11_c" name="q11" value="c">
+                    <label for="q11_c" data-correct="true">C) `(M_2(R), +, *)` (2x2 matrices with real entries)</label><br>
+                    <input type="radio" id="q11_d" name="q11" value="d">
+                    <label for="q11_d">D) `(Z_p, +, *)` where `p` is a prime number</label><br>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p class="question-text">12. An integral domain is a commutative ring with unity that has no:</p>
+                <div class="options">
+                    <input type="radio" id="q12_a" name="q12" value="a">
+                    <label for="q12_a" data-correct="true">A) Zero divisors.</label><br>
+                    <input type="radio" id="q12_b" name="q12" value="b">
+                    <label for="q12_b">B) Identity element.</label><br>
+                    <input type="radio" id="q12_c" name="q12" value="c">
+                    <label for="q12_c">C) Invertible elements.</label><br>
+                    <input type="radio" id="q12_d" name="q12" value="d">
+                    <label for="q12_d">D) Non-associative elements.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p class="question-text">13. A field `(F, +, *)` is defined as a commutative ring with unity where every non-zero element has a:</p>
+                <div class="options">
+                    <input type="radio" id="q13_a" name="q13" value="a">
+                    <label for="q13_a">A) Square root.</label><br>
+                    <input type="radio" id="q13_b" name="q13" value="b">
+                    <label for="q13_b" data-correct="true">B) Multiplicative inverse.</label><br>
+                    <input type="radio" id="q13_c" name="q13" value="c">
+                    <label for="q13_c">C) Additive inverse.</label><br>
+                    <input type="radio" id="q13_d" name="q13" value="d">
+                    <label for="q13_d">D) Unique representation.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p class="question-text">14. Which of the following structures is an integral domain but NOT a field?</p>
+                <div class="options">
+                    <input type="radio" id="q14_a" name="q14" value="a">
+                    <label for="q14_a" data-correct="true">A) `(Z, +, *)` (integers)</label><br>
+                    <input type="radio" id="q14_b" name="q14" value="b">
+                    <label for="q14_b">B) `(Q, +, *)` (rational numbers)</label><br>
+                    <input type="radio" id="q14_c" name="q14" value="c">
+                    <label for="q14_c">C) `(R, +, *)` (real numbers)</label><br>
+                    <input type="radio" id="q14_d" name="q14" value="d">
+                    <label for="q14_d">D) `(C, +, *)` (complex numbers)</label><br>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p class="question-text">15. Let `R` be a ring and `I` be a non-empty subset of `R`. `I` is an ideal of `R` if:</p>
+                <div class="options">
+                    <input type="radio" id="q15_a" name="q15" value="a">
+                    <label for="q15_a" data-correct="true">A) `I` is a subgroup of `(R, +)` and for all `r ∈ R`, `rI ⊆ I` and `Ir ⊆ I`.</label><br>
+                    <input type="radio" id="q15_b" name="q15" value="b">
+                    <label for="q15_b">B) `I` is a subring of `R`.</label><br>
+                    <input type="radio" id="q15_c" name="q15" value="c">
+                    <label for="q15_c">C) `I` is a normal subgroup of `(R, +)`.</label><br>
+                    <input type="radio" id="q15_d" name="q15" value="d">
+                    <label for="q15_d">D) `I` is a field.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p class="question-text">16. The quotient group `G/N` (where `N` is a normal subgroup of `G`) consists of elements of the form:</p>
+                <div class="options">
+                    <input type="radio" id="q16_a" name="q16" value="a">
+                    <label for="q16_a">A) `gN = {gn | n ∈ N}`</label><br>
+                    <input type="radio" id="q16_b" name="q16" value="b">
+                    <label for="q16_b">B) `Ng = {ng | n ∈ N}`</label><br>
+                    <input type="radio" id="q16_c" name="q16" value="c">
+                    <label for="q16_c" data-correct="true">C) Both A and B (since `N` is normal, `gN = Ng`)</label><br>
+                    <input type="radio" id="q16_d" name="q16" value="d">
+                    <label for="q16_d">D) `g + N`</label><br>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p class="question-text">17. What is the order of the element `[3]` in the cyclic group `(Z_6, +_6)`?</p>
+                <div class="options">
+                    <input type="radio" id="q17_a" name="q17" value="a">
+                    <label for="q17_a">A) 1</label><br>
+                    <input type="radio" id="q17_b" name="q17" value="b">
+                    <label for="q17_b" data-correct="true">B) 2</label><br>
+                    <input type="radio" id="q17_c" name="q17" value="c">
+                    <label for="q17_c">C) 3</label><br>
+                    <input type="radio" id="q17_d" name="q17" value="d">
+                    <label for="q17_d">D) 6</label><br>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p class="question-text">18. If `φ: G → H` is a group isomorphism, then:</p>
+                <div class="options">
+                    <input type="radio" id="q18_a" name="q18" value="a">
+                    <label for="q18_a">A) `φ` is a homomorphism and `Ker(φ) = {e_G}`.</label><br>
+                    <input type="radio" id="q18_b" name="q18" value="b">
+                    <label for="q18_b">B) `φ` is a homomorphism and `φ` is surjective.</label><br>
+                    <input type="radio" id="q18_c" name="q18" value="c">
+                    <label for="q18_c" data-correct="true">C) `φ` is a homomorphism, `φ` is injective, and `φ` is surjective.</label><br>
+                    <input type="radio" id="q18_d" name="q18" value="d">
+                    <label for="q18_d">D) `φ` is a homomorphism and `G` is abelian.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p class="question-text">19. Consider the set of polynomials with integer coefficients, `Z[x]`. Under polynomial addition and multiplication, `Z[x]` forms:</p>
+                <div class="options">
+                    <input type="radio" id="q19_a" name="q19" value="a">
+                    <label for="q19_a">A) A field.</label><br>
+                    <input type="radio" id="q19_b" name="q19" value="b">
+                    <label for="q19_b" data-correct="true">B) An integral domain.</label><br>
+                    <input type="radio" id="q19_c" name="q19" value="c">
+                    <label for="q19_c">C) A group.</label><br>
+                    <input type="radio" id="q19_d" name="q19" value="d">
+                    <label for="q19_d">D) A division ring.</label><br>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p class="question-text">20. If `(S, *)` is a semigroup and `e ∈ S` is an identity element, then `(S, *)` is a:</p>
+                <div class="options">
+                    <input type="radio" id="q20_a" name="q20" value="a">
+                    <label for="q20_a">A) Group</label><br>
+                    <input type="radio" id="q20_b" name="q20" value="b">
+                    <label for="q20_b" data-correct="true">B) Monoid</label><br>
+                    <input type="radio" id="q20_c" name="q20" value="c">
+                    <label for="q20_c">C) Ring</label><br>
+                    <input type="radio" id="q20_d" name="q20" value="d">
+                    <label for="q20_d">D) Field</label><br>
+                </div>
+            </div>
+        </div>
+
+        <button id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const quizForm = document.getElementById('quizForm');
+
+            showAnswersBtn.addEventListener('click', function() {
+                // Get all labels that are marked as correct
+                const correctLabels = quizForm.querySelectorAll('label[data-correct="true"]');
+
+                correctLabels.forEach(label => {
+                    // Add the highlighting class
+                    label.classList.add('correct-answer');
+
+                    // Prepend the checkmark emoji if not already present
+                    if (!label.textContent.startsWith('✅ ')) {
+                        label.textContent = '✅ ' + label.textContent;
+                    }
+
+                    // Disable the corresponding radio button
+                    const inputElement = document.getElementById(label.htmlFor);
+                    if (inputElement) {
+                        inputElement.disabled = true;
+                    }
+                });
+
+                // Disable all other radio buttons to prevent further selection
+                const allRadioInputs = quizForm.querySelectorAll('input[type="radio"]');
+                allRadioInputs.forEach(input => {
+                    input.disabled = true;
+                });
+
+                // Change button text and disable it
+                showAnswersBtn.textContent = 'Answers Shown';
+                showAnswersBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

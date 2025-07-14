@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Theory Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f8f8; /* Light gray background */
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            color: #2c3e50; /* Dark blue-gray */
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 600;
+            border-bottom: 2px solid #3498db; /* Blue accent under title */
+            padding-bottom: 15px;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Question Styling */
+        .question {
+            background-color: #fbfbfb;
+            border: 1px solid #e9e9e9;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-text {
+            font-size: 1.25em;
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* Options Styling */
+        .options label {
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Vertically align items */
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .options label:hover {
+            background-color: #eef7fc; /* Light blue on hover */
+            border-color: #b3d9ff; /* Darker blue border on hover */
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2); /* Slightly larger radio buttons */
+            accent-color: #3498db; /* Blue accent for radio button itself */
+            flex-shrink: 0; /* Prevent radio button from shrinking */
+        }
+
+        .options .option-text {
+            flex-grow: 1; /* Allow text to take up remaining space */
+        }
+
+        /* Correct Answer Highlight */
+        .correct-answer-highlight {
+            background-color: #d4edda !important; /* Light green */
+            border-color: #28a745 !important; /* Darker green border */
+            font-weight: 600;
+            color: #155724 !important; /* Dark green text */
+            box-shadow: 0 2px 10px rgba(40, 167, 69, 0.2); /* Green shadow */
+        }
+
+        /* Show Answers Button */
+        .show-answers-btn {
+            display: block;
+            width: 300px;
+            padding: 18px 25px;
+            margin: 50px auto 20px auto;
+            background-color: #3498db; /* Blue */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Set Theory Quiz</h1>
+
+        <div class="question">
+            <p class="question-text">1. Which of the following is an accurate definition of the power set of a set A, denoted P(A)?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q1" value="a">
+                    <span class="option-text">A. The set of all elements of A.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1" value="b">
+                    <span class="option-text">B. The set of all proper subsets of A.</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q1" value="c">
+                    <span class="option-text">C. The set of all subsets of A, including A itself and the empty set.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1" value="d">
+                    <span class="option-text">D. The set of all subsets of A excluding the empty set.</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">2. If A = {1, 2, 3} and B = {3, 4, 5}, what is A ∪ B?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q2" value="a">
+                    <span class="option-text">A. {1, 2, 3, 4}</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q2" value="b">
+                    <span class="option-text">B. {1, 2, 3, 4, 5}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q2" value="c">
+                    <span class="option-text">C. {3}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q2" value="d">
+                    <span class="option-text">D. {1, 2, 4, 5}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">3. For any sets A and B, which of the following is equivalent to A \ B (A minus B)?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q3" value="a">
+                    <span class="option-text">A. A ∪ B</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q3" value="b">
+                    <span class="option-text">B. A ∩ B</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q3" value="c">
+                    <span class="option-text">C. A ∩ B<sup>c</sup> (where B<sup>c</sup> is the complement of B)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q3" value="d">
+                    <span class="option-text">D. B \ A</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">4. What is the cardinality of the power set of a set with n elements?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q4" value="a">
+                    <span class="option-text">A. n!</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q4" value="b">
+                    <span class="option-text">B. n<sup>2</sup></span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q4" value="c">
+                    <span class="option-text">C. 2<sup>n</sup></span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q4" value="d">
+                    <span class="option-text">D. n</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">5. Which of the following statements is true regarding the empty set (∅)?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q5" value="a">
+                    <span class="option-text">A. ∅ is a subset of every set except itself.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q5" value="b">
+                    <span class="option-text">B. ∅ has a cardinality of 1.</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q5" value="c">
+                    <span class="option-text">C. ∅ is a subset of every set.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q5" value="d">
+                    <span class="option-text">D. ∅ is an element of every set.</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">6. If A ⊆ B and B ⊆ A, what can be concluded?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q6" value="a">
+                    <span class="option-text">A. A is a proper subset of B.</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q6" value="b">
+                    <span class="option-text">B. A = B.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q6" value="c">
+                    <span class="option-text">C. A ∩ B = ∅.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q6" value="d">
+                    <span class="option-text">D. A ∪ B = U (Universal set).</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">7. What is the Cartesian product A × B if A = {a, b} and B = {1, 2}?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q7" value="a">
+                    <span class="option-text">A. {(a,1), (b,2)}</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q7" value="b">
+                    <span class="option-text">B. {(a,1), (a,2), (b,1), (b,2)}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q7" value="c">
+                    <span class="option-text">C. {{a,1}, {a,2}, {b,1}, {b,2}}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q7" value="d">
+                    <span class="option-text">D. {a, b, 1, 2}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">8. De Morgan's Law states that (A ∪ B)<sup>c</sup> is equal to:</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q8" value="a">
+                    <span class="option-text">A. A<sup>c</sup> ∪ B<sup>c</sup></span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q8" value="b">
+                    <span class="option-text">B. A<sup>c</sup> ∩ B<sup>c</sup></span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q8" value="c">
+                    <span class="option-text">C. A ∩ B</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q8" value="d">
+                    <span class="option-text">D. A ∪ B</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">9. What is the symmetric difference of sets A and B, denoted A Δ B?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q9" value="a">
+                    <span class="option-text">A. A ∩ B</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q9" value="b">
+                    <span class="option-text">B. A ∪ B</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q9" value="c">
+                    <span class="option-text">C. (A \ B) ∪ (B \ A)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q9" value="d">
+                    <span class="option-text">D. A \ B</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">10. If U = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} is the universal set and A = {2, 4, 6, 8, 10}, what is A<sup>c</sup>?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q10" value="a">
+                    <span class="option-text">A. {1, 3, 5, 7, 9, 10}</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q10" value="b">
+                    <span class="option-text">B. {1, 3, 5, 7, 9}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q10" value="c">
+                    <span class="option-text">C. {2, 4, 6, 8, 10}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q10" value="d">
+                    <span class="option-text">D. ∅</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">11. What is the fundamental property of a set that distinguishes it from a multiset?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q11" value="a">
+                    <span class="option-text">A. Elements in a set must be ordered.</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q11" value="b">
+                    <span class="option-text">B. Elements in a set are distinct (no duplicates).</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q11" value="c">
+                    <span class="option-text">C. A set must contain at least one element.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q11" value="d">
+                    <span class="option-text">D. A set must be finite.</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">12. Which of the following sets is uncountable?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q12" value="a">
+                    <span class="option-text">A. The set of integers (ℤ).</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q12" value="b">
+                    <span class="option-text">B. The set of rational numbers (ℚ).</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q12" value="c">
+                    <span class="option-text">C. The set of real numbers (ℝ).</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q12" value="d">
+                    <span class="option-text">D. The set of natural numbers (ℕ).</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">13. The set {x ∈ ℝ | x<sup>2</sup> = -1} is equivalent to which set?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q13" value="a">
+                    <span class="option-text">A. {i, -i} (where i is the imaginary unit)</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q13" value="b">
+                    <span class="option-text">B. ∅ (the empty set)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q13" value="c">
+                    <span class="option-text">C. {1}</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q13" value="d">
+                    <span class="option-text">D. {-1, 1}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">14. If |A| = 5, |B| = 7, and |A ∩ B| = 3, what is |A ∪ B|?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q14" value="a">
+                    <span class="option-text">A. 9</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q14" value="b">
+                    <span class="option-text">B. 5 + 7 - 3 = 9</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q14" value="c">
+                    <span class="option-text">C. 12</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q14" value="d">
+                    <span class="option-text">D. 15</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">15. A partition of a set S is a collection of non-empty subsets of S such that:</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q15" value="a">
+                    <span class="option-text">A. Their union is S, and they are all identical.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q15" value="b">
+                    <span class="option-text">B. Their intersection is S, and they are pairwise disjoint.</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q15" value="c">
+                    <span class="option-text">C. Their union is S, and they are pairwise disjoint.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q15" value="d">
+                    <span class="option-text">D. They are all subsets of S, and their intersection is the empty set.</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">16. The statement "If A is a subset of B and B is a subset of C, then A is a subset of C" represents which property of set inclusion?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q16" value="a">
+                    <span class="option-text">A. Reflexivity</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q16" value="b">
+                    <span class="option-text">B. Antisymmetry</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q16" value="c">
+                    <span class="option-text">C. Transitivity</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q16" value="d">
+                    <span class="option-text">D. Commutativity</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">17. Which of the following defines a proper subset?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q17" value="a">
+                    <span class="option-text">A. A ⊆ B</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q17" value="b">
+                    <span class="option-text">B. A ⊆ B and A ≠ B</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q17" value="c">
+                    <span class="option-text">C. A ∩ B = ∅</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q17" value="d">
+                    <span class="option-text">D. A ∈ B</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">18. Given sets A = {x | x is an even integer} and B = {x | x is an odd integer}. What is A ∩ B?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q18" value="a">
+                    <span class="option-text">A. The set of all integers.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q18" value="b">
+                    <span class="option-text">B. The set of all prime numbers.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q18" value="c">
+                    <span class="option-text">C. {0}</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q18" value="d">
+                    <span class="option-text">D. ∅ (the empty set)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">19. If S is a set, the statement 'S ∈ S' (S is an element of itself) leads to which famous paradox in set theory?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q19" value="a">
+                    <span class="option-text">A. The Barber Paradox</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q19" value="b">
+                    <span class="option-text">B. Zeno's Paradox</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q19" value="c">
+                    <span class="option-text">C. Russell's Paradox</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q19" value="d">
+                    <span class="option-text">D. The Liar Paradox</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">20. Which of the following statements about infinite sets is false?</p>
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="q20" value="a">
+                    <span class="option-text">A. The set of natural numbers is countably infinite.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q20" value="b">
+                    <span class="option-text">B. The set of real numbers is uncountably infinite.</span>
+                </label>
+                <label class="option-label" data-correct="true">
+                    <input type="radio" name="q20" value="c">
+                    <span class="option-text">C. Any subset of an infinite set is infinite.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q20" value="d">
+                    <span class="option-text">D. The power set of any infinite set is uncountably infinite.</span>
+                </label>
+            </div>
+        </div>
+
+        <button id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const labels = document.querySelectorAll('.option-label'); // Select all labels with this class
+            labels.forEach(label => {
+                if (label.dataset.correct === 'true') {
+                    label.classList.add('correct-answer-highlight'); // Add class for styling
+                    const optionTextSpan = label.querySelector('.option-text');
+                    if (optionTextSpan) {
+                        optionTextSpan.textContent = '✅ ' + optionTextSpan.textContent; // Prepend checkmark
+                    }
+                    // Optionally hide the radio button itself for a cleaner look
+                    const radioInput = label.querySelector('input[type="radio"]');
+                    if (radioInput) {
+                        radioInput.style.display = 'none';
+                    }
+                }
+            });
+
+            // Change button text and disable it
+            this.textContent = 'Answers Shown';
+            this.disabled = true;
+        });
+    </script>
+</body>
+</html>

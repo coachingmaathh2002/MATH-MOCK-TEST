@@ -1,0 +1,674 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Theory Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+        :root {
+            --primary-blue: #2c3e50; /* Dark blue for headings/accents */
+            --light-blue: #3498db;   /* Medium blue for buttons/links */
+            --accent-green: #27ae60; /* Green for success/correct answers */
+            --light-gray: #ecf0f1;   /* Light background */
+            --medium-gray: #bdc3c7;  /* Border/separator color */
+            --dark-text: #34495e;    /* Dark text color */
+            --white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .quiz-container {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow);
+            max-width: 900px;
+            width: 100%;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.25em;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            position: relative; /* For custom radio button */
+            cursor: pointer;
+            padding: 15px 20px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            user-select: none; /* Prevent text selection on click */
+        }
+
+        .option:hover {
+            background-color: #f8fbfc;
+            border-color: var(--light-blue);
+        }
+
+        .option input[type="radio"] {
+            /* Hide default radio button */
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .option label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.1em;
+            color: var(--dark-text);
+            flex-grow: 1; /* Make label fill available space */
+        }
+
+        /* Custom radio button styling */
+        .option label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--light-blue);
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: var(--white);
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .option input[type="radio"]:checked + label::before {
+            background-color: var(--light-blue);
+            border-color: var(--light-blue);
+            box-shadow: inset 0 0 0 5px var(--white);
+        }
+
+        /* Styling for correct answers */
+        .option.correct-answer {
+            background-color: #e6ffe6; /* Light green */
+            border-color: var(--accent-green);
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
+        }
+
+        .option.correct-answer label {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .option.correct-answer label::before {
+            border-color: var(--accent-green);
+            background-color: var(--accent-green);
+            box-shadow: inset 0 0 0 5px var(--white);
+        }
+
+
+        button {
+            display: block;
+            margin: 30px auto 0;
+            padding: 15px 30px;
+            background-color: var(--light-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px var(--shadow);
+            outline: none;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        button:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Group Theory Quiz</h1>
+
+        <div class="question-block">
+            <p class="question-text">1. Which of the following is NOT necessarily true for a group (G, *)?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q1a" name="q1" value="a">
+                    <label for="q1a">A. G has an identity element.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q1b" name="q1" value="b">
+                    <label for="q1b">B. Every element in G has an inverse.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q1c" name="q1" value="c" data-correct="true">
+                    <label for="q1c" data-correct="true">C. The operation * is commutative.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q1d" name="q1" value="d">
+                    <label for="q1d">D. The operation * is associative.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">2. What is the order of the element 3 in the group (Z_6, +_6)?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q2a" name="q2" value="a">
+                    <label for="q2a">A. 1</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q2b" name="q2" value="b" data-correct="true">
+                    <label for="q2b" data-correct="true">B. 2</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q2c" name="q2" value="c">
+                    <label for="q2c">C. 3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q2d" name="q2" value="d">
+                    <label for="q2d">D. 6</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">3. According to Lagrange's Theorem, if H is a subgroup of a finite group G, then:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q3a" name="q3" value="a">
+                    <label for="q3a">A. |G| divides |H|.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q3b" name="q3" value="b" data-correct="true">
+                    <label for="q3b" data-correct="true">B. |H| divides |G|.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q3c" name="q3" value="c">
+                    <label for="q3c">C. |G| = |H|.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q3d" name="q3" value="d">
+                    <label for="q3d">D. G/H is always a group.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">4. Which of the following is a normal subgroup of S_3 (the symmetric group on 3 elements)?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q4a" name="q4" value="a">
+                    <label for="q4a">A. {e, (1 2)}</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q4b" name="q4" value="b">
+                    <label for="q4b">B. {e, (1 2 3), (1 3 2)}</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q4c" name="q4" value="c" data-correct="true">
+                    <label for="q4c" data-correct="true">C. A_3 (the alternating group on 3 elements)</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q4d" name="q4" value="d">
+                    <label for="q4d">D. S_3 itself is the only normal subgroup.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">5. If φ: G → H is a group homomorphism, then Ker(φ) is a normal subgroup of:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q5a" name="q5" value="a">
+                    <label for="q5a">A. H</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q5b" name="q5" value="b" data-correct="true">
+                    <label for="q5b" data-correct="true">C. G</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q5c" name="q5" value="c">
+                    <label for="q5c">C. Im(φ)</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q5d" name="q5" value="d">
+                    <label for="q5d">D. G/Ker(φ)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">6. Which of the following groups is cyclic?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q6a" name="q6" value="a">
+                    <label for="q6a">A. S_3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q6b" name="q6" value="b">
+                    <label for="q6b">B. D_4 (Dihedral group of order 8)</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q6c" name="q6" value="c">
+                    <label for="q6c">C. Z_2 x Z_2 (Klein four-group)</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q6d" name="q6" value="d" data-correct="true">
+                    <label for="q6d" data-correct="true">D. Z_6</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">7. The set of all invertible 2x2 matrices with real entries under matrix multiplication forms a group. Is it abelian?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q7a" name="q7" value="a" data-correct="true">
+                    <label for="q7a" data-correct="true">A. No, matrix multiplication is generally not commutative.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q7b" name="q7" value="b">
+                    <label for="q7b">B. Yes, because it's a group.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q7c" name="q7" value="c">
+                    <label for="q7c">C. Only if the determinant is 1.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q7d" name="q7" value="d">
+                    <label for="q7d">D. Only if the matrices are diagonal.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">8. By Cayley's Theorem, every group is isomorphic to a subgroup of:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q8a" name="q8" value="a">
+                    <label for="q8a">A. An abelian group.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q8b" name="q8" value="b" data-correct="true">
+                    <label for="q8b" data-correct="true">B. A symmetric group.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q8c" name="q8" value="c">
+                    <label for="q8c">C. A cyclic group.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q8d" name="q8" value="d">
+                    <label for="q8d">D. The group of integers under addition.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">9. What is the quotient group Z_12 / <4>, where <4> is the subgroup generated by 4?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q9a" name="q9" value="a">
+                    <label for="q9a">A. Z_2</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q9b" name="q9" value="b" data-correct="true">
+                    <label for="q9b" data-correct="true">B. Z_4</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q9c" name="q9" value="c">
+                    <label for="q9c">C. Z_3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q9d" name="q9" value="d">
+                    <label for="q9d">D. Z_6</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">10. The center of a group G, denoted Z(G), is:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q10a" name="q10" value="a">
+                    <label for="q10a">A. The set of all elements that commute with the identity element.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q10b" name="q10" value="b" data-correct="true">
+                    <label for="q10b" data-correct="true">B. The set of all elements that commute with every element in G.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q10c" name="q10" value="c">
+                    <label for="q10c">C. The smallest subgroup of G.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q10d" name="q10" value="d">
+                    <label for="q10d">D. The set of all normal subgroups of G.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">11. How many distinct groups of order 4 are there, up to isomorphism?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q11a" name="q11" value="a">
+                    <label for="q11a">A. 1</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q11b" name="q11" value="b" data-correct="true">
+                    <label for="q11b" data-correct="true">B. 2</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q11c" name="q11" value="c">
+                    <label for="q11c">C. 3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q11d" name="q11" value="d">
+                    <label for="q11d">D. 4</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">12. According to Cauchy's Theorem, if p is a prime dividing the order of a finite group G, then G has an element of order:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q12a" name="q12" value="a">
+                    <label for="q12a">A. 1</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q12b" name="q12" value="b">
+                    <label for="q12b">B. The order of G</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q12c" name="q12" value="c" data-correct="true">
+                    <label for="q12c" data-correct="true">C. p</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q12d" name="q12" value="d">
+                    <label for="q12d">D. p^k for some k >= 1</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">13. Which of the following is an example of a non-abelian group of order 6?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q13a" name="q13" value="a">
+                    <label for="q13a">A. Z_6</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q13b" name="q13" value="b" data-correct="true">
+                    <label for="q13b" data-correct="true">B. S_3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q13c" name="q13" value="c">
+                    <label for="q13c">C. Z_2 x Z_3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q13d" name="q13" value="d">
+                    <label for="q13d">D. U(6) (group of units modulo 6)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">14. If G is an abelian group, then every subgroup H of G is:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q14a" name="q14" value="a">
+                    <label for="q14a">A. Cyclic</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q14b" name="q14" value="b" data-correct="true">
+                    <label for="q14b" data-correct="true">B. Normal</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q14c" name="q14" value="c">
+                    <label for="q14c">C. Simple</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q14d" name="q14" value="d">
+                    <label for="q14d">D. Trivial</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">15. What is the order of the permutation (1 2 3)(4 5) in S_5?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q15a" name="q15" value="a">
+                    <label for="q15a">A. 2</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q15b" name="q15" value="b">
+                    <label for="q15b">B. 3</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q15c" name="q15" value="c">
+                    <label for="q15c">C. 5</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q15d" name="q15" value="d" data-correct="true">
+                    <label for="q15d" data-correct="true">D. 6</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">16. The Fundamental Theorem of Finite Abelian Groups states that every finite abelian group is isomorphic to a direct product of cyclic groups of prime power order. This decomposition is:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q16a" name="q16" value="a">
+                    <label for="q16a">A. Unique up to rearrangement of factors.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q16b" name="q16" value="b">
+                    <label for="q16b">B. Unique only if the group is cyclic.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q16c" name="q16" value="c" data-correct="true">
+                    <label for="q16c" data-correct="true">C. Unique up to isomorphism and rearrangement of factors.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q16d" name="q16" value="d">
+                    <label for="q16d">D. Not unique.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">17. If |G|=pq where p and q are distinct primes, and p < q. If q does not divide p-1, then G is necessarily:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q17a" name="q17" value="a">
+                    <label for="q17a">A. Simple</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q17b" name="q17" value="b">
+                    <label for="q17b">B. Non-abelian</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q17c" name="q17" value="c" data-correct="true">
+                    <label for="q17c" data-correct="true">C. Cyclic</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q17d" name="q17" value="d">
+                    <label for="q17d">D. A dihedral group</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">18. The set of all automorphisms of a group G, Aut(G), forms a group under:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q18a" name="q18" value="a">
+                    <label for="q18a">A. Pointwise multiplication</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q18b" name="q18" value="b" data-correct="true">
+                    <label for="q18b" data-correct="true">B. Function composition</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q18c" name="q18" value="c">
+                    <label for="q18c">C. Addition</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q18d" name="q18" value="d">
+                    <label for="q18d">D. Convolution</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">19. Consider the group of integers under addition (Z, +). Which of the following is NOT a subgroup of (Z, +)?</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q19a" name="q19" value="a">
+                    <label for="q19a">A. The set of even integers</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q19b" name="q19" value="b">
+                    <label for="q19b">B. {0}</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q19c" name="q19" value="c" data-correct="true">
+                    <label for="q19c" data-correct="true">C. The set of prime numbers</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q19d" name="q19" value="d">
+                    <label for="q19d">D. The set of multiples of 5</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <p class="question-text">20. If G is a finite group and H is a subgroup of G, then the number of distinct left cosets of H in G is equal to:</p>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" id="q20a" name="q20" value="a">
+                    <label for="q20a">A. The order of H</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q20b" name="q20" value="b">
+                    <label for="q20b">B. The order of G</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q20c" name="q20" value="c" data-correct="true">
+                    <label for="q20c" data-correct="true">C. |G| / |H|</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q20d" name="q20" value="d">
+                    <label for="q20d">D. The number of normal subgroups in G</label>
+                </div>
+            </div>
+        </div>
+
+        <button id="showAnswersBtn">Show Answers</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+
+            showAnswersBtn.addEventListener('click', () => {
+                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+
+                correctLabels.forEach(label => {
+                    // Add class to the parent .option div for background and border
+                    const parentOption = label.closest('.option');
+                    if (parentOption) {
+                        parentOption.classList.add('correct-answer');
+                    }
+
+                    // Prepend checkmark emoji if not already present
+                    if (!label.textContent.startsWith('✅')) {
+                        label.innerHTML = '✅ ' + label.innerHTML;
+                    }
+                });
+
+                showAnswersBtn.textContent = 'Answers Shown';
+                showAnswersBtn.disabled = true; // Disable button after showing answers
+            });
+
+            // Optional: Prevent changing selection after answers are shown
+            // You could also iterate through all inputs and disable them
+            // const radioInputs = document.querySelectorAll('input[type="radio"]');
+            // showAnswersBtn.addEventListener('click', () => {
+            //     radioInputs.forEach(input => {
+            //         input.disabled = true;
+            //     });
+            //     // ... rest of the code
+            // });
+        });
+    </script>
+</body>
+</html>
+```

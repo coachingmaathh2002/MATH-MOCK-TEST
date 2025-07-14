@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions and Mappings Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5; /* Light gray-blue background */
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        /* Header Styling */
+        h1 {
+            color: #2c3e50; /* Dark blue for headings */
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            border-bottom: 2px solid #3498db; /* A vibrant blue underline */
+            padding-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* Question Styling */
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9; /* Slightly off-white for questions */
+            border-left: 5px solid #3498db; /* Blue accent border */
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question p {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            text-align: left; /* Ensure question text is left-aligned */
+        }
+
+        /* Options Styling */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Space between options */
+        }
+
+        .options label {
+            display: block;
+            padding: 12px 15px;
+            background-color: #ecf0f1; /* Light gray for options */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            font-size: 1.05em;
+            color: #444;
+            display: flex; /* For aligning checkbox and text */
+            align-items: center;
+        }
+
+        .options label:hover {
+            background-color: #e0e6ea;
+            border-color: #c0c8cc;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            /* Hide default radio button and style it custom if needed */
+            /* For simplicity, we'll let the browser render it, but ensure margin */
+            -webkit-appearance: none; /* Hide default radio button */
+            -moz-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #999;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0; /* Prevent it from shrinking */
+        }
+
+        .options input[type="radio"]:checked {
+            background-color: #3498db; /* Blue dot when checked */
+            border-color: #3498db;
+        }
+
+        .options input[type="radio"]:checked::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Button Styling */
+        .show-answers-btn {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0;
+            padding: 15px 30px;
+            background-color: #3498db; /* Blue button */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #217dbb;
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Correct Answer Highlight */
+        .correct-answer {
+            background-color: #D4EDDA !important; /* Light green for correct answer */
+            border-color: #28a745 !important; /* Darker green border */
+            font-weight: bold;
+            color: #155724 !important; /* Dark green text */
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Functions and Mappings Quiz</h1>
+        <p>Test your knowledge on university-level concepts of Functions and Mappings. Select one option for each question.</p>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question">
+                <p>1. Which of the following best defines a function f from set A to set B?</p>
+                <div class="options">
+                    <label for="q1a"><input type="radio" id="q1a" name="q1" value="A"> A. A relation where every element in B is mapped to at least one element in A.</label>
+                    <label for="q1b" data-correct="true"><input type="radio" id="q1b" name="q1" value="B"> B. A relation where every element in A is mapped to exactly one element in B.</label>
+                    <label for="q1c"><input type="radio" id="q1c" name="q1" value="C"> C. A relation where some elements in A are mapped to multiple elements in B.</label>
+                    <label for="q1d"><input type="radio" id="q1d" name="q1" value="D"> D. A relation where every element in B is mapped from at least one element in A.</label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <p>2. If a function f: A → B is injective (one-to-one), what does this imply about its mapping?</p>
+                <div class="options">
+                    <label for="q2a" data-correct="true"><input type="radio" id="q2a" name="q2" value="A"> A. Different elements in A map to different elements in B.</label>
+                    <label for="q2b"><input type="radio" id="q2b" name="q2" value="B"> B. Every element in B is the image of some element in A.</label>
+                    <label for="q2c"><input type="radio" id="q2c" name="q2" value="C"> C. The range of f is equal to the codomain B.</label>
+                    <label for="q2d"><input type="radio" id="q2d" name="q2" value="D"> D. Every element in A maps to the same element in B.</label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <p>3. A function f: A → B is surjective (onto) if:</p>
+                <div class="options">
+                    <label for="q3a"><input type="radio" id="q3a" name="q3" value="A"> A. For every x in A, there is a unique y in B such that f(x) = y.</label>
+                    <label for="q3b"><input type="radio" id="q3b" name="q3" value="B"> B. For every y in B, there is at most one x in A such that f(x) = y.</label>
+                    <label for="q3c" data-correct="true"><input type="radio" id="q3c" name="q3" value="C"> C. For every y in B, there is at least one x in A such that f(x) = y.</label>
+                    <label for="q3d"><input type="radio" id="q3d" name="q3" value="D"> D. The domain and codomain are the same set.</label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <p>4. What property must a function possess to have an inverse function?</p>
+                <div class="options">
+                    <label for="q4a"><input type="radio" id="q4a" name="q4" value="A"> A. It must be injective.</label>
+                    <label for="q4b"><input type="radio" id="q4b" name="q4" value="B"> B. It must be surjective.</label>
+                    <label for="q4c" data-correct="true"><input type="radio" id="q4c" name="q4" value="C"> C. It must be bijective (both injective and surjective).</label>
+                    <label for="q4d"><input type="radio" id="q4d" name="q4" value="D"> D. It must be continuous.</label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <p>5. Let f(x) = 2x + 1 and g(x) = x². What is (g ∘ f)(x)?</p>
+                <div class="options">
+                    <label for="q5a"><input type="radio" id="q5a" name="q5" value="A"> A. 2x² + 1</label>
+                    <label for="q5b"><input type="radio" id="q5b" name="q5" value="B"> B. (2x + 1)²</label>
+                    <label for="q5c" data-correct="true"><input type="radio" id="q5c" name="q5" value="C"> C. (2x + 1)²</label>
+                    <label for="q5d"><input type="radio" id="q5d" name="q5" value="D"> D. 4x² + 4x + 1</label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <p>6. The domain of the function f(x) = √(x - 3) is:</p>
+                <div class="options">
+                    <label for="q6a"><input type="radio" id="q6a" name="q6" value="A"> A. (-∞, 3)</label>
+                    <label for="q6b"><input type="radio" id="q6b" name="q6" value="B"> B. (3, ∞)</label>
+                    <label for="q6c" data-correct="true"><input type="radio" id="q6c" name="q6" value="C"> C. [3, ∞)</label>
+                    <label for="q6d"><input type="radio" id="q6d" name="q6" value="D"> D. (-∞, ∞)</label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <p>7. Which of the following functions is an odd function?</p>
+                <div class="options">
+                    <label for="q7a"><input type="radio" id="q7a" name="q7" value="A"> A. f(x) = x²</label>
+                    <label for="q7b"><input type="radio" id="q7b" name="q7" value="B"> B. f(x) = cos(x)</label>
+                    <label for="q7c" data-correct="true"><input type="radio" id="q7c" name="q7" value="C"> C. f(x) = sin(x)</label>
+                    <label for="q7d"><input type="radio" id="q7d" name="q7" value="D"> D. f(x) = |x|</label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <p>8. What is the range of the function f(x) = |x|?</p>
+                <div class="options">
+                    <label for="q8a"><input type="radio" id="q8a" name="q8" value="A"> A. (-∞, ∞)</label>
+                    <label for="q8b"><input type="radio" id="q8b" name="q8" value="B"> B. (-∞, 0]</label>
+                    <label for="q8c" data-correct="true"><input type="radio" id="q8c" name="q8" value="C"> C. [0, ∞)</label>
+                    <label for="q8d"><input type="radio" id="q8d" name="q8" value="D"> D. (0, ∞)</label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <p>9. A function f: ℝ → ℝ defined by f(x) = x³ is:</p>
+                <div class="options">
+                    <label for="q9a"><input type="radio" id="q9a" name="q9" value="A"> A. Injective but not surjective</label>
+                    <label for="q9b"><input type="radio" id="q9b" name="q9" value="B"> B. Surjective but not injective</label>
+                    <label for="q9c" data-correct="true"><input type="radio" id="q9c" name="q9" value="C"> C. Bijective</label>
+                    <label for="q9d"><input type="radio" id="q9d" name="q9" value="D"> D. Neither injective nor surjective</label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <p>10. If f(x) = ln(x), what is its inverse function, f⁻¹(x)?</p>
+                <div class="options">
+                    <label for="q10a"><input type="radio" id="q10a" name="q10" value="A"> A. f⁻¹(x) = 1/ln(x)</label>
+                    <label for="q10b"><input type="radio" id="q10b" name="q10" value="B"> B. f⁻¹(x) = log₁₀(x)</label>
+                    <label for="q10c" data-correct="true"><input type="radio" id="q10c" name="q10" value="C"> C. f⁻¹(x) = eˣ</label>
+                    <label for="q10d"><input type="radio" id="q10d" name="q10" value="D"> D. f⁻¹(x) = -ln(x)</label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question">
+                <p>11. The floor function, ⌊x⌋, maps a real number x to:</p>
+                <div class="options">
+                    <label for="q11a"><input type="radio" id="q11a" name="q11" value="A"> A. The smallest integer greater than or equal to x.</label>
+                    <label for="q11b" data-correct="true"><input type="radio" id="q11b" name="q11" value="B"> B. The largest integer less than or equal to x.</label>
+                    <label for="q11c"><input type="radio" id="q11c" name="q11" value="C"> C. The nearest integer to x.</label>
+                    <label for="q11d"><input type="radio" id="q11d" name="q11" value="D"> D. The fractional part of x.</label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question">
+                <p>12. Which of the following represents the graph of an even function?</p>
+                <div class="options">
+                    <label for="q12a"><input type="radio" id="q12a" name="q12" value="A"> A. Symmetric with respect to the origin.</label>
+                    <label for="q12b" data-correct="true"><input type="radio" id="q12b" name="q12" value="B"> B. Symmetric with respect to the y-axis.</label>
+                    <label for="q12c"><input type="radio" id="q12c" name="q12" value="C"> C. Symmetric with respect to the x-axis.</label>
+                    <label for="q12d"><input type="radio" id="q12d" name="q12" value="D"> D. Symmetric with respect to the line y=x.</label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question">
+                <p>13. A periodic function f(x) with period P satisfies:</p>
+                <div class="options">
+                    <label for="q13a"><input type="radio" id="q13a" name="q13" value="A"> A. f(x) = -f(x)</label>
+                    <label for="q13b" data-correct="true"><input type="radio" id="q13b" name="q13" value="B"> B. f(x + P) = f(x)</label>
+                    <label for="q13c"><input type="radio" id="q13c" name="q13" value="C"> C. f(x) = f(-x)</label>
+                    <label for="q13d"><input type="radio" id="q13d" name="q13" value="D"> D. f(P) = 0</label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question">
+                <p>14. For the function f(x) = 1/x, its domain is:</p>
+                <div class="options">
+                    <label for="q14a"><input type="radio" id="q14a" name="q14" value="A"> A. (-∞, ∞)</label>
+                    <label for="q14b"><input type="radio" id="q14b" name="q14" value="B"> B. [0, ∞)</label>
+                    <label for="q14c"><input type="radio" id="q14c" name="q14" value="C"> C. (-∞, 0)</label>
+                    <label for="q14d" data-correct="true"><input type="radio" id="q14d" name="q14" value="D"> D. (-∞, 0) U (0, ∞)</label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question">
+                <p>15. If a function f: A → B is defined, its range is a subset of:</p>
+                <div class="options">
+                    <label for="q15a"><input type="radio" id="q15a" name="q15" value="A"> A. The domain A</label>
+                    <label for="q15b" data-correct="true"><input type="radio" id="q15b" name="q15" value="B"> B. The codomain B</label>
+                    <label for="q15c"><input type="radio" id="q15c" name="q15" value="C"> C. Both A and B</label>
+                    <label for="q15d"><input type="radio" id="q15d" name="q15" value="D"> D. The set of real numbers ℝ</label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question">
+                <p>16. Which of these is NOT a function from ℝ to ℝ?</p>
+                <div class="options">
+                    <label for="q16a"><input type="radio" id="q16a" name="q16" value="A"> A. y = x² + 1</label>
+                    <label for="q16b"><input type="radio" id="q16b" name="q16" value="B"> B. y = sin(x)</label>
+                    <label for="q16c" data-correct="true"><input type="radio" id="q16c" name="q16" value="C"> C. x = y²</label>
+                    <label for="q16d"><input type="radio" id="q16d" name="q16" value="D"> D. y = eˣ</label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question">
+                <p>17. The composition of two injective functions is always:</p>
+                <div class="options">
+                    <label for="q17a"><input type="radio" id="q17a" name="q17" value="A"> A. Surjective</label>
+                    <label for="q17b" data-correct="true"><input type="radio" id="q17b" name="q17" value="B"> B. Injective</label>
+                    <label for="q17c"><input type="radio" id="q17c" name="q17" value="C"> C. Bijective</label>
+                    <label for="q17d"><input type="radio" id="q17d" name="q17" value="D"> D. Neither injective nor surjective</label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question">
+                <p>18. A piecewise function is defined as f(x) = { x+1 for x < 0; x² for x ≥ 0 }. What is f(-2) + f(2)?</p>
+                <div class="options">
+                    <label for="q18a"><input type="radio" id="q18a" name="q18" value="A"> A. 3</label>
+                    <label for="q18b" data-correct="true"><input type="radio" id="q18b" name="q18" value="B"> B. 3</label>
+                    <label for="q18c"><input type="radio" id="q18c" name="q18" value="C"> C. 5</label>
+                    <label for="q18d"><input type="radio" id="q18d" name="q18" value="D"> D. -1</label>
+                </div>
+            </div>
+            
+            <!-- Question 19 -->
+            <div class="question">
+                <p>19. What is the fundamental property of a linear function f(x) = mx + b that makes it "linear"?</p>
+                <div class="options">
+                    <label for="q19a"><input type="radio" id="q19a" name="q19" value="A"> A. It passes through the origin.</label>
+                    <label for="q19b"><input type="radio" id="q19b" name="q19" value="B"> B. Its graph is a straight line.</label>
+                    <label for="q19c" data-correct="true"><input type="radio" id="q19c" name="q19" value="C"> C. It satisfies f(x+y) = f(x) + f(y) and f(cx) = cf(x) for all x, y, c (homogeneity and additivity).</label>
+                    <label for="q19d"><input type="radio" id="q19d" name="q19" value="D"> D. Its derivative is a constant.</label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question">
+                <p>20. If A and B are finite sets with |A| = m and |B| = n, how many distinct functions can be defined from A to B?</p>
+                <div class="options">
+                    <label for="q20a"><input type="radio" id="q20a" name="q20" value="A"> A. mⁿ</label>
+                    <label for="q20b"><input type="radio" id="q20b" name="q20" value="B"> B. m × n</label>
+                    <label for="q20c" data-correct="true"><input type="radio" id="q20c" name="q20" value="C"> C. nᵐ</label>
+                    <label for="q20d"><input type="radio" id="q20d" name="q20" value="D"> D. n!</label>
+                </div>
+            </div>
+
+            <button type="button" class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const quizForm = document.getElementById('quizForm');
+
+            showAnswersBtn.addEventListener('click', function() {
+                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+                
+                correctLabels.forEach(label => {
+                    label.classList.add('correct-answer');
+                    // Prepend checkmark emoji if not already present
+                    if (!label.textContent.includes('✅')) {
+                        label.textContent = '✅ ' + label.textContent;
+                    }
+                });
+
+                // Disable all radio buttons to prevent further changes
+                const radioButtons = quizForm.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(radio => {
+                    radio.disabled = true;
+                });
+
+                // Change button text and disable it
+                this.textContent = 'Answers Shown';
+                this.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

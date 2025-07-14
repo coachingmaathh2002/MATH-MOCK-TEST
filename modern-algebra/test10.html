@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relations and Their Properties Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Light gray background */
+            color: #333; /* Dark gray text */
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Container for the Quiz */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff; /* White background for the content area */
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            box-sizing: border-box;
+        }
+
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            color: #2c3e50; /* Darker blue for headings */
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+
+        .description {
+            text-align: center;
+            color: #666; /* Medium gray for description */
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        /* Question Block Styling */
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee; /* Light separator line */
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none; /* No border for the last question */
+            margin-bottom: 40px; /* More space before the button */
+        }
+
+        .question-number {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #3498db; /* Primary blue for question numbers */
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Options Styling */
+        .options label {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9; /* Slightly off-white for options */
+            border: 1px solid #e0e0e0; /* Light border for options */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            font-size: 1em;
+            color: #444;
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Align radio button and text vertically */
+        }
+
+        .options label:hover {
+            background-color: #eaf6fe; /* Light blue on hover */
+            border-color: #b3d9ff; /* More prominent border on hover */
+        }
+
+        .options input[type="radio"] {
+            margin-right: 12px; /* Space between radio button and text */
+            transform: scale(1.1); /* Slightly larger radio buttons */
+            accent-color: #3498db; /* Blue accent color for radio button */
+        }
+
+        /* Correct Answer Highlighting */
+        .options label.correct-answer {
+            background-color: #d4edda; /* Light green for correct answers */
+            border-color: #28a745; /* Green border */
+            font-weight: 600;
+            color: #155724; /* Dark green text */
+        }
+
+        /* Show Answers Button */
+        #showAnswersBtn {
+            display: block;
+            width: auto; /* Adjust width based on content */
+            min-width: 200px; /* Minimum width for the button */
+            margin: 30px auto 20px auto; /* Center the button */
+            padding: 15px 30px;
+            background-color: #3498db; /* Primary blue button */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #showAnswersBtn:hover:not(:disabled) {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        #showAnswersBtn:disabled {
+            background-color: #cccccc; /* Gray out when disabled */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 25px;
+                margin: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .question-text, .options label {
+                font-size: 0.95em;
+            }
+            #showAnswersBtn {
+                padding: 12px 25px;
+                font-size: 1em;
+                min-width: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .description {
+                font-size: 0.9em;
+                margin-bottom: 30px;
+            }
+            .question-text, .options label {
+                font-size: 0.9em;
+            }
+            .options input[type="radio"] {
+                margin-right: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Relations and Their Properties Quiz</h1>
+        <p class="description">Test your knowledge on the fundamental concepts of relations in discrete mathematics, including their properties, types, and applications.</p>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p class="question-number">Question 1:</p>
+                <p class="question-text">Which property of a relation R on a set A states that for every element 'a' in A, (a, a) must be in R?</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="A"> A) Symmetric</label>
+                    <label data-correct="true"><input type="radio" name="q1" value="B"> B) Reflexive</label>
+                    <label><input type="radio" name="q1" value="C"> C) Transitive</label>
+                    <label><input type="radio" name="q1" value="D"> D) Antisymmetric</label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p class="question-number">Question 2:</p>
+                <p class="question-text">A relation R on a set A is symmetric if and only if:</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="A"> A) For all a, b &#x2208; A, if (a,b) &#x2208; R and (b,c) &#x2208; R, then (a,c) &#x2208; R.</label>
+                    <label data-correct="true"><input type="radio" name="q2" value="B"> B) For all a, b &#x2208; A, if (a,b) &#x2208; R, then (b,a) &#x2208; R.</label>
+                    <label><input type="radio" name="q2" value="C"> C) For all a &#x2208; A, (a,a) &#x2208; R.</label>
+                    <label><input type="radio" name="q2" value="D"> D) For all a, b &#x2208; A, if (a,b) &#x2208; R and (b,a) &#x2208; R, then a = b.</label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p class="question-number">Question 3:</p>
+                <p class="question-text">Which of the following is NOT a property required for an equivalence relation?</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="A"> A) Reflexivity</label>
+                    <label><input type="radio" name="q3" value="B"> B) Symmetry</label>
+                    <label><input type="radio" name="q3" value="C"> C) Transitivity</label>
+                    <label data-correct="true"><input type="radio" name="q3" value="D"> D) Antisymmetry</label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p class="question-number">Question 4:</p>
+                <p class="question-text">Consider the relation R on the set of integers Z defined as (a,b) &#x2208; R if a - b is an even number. Which type of relation is R?</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="A"> A) Partial Order</label>
+                    <label data-correct="true"><input type="radio" name="q4" value="B"> B) Equivalence Relation</label>
+                    <label><input type="radio" name="q4" value="C"> C) Strict Partial Order</label>
+                    <label><input type="radio" name="q4" value="D"> D) Total Order</label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p class="question-number">Question 5:</p>
+                <p class="question-text">If a relation R on a set A is reflexive, antisymmetric, and transitive, it is called a:</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="A"> A) Equivalence Relation</label>
+                    <label data-correct="true"><input type="radio" name="q5" value="B"> B) Partial Order Relation</label>
+                    <label><input type="radio" name="q5" value="C"> C) Total Order Relation</label>
+                    <label><input type="radio" name="q5" value="D"> D) Strict Partial Order</label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p class="question-number">Question 6:</p>
+                <p class="question-text">Let A = {1, 2, 3}. Which of the following relations on A is transitive?</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="A"> A) R = {(1,2), (2,1)}</label>
+                    <label><input type="radio" name="q6" value="B"> B) R = {(1,2), (2,3), (3,1)}</label>
+                    <label data-correct="true"><input type="radio" name="q6" value="C"> C) R = {(1,1), (1,2), (2,2)}</label>
+                    <label><input type="radio" name="q6" value="D"> D) R = {(1,2), (2,3)}</label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p class="question-number">Question 7:</p>
+                <p class="question-text">For a relation R to be a total order on a set A, in addition to being a partial order, it must satisfy which property?</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="A"> A) Symmetry</label>
+                    <label><input type="radio" name="q7" value="B"> B) Irreflexivity</label>
+                    <label data-correct="true"><input type="radio" name="q7" value="C"> C) Comparability (or Totality)</label>
+                    <label><input type="radio" name="q7" value="D"> D) Asymmetry</label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p class="question-number">Question 8:</p>
+                <p class="question-text">The relation "is a subset of" (&#x2286;) on the power set P(S) of a non-empty set S is an example of a:</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="A"> A) Equivalence relation</label>
+                    <label data-correct="true"><input type="radio" name="q8" value="B"> B) Partial order relation</label>
+                    <label><input type="radio" name="q8" value="C"> C) Total order relation</label>
+                    <label><input type="radio" name="q8" value="D"> D) Symmetric relation</label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p class="question-number">Question 9:</p>
+                <p class="question-text">If R is a relation from set A to set B, and S is a relation from set B to set C, the composition of R and S, denoted S &#x25CB; R, is a relation from A to C such that (a, c) &#x2208; S &#x25CB; R if:</p>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="A"> A) (c, b) &#x2208; S and (b, a) &#x2208; R for some b &#x2208; B.</label>
+                    <label><input type="radio" name="q9" value="B"> B) (a, b) &#x2208; R and (c, b) &#x2208; S for some b &#x2208; B.</label>
+                    <label data-correct="true"><input type="radio" name="q9" value="C"> C) (a, b) &#x2208; R and (b, c) &#x2208; S for some b &#x2208; B.</label>
+                    <label><input type="radio" name="q9" value="D"> D) (b, a) &#x2208; R and (c, b) &#x2208; S for some b &#x2208; B.</label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p class="question-number">Question 10:</p>
+                <p class="question-text">An equivalence class [a]R for an equivalence relation R on a set A is defined as:</p>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="A"> A) The set of all elements b &#x2208; A such that (a,b) &#x2208; R and (b,a) &#x2208; R.</label>
+                    <label data-correct="true"><input type="radio" name="q10" value="B"> B) The set of all elements b &#x2208; A such that (a,b) &#x2208; R.</label>
+                    <label><input type="radio" name="q10" value="C"> C) The set of all elements b &#x2208; A such that (b,a) &#x2208; R.</label>
+                    <label><input type="radio" name="q10" value="D"> D) The set A itself.</label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p class="question-number">Question 11:</p>
+                <p class="question-text">How many distinct binary relations can be defined on a set with 'n' elements?</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="A"> A) n<sup>2</sup></label>
+                    <label><input type="radio" name="q11" value="B"> B) 2n</label>
+                    <label data-correct="true"><input type="radio" name="q11" value="C"> C) 2<sup>n<sup>2</sup></sup></label>
+                    <label><input type="radio" name="q11" value="D"> D) n!</label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p class="question-number">Question 12:</p>
+                <p class="question-text">Let R be the relation on the set of positive integers Z<sup>+</sup> defined by (a,b) &#x2208; R if a divides b. Which property does R NOT possess?</p>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="A"> A) Reflexivity</label>
+                    <label data-correct="true"><input type="radio" name="q12" value="B"> B) Symmetry</label>
+                    <label><input type="radio" name="q12" value="C"> C) Transitivity</label>
+                    <label><input type="radio" name="q12" value="D"> D) Antisymmetry</label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p class="question-number">Question 13:</p>
+                <p class="question-text">If a relation R is both symmetric and antisymmetric, what must be true about R?</p>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="A"> A) R must be transitive.</label>
+                    <label data-correct="true"><input type="radio" name="q13" value="B"> B) R must be a subset of the identity relation (i.e., (a,b) &#x2208; R implies a=b).</label>
+                    <label><input type="radio" name="q13" value="C"> C) R must be reflexive.</label>
+                    <label><input type="radio" name="q13" value="D"> D) R must be an equivalence relation.</label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p class="question-number">Question 14:</p>
+                <p class="question-text">The relation 'is less than' (<) on the set of real numbers R is an example of a:</p>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="A"> A) Equivalence relation</label>
+                    <label><input type="radio" name="q14" value="B"> B) Partial order relation</label>
+                    <label data-correct="true"><input type="radio" name="q14" value="C"> C) Strict total order relation</label>
+                    <label><input type="radio" name="q14" value="D"> D) Reflexive relation</label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p class="question-number">Question 15:</p>
+                <p class="question-text">If a relation R on a set A is irreflexive and transitive, it is called a:</p>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="A"> A) Partial order</label>
+                    <label data-correct="true"><input type="radio" name="q15" value="B"> B) Strict partial order</label>
+                    <label><input type="radio" name="q15" value="C"> C) Total order</label>
+                    <label><input type="radio" name="q15" value="D"> D) Equivalence relation</label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p class="question-number">Question 16:</p>
+                <p class="question-text">What is the inverse relation R<sup>-1</sup> of R = {(1,2), (2,3), (3,1)} on the set {1,2,3}?</p>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="A"> A) R<sup>-1</sup> = {(1,1), (2,2), (3,3)}</label>
+                    <label><input type="radio" name="q16" value="B"> B) R<sup>-1</sup> = {(1,2), (2,3), (3,1)}</label>
+                    <label data-correct="true"><input type="radio" name="q16" value="C"> C) R<sup>-1</sup> = {(2,1), (3,2), (1,3)}</label>
+                    <label><input type="radio" name="q16" value="D"> D) R<sup>-1</sup> = &#x2205; (empty set)</label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p class="question-number">Question 17:</p>
+                <p class="question-text">Let A = {a, b, c}. Which of the following relations on A is reflexive, but not symmetric?</p>
+                <div class="options">
+                    <label><input type="radio" name="q17" value="A"> A) R = {(a,a), (b,b), (c,c), (a,b), (b,a)}</label>
+                    <label><input type="radio" name="q17" value="B"> B) R = {(a,a), (b,b), (c,c), (a,c), (c,a)}</label>
+                    <label data-correct="true"><input type="radio" name="q17" value="C"> C) R = {(a,a), (b,b), (c,c), (a,b)}</label>
+                    <label><input type="radio" name="q17" value="D"> D) R = {(a,b), (b,c), (c,a)}</label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p class="question-number">Question 18:</p>
+                <p class="question-text">The relation R = {(a,b) | a is a parent of b} on the set of all people is:</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q18" value="A"> A) Irreflexive, Asymmetric, Not Transitive</label>
+                    <label><input type="radio" name="q18" value="B"> B) Reflexive, Symmetric, Transitive</label>
+                    <label><input type="radio" name="q18" value="C"> C) Reflexive, Antisymmetric, Transitive</label>
+                    <label><input type="radio" name="q18" value="D"> D) Irreflexive, Symmetric, Transitive</label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p class="question-number">Question 19:</p>
+                <p class="question-text">If a relation R is an equivalence relation on a set A, then the set of all distinct equivalence classes forms a:</p>
+                <div class="options">
+                    <label><input type="radio" name="q19" value="A"> A) Subset of A</label>
+                    <label><input type="radio" name="q19" value="B"> B) Cartesian product A x A</label>
+                    <label data-correct="true"><input type="radio" name="q19" value="C"> C) Partition of A</label>
+                    <label><input type="radio" name="q19" value="D"> D) Power set of A</label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p class="question-number">Question 20:</p>
+                <p class="question-text">Let R be the relation on Z defined by a R b if 3a + 7b is a multiple of 10. This relation is:</p>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="A"> A) Reflexive and Symmetric, but not Transitive</label>
+                    <label><input type="radio" name="q20" value="B"> B) Reflexive and Transitive, but not Symmetric</label>
+                    <label><input type="radio" name="q20" value="C"> C) Symmetric and Transitive, but not Reflexive</label>
+                    <label data-correct="true"><input type="radio" name="q20" value="D"> D) An equivalence relation</label>
+                </div>
+            </div>
+
+            <button type="button" id="showAnswersBtn">Show Answers</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+
+            showAnswersBtn.addEventListener('click', function() {
+                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+
+                correctLabels.forEach(label => {
+                    label.classList.add('correct-answer');
+                    // Prepend checkmark emoji
+                    if (!label.textContent.startsWith('✅')) { // Prevent adding multiple checkmarks
+                        label.innerHTML = '✅ ' + label.innerHTML;
+                    }
+                    // Disable the radio button to prevent further changes
+                    const radioInput = label.querySelector('input[type="radio"]');
+                    if (radioInput) {
+                        radioInput.disabled = true;
+                    }
+                });
+
+                // Change button text and disable it
+                this.textContent = 'Answers Shown';
+                this.disabled = true;
+            });
+
+            // Optional: Disable all radio buttons initially to prevent accidental changes before showing answers
+            // Or, more commonly, allow selection and then just show answers.
+            // The current setup allows selection and then highlights.
+            // If quiz submission was intended, one would handle form submission logic.
+            // For a "show answers" only, disabling inputs after showing is good practice.
+            const allRadioInputs = document.querySelectorAll('input[type="radio"]');
+            allRadioInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    // This event listener is just to ensure selection works, no specific action here
+                    // before answers are shown.
+                });
+            });
+        });
+    </script>
+</body>
+</html>

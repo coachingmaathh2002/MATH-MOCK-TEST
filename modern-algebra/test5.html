@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions and Mappings Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Container for the Quiz */
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Headings */
+        h1 {
+            color: #2c3e50; /* Dark blue-gray */
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: #34495e; /* Slightly lighter dark blue-gray */
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 1.3em;
+            font-weight: 400;
+        }
+
+        /* Question Block Styling */
+        .question-block {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e6ed; /* Light border */
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        /* Options Styling */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Space between options */
+        }
+
+        .options label {
+            display: block;
+            background-color: #f7f9fc; /* Very light blue-gray */
+            padding: 14px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            border: 1px solid #e0e6ed;
+            position: relative;
+            padding-left: 45px; /* Space for custom radio button */
+            font-size: 1em;
+            color: #34495e;
+        }
+
+        .options label:hover {
+            background-color: #eef2f7; /* Slightly darker on hover */
+            border-color: #cdd8e4;
+        }
+
+        /* Hide default radio buttons */
+        .options input[type="radio"] {
+            display: none;
+        }
+
+        /* Custom radio button appearance */
+        .options label::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #95a5a6; /* Gray border */
+            border-radius: 50%;
+            background-color: #fff;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .options input[type="radio"]:checked + label::before {
+            border-color: #3498db; /* Blue border when checked */
+            background-color: #3498db; /* Blue fill when checked */
+            box-shadow: inset 0 0 0 6px #fff; /* White inner circle */
+        }
+
+        /* Styling for correct answers revealed by JS */
+        .correct-answer {
+            background-color: #e6ffe6 !important; /* Light green */
+            border-color: #a3e6a3 !important; /* Green border */
+            font-weight: 600;
+            color: #28a745 !important; /* Darker green text */
+        }
+
+        .correct-answer::before {
+            border-color: #28a745 !important; /* Green border for custom radio */
+            background-color: #28a745 !important; /* Green fill for custom radio */
+            box-shadow: inset 0 0 0 6px #e6ffe6 !important; /* Light green inner circle */
+        }
+
+        /* Show Answers Button */
+        #showAnswersBtn {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #3498db; /* Blue */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #showAnswersBtn:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        #showAnswersBtn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #showAnswersBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.1em;
+            }
+            .question-text {
+                font-size: 1em;
+            }
+            .options label {
+                padding: 12px 15px;
+                padding-left: 40px;
+            }
+            .options label::before {
+                left: 10px;
+                width: 18px;
+                height: 18px;
+            }
+            #showAnswersBtn {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Functions and Mappings Quiz</h1>
+        <h2>Test your understanding of advanced concepts in functions and mappings.</h2>
+
+        <!-- Question 1 -->
+        <div class="question-block">
+            <p class="question-text">1. Which statement accurately defines a function `f: A → B`?</p>
+            <div class="options">
+                <input type="radio" id="q1_optionA" name="q1" value="A">
+                <label for="q1_optionA">A) Every element in B has a unique pre-image in A.</label>
+                <input type="radio" id="q1_optionB" name="q1" value="B">
+                <label for="q1_optionB" data-correct="true">B) Every element in A maps to exactly one element in B.</label>
+                <input type="radio" id="q1_optionC" name="q1" value="C">
+                <label for="q1_optionC">C) Every element in B is mapped from at least one element in A.</label>
+                <input type="radio" id="q1_optionD" name="q1" value="D">
+                <label for="q1_optionD">D) Every element in A maps to at least one element in B.</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-block">
+            <p class="question-text">2. A function `f: A → B` is injective (one-to-one) if:</p>
+            <div class="options">
+                <input type="radio" id="q2_optionA" name="q2" value="A">
+                <label for="q2_optionA">A) For every `y ∈ B`, there exists at least one `x ∈ A` such that `f(x) = y`.</label>
+                <input type="radio" id="q2_optionB" name="q2" value="B">
+                <label for="q2_optionB" data-correct="true">B) `f(x1) = f(x2)` implies `x1 = x2`.</label>
+                <input type="radio" id="q2_optionC" name="q2" value="C">
+                <label for="q2_optionC">C) `x1 = x2` implies `f(x1) = f(x2)`.</label>
+                <input type="radio" id="q2_optionD" name="q2" value="D">
+                <label for="q2_optionD">D) The range of `f` is equal to `B`.</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-block">
+            <p class="question-text">3. A function `f: A → B` is surjective (onto) if:</p>
+            <div class="options">
+                <input type="radio" id="q3_optionA" name="q3" value="A">
+                <label for="q3_optionA">A) For every `y ∈ B`, there exists a unique `x ∈ A` such that `f(x) = y`.</label>
+                <input type="radio" id="q3_optionB" name="q3" value="B">
+                <label for="q3_optionB">B) `f(x1) = f(x2)` implies `x1 = x2`.</label>
+                <input type="radio" id="q3_optionC" name="q3" value="C">
+                <label for="q3_optionC" data-correct="true">C) The codomain of `f` is equal to its range.</label>
+                <input type="radio" id="q3_optionD" name="q3" value="D">
+                <label for="q3_optionD">D) `A` has more elements than `B`.</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-block">
+            <p class="question-text">4. A function `f: A → B` is bijective if:</p>
+            <div class="options">
+                <input type="radio" id="q4_optionA" name="q4" value="A">
+                <label for="q4_optionA">A) It is injective but not surjective.</label>
+                <input type="radio" id="q4_optionB" name="q4" value="B">
+                <label for="q4_optionB">B) It is surjective but not injective.</label>
+                <input type="radio" id="q4_optionC" name="q4" value="C">
+                <label for="q4_optionC" data-correct="true">C) It is both injective and surjective.</label>
+                <input type="radio" id="q4_optionD" name="q4" value="D">
+                <label for="q4_optionD">D) It maps elements from `A` to `B` and vice-versa.</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-block">
+            <p class="question-text">5. If `f(x) = x^2` and `g(x) = x + 3`, what is `(g o f)(x)`?</p>
+            <div class="options">
+                <input type="radio" id="q5_optionA" name="q5" value="A">
+                <label for="q5_optionA" data-correct="true">A) `x^2 + 3`</label>
+                <input type="radio" id="q5_optionB" name="q5" value="B">
+                <label for="q5_optionB">B) `(x + 3)^2`</label>
+                <input type="radio" id="q5_optionC" name="q5" value="C">
+                <label for="q5_optionC">C) `x^2 + 9`</label>
+                <input type="radio" id="q5_optionD" name="q5" value="D">
+                <label for="q5_optionD">D) `x^2 + 6x + 9`</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-block">
+            <p class="question-text">6. Which of the following functions has an inverse function over its natural domain `R`?</p>
+            <div class="options">
+                <input type="radio" id="q6_optionA" name="q6" value="A">
+                <label for="q6_optionA">A) `f(x) = x^2`</label>
+                <input type="radio" id="q6_optionB" name="q6" value="B">
+                <label for="q6_optionB">B) `f(x) = |x|`</label>
+                <input type="radio" id="q6_optionC" name="q6" value="C">
+                <label for="q6_optionC">C) `f(x) = sin(x)`</label>
+                <input type="radio" id="q6_optionD" name="q6" value="D">
+                <label for="q6_optionD" data-correct="true">D) `f(x) = 2x + 5`</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-block">
+            <p class="question-text">7. If `f: R → R` is `f(x) = x^2`, what is the image of the interval `[-2, 1]`?</p>
+            <div class="options">
+                <input type="radio" id="q7_optionA" name="q7" value="A">
+                <label for="q7_optionA">A) `[0, 1]`</label>
+                <input type="radio" id="q7_optionB" name="q7" value="B">
+                <label for="q7_optionB" data-correct="true">B) `[0, 4]`</label>
+                <input type="radio" id="q7_optionC" name="q7" value="C">
+                <label for="q7_optionC">C) `[1, 4]`</label>
+                <input type="radio" id="q7_optionD" name="q7" value="D">
+                <label for="q7_optionD">D) `[-2, 4]`</label>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-block">
+            <p class="question-text">8. If `f: R → R` is `f(x) = x^2`, what is the pre-image of the interval `[4, 9]`?</p>
+            <div class="options">
+                <input type="radio" id="q8_optionA" name="q8" value="A">
+                <label for="q8_optionA">A) `[2, 3]`</label>
+                <input type="radio" id="q8_optionB" name="q8" value="B">
+                <label for="q8_optionB" data-correct="true">B) `[-3, -2] U [2, 3]`</label>
+                <input type="radio" id="q8_optionC" name="q8" value="C">
+                <label for="q8_optionC">C) `[-9, -4] U [4, 9]`</label>
+                <input type="radio" id="q8_optionD" name="q8" value="D">
+                <label for="q8_optionD">D) `[-3, 3]`</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-block">
+            <p class="question-text">9. If `A` is a finite set with `m` elements and `B` is a finite set with `n` elements, how many distinct functions can be defined from `A` to `B`?</p>
+            <div class="options">
+                <input type="radio" id="q9_optionA" name="q9" value="A">
+                <label for="q9_optionA">A) `m^n`</label>
+                <input type="radio" id="q9_optionB" name="q9" value="B">
+                <label for="q9_optionB" data-correct="true">B) `n^m`</label>
+                <input type="radio" id="q9_optionC" name="q9" value="C">
+                <label for="q9_optionC">C) `m * n`</label>
+                <input type="radio" id="q9_optionD" name="q9" value="D">
+                <label for="q9_optionD">D) `m + n`</label>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-block">
+            <p class="question-text">10. Which property is *not* generally true for a linear transformation `T: V → W` between vector spaces `V` and `W`?</p>
+            <div class="options">
+                <input type="radio" id="q10_optionA" name="q10" value="A">
+                <label for="q10_optionA">A) `T(u + v) = T(u) + T(v)` for all `u, v ∈ V`.</label>
+                <input type="radio" id="q10_optionB" name="q10" value="B">
+                <label for="q10_optionB">B) `T(cu) = cT(u)` for all scalar `c` and `u ∈ V`.</label>
+                <input type="radio" id="q10_optionC" name="q10" value="C">
+                <label for="q10_optionC">C) `T(0_V) = 0_W`.</label>
+                <input type="radio" id="q10_optionD" name="q10" value="D">
+                <label for="q10_optionD" data-correct="true">D) `T` must be bijective.</label>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question-block">
+            <p class="question-text">11. For the function `f(x) = 1/(x-2)`, if the domain is `R \ {2}`, what is the natural codomain?</p>
+            <div class="options">
+                <input type="radio" id="q11_optionA" name="q11" value="A">
+                <label for="q11_optionA">A) `R`</label>
+                <input type="radio" id="q11_optionB" name="q11" value="B">
+                <label for="q11_optionB" data-correct="true">B) `R \ {0}`</label>
+                <input type="radio" id="q11_optionC" name="q11" value="C">
+                <label for="q11_optionC">C) `(-∞, 0) U (0, ∞)`</label>
+                <input type="radio" id="q11_optionD" name="q11" value="D">
+                <label for="q11_optionD">D) `[0, ∞)`</label>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-block">
+            <p class="question-text">12. Which of the following functions is strictly increasing on its entire domain `R`?</p>
+            <div class="options">
+                <input type="radio" id="q12_optionA" name="q12" value="A">
+                <label for="q12_optionA">A) `f(x) = x^2`</label>
+                <input type="radio" id="q12_optionB" name="q12" value="B">
+                <label for="q12_optionB">B) `f(x) = cos(x)`</label>
+                <input type="radio" id="q12_optionC" name="q12" value="C">
+                <label for="q12_optionC" data-correct="true">C) `f(x) = e^x`</label>
+                <input type="radio" id="q12_optionD" name="q12" value="D">
+                <label for="q12_optionD">D) `f(x) = -x + 5`</label>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-block">
+            <p class="question-text">13. A function `f` is odd if `f(-x) = -f(x)` and even if `f(-x) = f(x)`. Which function is neither even nor odd?</p>
+            <div class="options">
+                <input type="radio" id="q13_optionA" name="q13" value="A">
+                <label for="q13_optionA">A) `f(x) = x^3 + x`</label>
+                <input type="radio" id="q13_optionB" name="q13" value="B">
+                <label for="q13_optionB">B) `f(x) = cos(x) + x^2`</label>
+                <input type="radio" id="q13_optionC" name="q13" value="C">
+                <label for="q13_optionC" data-correct="true">C) `f(x) = x^2 + x`</label>
+                <input type="radio" id="q13_optionD" name="q13" value="D">
+                <label for="q13_optionD">D) `f(x) = 0`</label>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-block">
+            <p class="question-text">14. What is the fundamental period of the function `f(x) = sin(2x)`?</p>
+            <div class="options">
+                <input type="radio" id="q14_optionA" name="q14" value="A">
+                <label for="q14_optionA" data-correct="true">A) `π`</label>
+                <input type="radio" id="q14_optionB" name="q14" value="B">
+                <label for="q14_optionB">B) `2π`</label>
+                <input type="radio" id="q14_optionC" name="q14" value="C">
+                <label for="q14_optionC">C) `π/2`</label>
+                <input type="radio" id="q14_optionD" name="q14" value="D">
+                <label for="q14_optionD">D) `4π`</label>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-block">
+            <p class="question-text">15. A fixed point of a function `f(x)` is a value `x` such that `f(x) = x`. How many fixed points does `f(x) = x^2` have?</p>
+            <div class="options">
+                <input type="radio" id="q15_optionA" name="q15" value="A">
+                <label for="q15_optionA">A) 0</label>
+                <input type="radio" id="q15_optionB" name="q15" value="B">
+                <label for="q15_optionB">B) 1</label>
+                <input type="radio" id="q15_optionC" name="q15" value="C">
+                <label for="q15_optionC" data-correct="true">C) 2</label>
+                <input type="radio" id="q15_optionD" name="q15" value="D">
+                <label for="q15_optionD">D) Infinitely many</label>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-block">
+            <p class="question-text">16. Consider `f(x) = x^2`. To make `f` injective, which of the following is a valid restricted domain?</p>
+            <div class="options">
+                <input type="radio" id="q16_optionA" name="q16" value="A">
+                <label for="q16_optionA">A) `R`</label>
+                <input type="radio" id="q16_optionB" name="q16" value="B">
+                <label for="q16_optionB">B) `[-1, 1]`</label>
+                <input type="radio" id="q16_optionC" name="q16" value="C">
+                <label for="q16_optionC" data-correct="true">C) `[0, ∞)`</label>
+                <input type="radio" id="q16_optionD" name="q16" value="D">
+                <label for="q16_optionD">D) `(-∞, ∞)`</label>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-block">
+            <p class="question-text">17. Let `S` be the set of all subsets of `N` (natural numbers). Consider a function `f: S → {0, 1}` defined by `f(A) = 1` if `A` is finite, and `f(A) = 0` if `A` is infinite. Is `f` injective, surjective, both, or neither?</p>
+            <div class="options">
+                <input type="radio" id="q17_optionA" name="q17" value="A">
+                <label for="q17_optionA">A) Injective only</label>
+                <input type="radio" id="q17_optionB" name="q17" value="B">
+                <label for="q17_optionB" data-correct="true">B) Surjective only</label>
+                <input type="radio" id="q17_optionC" name="q17" value="C">
+                <label for="q17_optionC">C) Bijective</label>
+                <input type="radio" id="q17_optionD" name="q17" value="D">
+                <label for="q17_optionD">D) Neither injective nor surjective</label>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-block">
+            <p class="question-text">18. Two functions `f` and `g` are equal if:</p>
+            <div class="options">
+                <input type="radio" id="q18_optionA" name="q18" value="A">
+                <label for="q18_optionA">A) They have the same rule of assignment.</label>
+                <input type="radio" id="q18_optionB" name="q18" value="B">
+                <label for="q18_optionB">B) They have the same domain and the same rule of assignment.</label>
+                <input type="radio" id="q18_optionC" name="q18" value="C">
+                <label for="q18_optionC" data-correct="true">C) They have the same domain, codomain, and rule of assignment.</label>
+                <input type="radio" id="q18_optionD" name="q18" value="D">
+                <label for="q18_optionD">D) They have the same range and the same rule of assignment.</label>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-block">
+            <p class="question-text">19. Which of the following is a necessary condition for a function `f` to be continuous at a point `c`?</p>
+            <div class="options">
+                <input type="radio" id="q19_optionA" name="q19" value="A">
+                <label for="q19_optionA">A) `f(c)` is defined.</label>
+                <input type="radio" id="q19_optionB" name="q19" value="B">
+                <label for="q19_optionB">B) `lim x→c f(x)` exists.</label>
+                <input type="radio" id="q19_optionC" name="q19" value="C">
+                <label for="q19_optionC" data-correct="true">C) `lim x→c f(x) = f(c)`.</label>
+                <input type="radio" id="q19_optionD" name="q19" value="D">
+                <label for="q19_optionD">D) `f` is differentiable at `c`.</label>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-block">
+            <p class="question-text">20. In abstract algebra, an isomorphism is a bijective homomorphism. Why is bijectivity crucial for an isomorphism?</p>
+            <div class="options">
+                <input type="radio" id="q20_optionA" name="q20" value="A">
+                <label for="q20_optionA">A) It ensures the function is monotonic.</label>
+                <input type="radio" id="q20_optionB" name="q20" value="B">
+                <label for="q20_optionB" data-correct="true">B) It guarantees that the function preserves the structure in both directions.</label>
+                <input type="radio" id="q20_optionC" name="q20" value="C">
+                <label for="q20_optionC">C) It means the function is defined for all elements in the domain.</label>
+                <input type="radio" id="q20_optionD" name="q20" value="D">
+                <label for="q20_optionD">D) It implies the function is continuous.</label>
+            </div>
+        </div>
+
+        <button id="showAnswersBtn">Show Answers</button>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+
+            showAnswersBtn.addEventListener('click', () => {
+                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+
+                correctLabels.forEach(label => {
+                    label.classList.add('correct-answer');
+                    // Add checkmark emoji if not already present
+                    if (!label.innerHTML.includes('✅')) {
+                        label.innerHTML = '✅ ' + label.innerHTML;
+                    }
+                });
+
+                showAnswersBtn.textContent = 'Answers Shown';
+                showAnswersBtn.disabled = true; // Disable button after showing answers
+            });
+        });
+    </script>
+</body>
+</html>

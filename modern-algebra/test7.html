@@ -1,0 +1,676 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Theory Quiz</title>
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --accent-blue: #007bff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --correct-green-bg: #d4edda;
+            --correct-green-border: #28a745;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            border-bottom: 2px solid var(--medium-gray);
+            padding-bottom: 15px;
+        }
+
+        .question {
+            background-color: var(--white);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-gray);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .question h2 {
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-item {
+            background-color: var(--medium-gray);
+            border: 1px solid #d1d1d1;
+            border-radius: 6px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item:hover {
+            background-color: #e0e0e0;
+            border-color: var(--accent-blue);
+        }
+
+        .option-item input[type="radio"] {
+            display: none; /* Hide default radio button */
+        }
+
+        .option-item label {
+            display: block;
+            cursor: pointer;
+            user-select: none;
+            flex-grow: 1; /* Make label take up available space */
+            padding-left: 10px; /* Space for hidden radio button */
+            position: relative;
+        }
+
+        /* Style for the custom radio button appearance */
+        .option-item label::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .option-item input[type="radio"]:checked + label::before {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        
+        .option-item input[type="radio"]:checked + label::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--white);
+            border-radius: 50%;
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Style for correct answers */
+        .option-item.correct-answer {
+            background-color: var(--correct-green-bg);
+            border-color: var(--correct-green-border);
+            font-weight: bold;
+        }
+        
+        .option-item.correct-answer label::before {
+            border-color: var(--correct-green-border);
+            background-color: var(--correct-green-border);
+        }
+        .option-item.correct-answer input[type="radio"]:checked + label::after {
+             background-color: var(--white);
+        }
+
+
+        button {
+            display: block;
+            margin: 40px auto 20px auto;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: var(--accent-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Group Theory Quiz</h1>
+
+        <form id="quizForm">
+            <div class="quiz-questions">
+
+                <!-- Question 1 -->
+                <div class="question">
+                    <h2>Q1. Which of the following is NOT a required property for a set G with a binary operation * to be a group (G, *)?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q1a" name="q1" value="a">
+                            <label for="q1a">Closure</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q1b" name="q1" value="b" data-correct="true">
+                            <label for="q1b" data-correct="true">Commutativity</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q1c" name="q1" value="c">
+                            <label for="q1c">Existence of an identity element</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q1d" name="q1" value="d">
+                            <label for="q1d">Existence of inverse elements</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question">
+                    <h2>Q2. If G is a finite group and H is a subgroup of G, then the order of H divides the order of G. This statement is known as:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q2a" name="q2" value="a">
+                            <label for="q2a">Cayley's Theorem</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q2b" name="q2" value="b">
+                            <label for="q2b">Sylow's Theorem</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q2c" name="q2" value="c" data-correct="true">
+                            <label for="q2c" data-correct="true">Lagrange's Theorem</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q2d" name="q2" value="d">
+                            <label for="q2d">Fundamental Theorem of Finite Abelian Groups</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question">
+                    <h2>Q3. Which of the following groups is cyclic?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q3a" name="q3" value="a">
+                            <label for="q3a">$S_3$ (symmetric group on 3 elements)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q3b" name="q3" value="b">
+                            <label for="q3b">$D_4$ (dihedral group of order 8)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q3c" name="q3" value="c" data-correct="true">
+                            <label for="q3c" data-correct="true">$(Z_6, +)$ (integers modulo 6 under addition)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q3d" name="q3" value="d">
+                            <label for="q3d">$Q_8$ (quaternion group)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question">
+                    <h2>Q4. In the group $(Z_{10}, +)$, what is the order of the element 4?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q4a" name="q4" value="a">
+                            <label for="q4a">2</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q4b" name="q4" value="b" data-correct="true">
+                            <label for="q4b" data-correct="true">5</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q4c" name="q4" value="c">
+                            <label for="q4c">10</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q4d" name="q4" value="d">
+                            <label for="q4d">4</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question">
+                    <h2>Q5. Which group is isomorphic to $Z_2 \times Z_3$?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q5a" name="q5" value="a">
+                            <label for="q5a">$Z_5$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q5b" name="q5" value="b" data-correct="true">
+                            <label for="q5b" data-correct="true">$Z_6$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q5c" name="q5" value="c">
+                            <label for="q5c">$S_3$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q5d" name="q5" value="d">
+                            <label for="q5d">$D_3$</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question">
+                    <h2>Q6. A subgroup H of G is normal if for all $g \in G$ and $h \in H$, which condition holds?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q6a" name="q6" value="a">
+                            <label for="q6a">$gh = hg$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q6b" name="q6" value="b" data-correct="true">
+                            <label for="q6b" data-correct="true">$ghg^{-1} \in H$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q6c" name="q6" value="c">
+                            <label for="q6c">$gH = G$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q6d" name="q6" value="d">
+                            <label for="q6d">$g \in H$</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question">
+                    <h2>Q7. Let $\phi: G \to H$ be a group homomorphism. Which of the following is always true?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q7a" name="q7" value="a">
+                            <label for="q7a">$\phi$ is injective.</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q7b" name="q7" value="b">
+                            <label for="q7b">$\phi$ is surjective.</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q7c" name="q7" value="c" data-correct="true">
+                            <label for="q7c" data-correct="true">$\phi(e_G) = e_H$ (where $e_G, e_H$ are identity elements)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q7d" name="q7" value="d">
+                            <label for="q7d">$\phi(g^{-1}) = (\phi(g))^{-1}$ only if G is abelian.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question">
+                    <h2>Q8. The kernel of a group homomorphism $\phi: G \to H$ is a:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q8a" name="q8" value="a">
+                            <label for="q8a">Subgroup of H</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q8b" name="q8" value="b" data-correct="true">
+                            <label for="q8b" data-correct="true">Normal subgroup of G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q8c" name="q8" value="c">
+                            <label for="q8c">Cyclic subgroup of G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q8d" name="q8" value="d">
+                            <label for="q8d">Quotient group of G</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question">
+                    <h2>Q9. If H is a normal subgroup of G, what are the elements of the quotient group G/H?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q9a" name="q9" value="a">
+                            <label for="q9a">Elements of G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q9b" name="q9" value="b">
+                            <label for="q9b">Elements of H</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q9c" name="q9" value="c" data-correct="true">
+                            <label for="q9c" data-correct="true">Cosets of H in G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q9d" name="q9" value="d">
+                            <label for="q9d">Homomorphisms from G to H</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question">
+                    <h2>Q10. Every group is isomorphic to a subgroup of a permutation group. This theorem is known as:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q10a" name="q10" value="a">
+                            <label for="q10a">Lagrange's Theorem</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q10b" name="q10" value="b">
+                            <label for="q10b">Sylow's Theorem</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q10c" name="q10" value="c" data-correct="true">
+                            <label for="q10c" data-correct="true">Cayley's Theorem</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q10d" name="q10" value="d">
+                            <label for="q10d">Fundamental Theorem of Finite Abelian Groups</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 11 -->
+                <div class="question">
+                    <h2>Q11. Which of the following is an example of a non-abelian group?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q11a" name="q11" value="a">
+                            <label for="q11a">$(Z, +)$ (integers under addition)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q11b" name="q11" value="b">
+                            <label for="q11b">$(Q^+, \times)$ (positive rational numbers under multiplication)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q11c" name="q11" value="c" data-correct="true">
+                            <label for="q11c" data-correct="true">$GL_2(\mathbb{R})$ (general linear group of 2x2 invertible matrices over $\mathbb{R}$)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q11d" name="q11" value="d">
+                            <label for="q11d">$(Z_n, +)$ (integers modulo n under addition)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 12 -->
+                <div class="question">
+                    <h2>Q12. What is the order of the symmetric group $S_n$?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q12a" name="q12" value="a">
+                            <label for="q12a">$n$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q12b" name="q12" value="b">
+                            <label for="q12b">$n^2$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q12c" name="q12" value="c" data-correct="true">
+                            <label for="q12c" data-correct="true">$n!$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q12d" name="q12" value="d">
+                            <label for="q12d">$2^n$</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 13 -->
+                <div class="question">
+                    <h2>Q13. Every subgroup of a cyclic group is:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q13a" name="q13" value="a">
+                            <label for="q13a">Normal</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q13b" name="q13" value="b" data-correct="true">
+                            <label for="q13b" data-correct="true">Cyclic</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q13c" name="q13" value="c">
+                            <label for="q13c">Abelian</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q13d" name="q13" value="d">
+                            <label for="q13d">Finite</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 14 -->
+                <div class="question">
+                    <h2>Q14. If $\phi: G \to H$ is a group homomorphism, then $G/\text{ker}(\phi)$ is isomorphic to:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q14a" name="q14" value="a">
+                            <label for="q14a">$H$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q14b" name="q14" value="b">
+                            <label for="q14b">$\text{ker}(\phi)$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q14c" name="q14" value="c" data-correct="true">
+                            <label for="q14c" data-correct="true">$\text{im}(\phi)$ (the image of $\phi$)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q14d" name="q14" value="d">
+                            <label for="q14d">$G$</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 15 -->
+                <div class="question">
+                    <h2>Q15. The direct product of $Z_2$ and $Z_4$ is a group of order:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q15a" name="q15" value="a">
+                            <label for="q15a">2</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q15b" name="q15" value="b">
+                            <label for="q15b">4</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q15c" name="q15" value="c">
+                            <label for="q15c">6</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q15d" name="q15" value="d" data-correct="true">
+                            <label for="q15d" data-correct="true">8</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 16 -->
+                <div class="question">
+                    <h2>Q16. How many elements of order 2 are there in $(Z_8, +)$?</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q16a" name="q16" value="a">
+                            <label for="q16a">0</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q16b" name="q16" value="b" data-correct="true">
+                            <label for="q16b" data-correct="true">1 (the element 4)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q16c" name="q16" value="c">
+                            <label for="q16c">2</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q16d" name="q16" value="d">
+                            <label for="q16d">4</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 17 -->
+                <div class="question">
+                    <h2>Q17. The centralizer of an element $a$ in a group $G$, denoted $C_G(a)$, is the set of all elements $x \in G$ such that:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q17a" name="q17" value="a">
+                            <label for="q17a">$xa = a$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q17b" name="q17" value="b">
+                            <label for="q17b">$ax = a$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q17c" name="q17" value="c" data-correct="true">
+                            <label for="q17c" data-correct="true">$xa = ax$</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q17d" name="q17" value="d">
+                            <label for="q17d">$xax^{-1} = a$</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 18 -->
+                <div class="question">
+                    <h2>Q18. The center of a group $G$, denoted $Z(G)$, is always a:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q18a" name="q18" value="a">
+                            <label for="q18a">Subgroup of G but not necessarily normal</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q18b" name="q18" value="b" data-correct="true">
+                            <label for="q18b" data-correct="true">Normal subgroup of G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q18c" name="q18" value="c">
+                            <label for="q18c">Cyclic subgroup of G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q18d" name="q18" value="d">
+                            <label for="q18d">Quotient group of G</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 19 -->
+                <div class="question">
+                    <h2>Q19. A non-trivial group G is called simple if its only normal subgroups are:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q19a" name="q19" value="a" data-correct="true">
+                            <label for="q19a" data-correct="true">The trivial subgroup $\{e\}$ and G itself</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q19b" name="q19" value="b">
+                            <label for="q19b">Cyclic subgroups</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q19c" name="q19" value="c">
+                            <label for="q19c">Abelian subgroups</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q19d" name="q19" value="d">
+                            <label for="q19d">Subgroups of prime order</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 20 -->
+                <div class="question">
+                    <h2>Q20. For a subgroup H of G, the number of distinct left cosets of H in G is called the:</h2>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="q20a" name="q20" value="a">
+                            <label for="q20a">Order of H</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q20b" name="q20" value="b">
+                            <label for="q20b">Order of G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q20c" name="q20" value="c" data-correct="true">
+                            <label for="q20c" data-correct="true">Index of H in G</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="q20d" name="q20" value="d">
+                            <label for="q20d">Rank of G</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" id="showAnswersBtn">Show Answers</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+            
+            correctLabels.forEach(label => {
+                // Add a class to the parent option-item for styling
+                label.closest('.option-item').classList.add('correct-answer');
+                
+                // Add checkmark emoji to the label text
+                // Ensure it's not added multiple times if button is somehow clicked again
+                if (!label.textContent.startsWith('✅')) {
+                    label.textContent = '✅ ' + label.textContent;
+                }
+            });
+
+            // Change button text and disable it
+            this.textContent = 'Answers Shown';
+            this.disabled = true;
+
+            // Optional: Disable all radio buttons after showing answers
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
+```

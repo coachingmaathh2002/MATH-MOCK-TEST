@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ring Theory Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f8f8; /* Light gray background */
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Main Quiz Container */
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* Quiz Header */
+        h1 {
+            color: #2c3e50; /* Dark blue-gray */
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        /* Question Styling */
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fdfdfd;
+            transition: all 0.3s ease;
+        }
+
+        .question-block:hover {
+            border-color: #c9e0f0; /* Lighter blue on hover */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-weight: bold;
+            font-size: 1.15em;
+            color: #34495e; /* Slightly lighter dark blue */
+            margin-bottom: 15px;
+        }
+
+        /* Options Styling */
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            font-size: 1em;
+            color: #555;
+        }
+
+        .options label:hover {
+            background-color: #f0f8ff; /* Light blue hover */
+            border-color: #aed6f1;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #3498db; /* Blue accent for radio button */
+            transform: scale(1.1); /* Slightly larger radio button */
+        }
+
+        /* Styling for correct answers when shown */
+        .options label.correct-answer {
+            background-color: #d4edda; /* Light green */
+            border-color: #28a745; /* Darker green */
+            color: #155724; /* Dark green text */
+            font-weight: bold;
+        }
+
+        /* Ensure checkmark emoji is correctly spaced */
+        .options label .checkmark-emoji {
+            margin-left: 5px; /* Adjust spacing after the radio button */
+            margin-right: 5px; /* Adjust spacing before the text */
+            white-space: nowrap; /* Prevent emoji from wrapping */
+        }
+
+        /* Show Answers Button */
+        .show-answers-btn {
+            display: block;
+            width: 250px;
+            padding: 15px 25px;
+            margin: 30px auto 0;
+            background-color: #3498db; /* Primary blue */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #2ecc71; /* Green when disabled */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-container {
+                padding: 20px;
+                margin: 0;
+            }
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            .question-block {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            .question-text {
+                font-size: 1.05em;
+                margin-bottom: 10px;
+            }
+            .options label {
+                padding: 10px 12px;
+                font-size: 0.95em;
+            }
+            .options input[type="radio"] {
+                margin-right: 8px;
+                transform: scale(1);
+            }
+            .show-answers-btn {
+                width: 100%;
+                font-size: 1em;
+                padding: 12px 20px;
+                margin-top: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Ring Theory Quiz</h1>
+
+        <!-- Question 1 -->
+        <div class="question-block">
+            <p class="question-text">1. Which of the following is NOT a requirement for a set R to be a ring?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q1" value="A"> A. (R, +) is an abelian group.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q1" value="B"> B. (R, ⋅) is a semigroup.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q1" value="C"> C. (R, ⋅) is an abelian group.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q1" value="D"> D. The distributive laws hold.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-block">
+            <p class="question-text">2. What is a commutative ring?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q2" value="A"> A. A ring where addition is commutative.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q2" value="B"> B. A ring where multiplication is commutative.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q2" value="C"> C. A ring where both operations are associative.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q2" value="D"> D. A ring with a multiplicative identity.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-block">
+            <p class="question-text">3. In a ring R, the additive identity is typically denoted by:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q3" value="A"> A. 1
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q3" value="B"> B. 0
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q3" value="C"> C. e
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q3" value="D"> D. i
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-block">
+            <p class="question-text">4. Which of the following is an example of a non-commutative ring?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q4" value="A"> A. The set of integers Z under standard addition and multiplication.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q4" value="B"> B. The set of real numbers R under standard addition and multiplication.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q4" value="C"> C. The set of 2x2 matrices with real entries under matrix addition and multiplication.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q4" value="D"> D. The set of complex numbers C under standard addition and multiplication.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-block">
+            <p class="question-text">5. A ring R is said to have a unity (or multiplicative identity) if:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q5" value="A"> A. For every a, b ∈ R, ab = ba.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q5" value="B"> B. There exists an element 1 ∈ R such that 1 ⋅ a = a ⋅ 1 = a for all a ∈ R.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q5" value="C"> C. For every a ∈ R, there exists b ∈ R such that ab = 1.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q5" value="D"> D. The only elements are 0 and 1.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-block">
+            <p class="question-text">6. What is a zero divisor in a ring R?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q6" value="A"> A. An element 'a' such that a * 0 = a.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q6" value="B"> B. An element 'a' such that a * a = 0.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q6" value="C"> C. A non-zero element 'a' such that there exists a non-zero element 'b' with ab = 0.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q6" value="D"> D. Any element that is equal to 0.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-block">
+            <p class="question-text">7. Which of the following rings contains zero divisors?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q7" value="A"> A. The ring of integers, Z.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q7" value="B"> B. The ring Z_6 (integers modulo 6).
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q7" value="C"> C. The ring of real numbers, R.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q7" value="D"> D. The ring of prime numbers, P.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-block">
+            <p class="question-text">8. An integral domain is a commutative ring with unity that has no:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q8" value="A"> A. Multiplicative inverses.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q8" value="B"> B. Zero divisors.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q8" value="C"> C. Additive identity.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q8" value="D"> D. Proper ideals.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-block">
+            <p class="question-text">9. Which of the following is an integral domain?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q9" value="A"> A. Z_4 (integers modulo 4).
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q9" value="B"> B. The ring of Gaussian integers, Z[i] = {a+bi | a,b ∈ Z}.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q9" value="C"> C. The set of 2x2 matrices with integer entries.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q9" value="D"> D. The set of continuous functions from R to R.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-block">
+            <p class="question-text">10. What is the characteristic of a ring R?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q10" value="A"> A. The smallest positive integer n such that n ⋅ x = x for all x ∈ R.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q10" value="B"> B. The smallest positive integer n such that n ⋅ 1 = 0 (if a unity exists and such n exists), otherwise 0.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q10" value="C"> C. The number of elements in the ring.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q10" value="D"> D. The number of prime ideals in the ring.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question-block">
+            <p class="question-text">11. If a ring has characteristic 0, it means:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q11" value="A"> A. The ring has no elements.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q11" value="B"> B. No positive integer n exists such that n ⋅ 1 = 0 (if a unity exists).
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q11" value="C"> C. The ring is finite.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q11" value="D"> D. Every element is its own additive inverse.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-block">
+            <p class="question-text">12. Which of the following statements is true regarding a field?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q12" value="A"> A. Every field is an integral domain, but not every integral domain is a field.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q12" value="B"> B. Every integral domain is a field, but not every field is an integral domain.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q12" value="C"> C. Every field is an integral domain, and an integral domain that is finite is a field.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q12" value="D"> D. A field is a ring with unity where every non-zero element has an additive inverse.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-block">
+            <p class="question-text">13. In the ring Z_10 (integers modulo 10), which of the following is a zero divisor?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q13" value="A"> A. 3
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q13" value="B"> B. 7
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q13" value="C"> C. 4
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q13" value="D"> D. 9
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-block">
+            <p class="question-text">14. What is the unity element in the ring of real numbers R?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q14" value="A"> A. 0
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q14" value="B"> B. 1
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q14" value="C"> C. -1
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q14" value="D"> D. It does not have a unity.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-block">
+            <p class="question-text">15. A non-zero element 'a' in a ring R with unity is called a unit if:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q15" value="A"> A. a is a zero divisor.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q15" value="B"> B. There exists an element b ∈ R such that ab = ba = 1.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q15" value="C"> C. a is its own additive inverse.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q15" value="D"> D. a squared is equal to a.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-block">
+            <p class="question-text">16. The set of even integers 2Z, under standard addition and multiplication, forms:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q16" value="A"> A. A field.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q16" value="B"> B. A ring with unity.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q16" value="C"> C. A commutative ring without unity.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q16" value="D"> D. An integral domain.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-block">
+            <p class="question-text">17. Which of the following is an example of an infinite integral domain that is not a field?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q17" value="A"> A. The rational numbers Q.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q17" value="B"> B. Z_5 (integers modulo 5).
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q17" value="C"> C. The integers Z.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q17" value="D"> D. The complex numbers C.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-block">
+            <p class="question-text">18. If a ring R has characteristic p, where p is a prime number, then for any a ∈ R, (a + a + ... + a) (p times) equals:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q18" value="A"> A. a
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q18" value="B"> B. 0
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q18" value="C"> C. p
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q18" value="D"> D. 1
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-block">
+            <p class="question-text">19. In a ring R, if a ⋅ b = 0 implies a = 0 or b = 0, then R is necessarily:</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q19" value="A"> A. A field.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q19" value="B"> B. A commutative ring.
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q19" value="C"> C. A ring with no zero divisors.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q19" value="D"> D. A ring with unity.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-block">
+            <p class="question-text">20. Which of the following is NOT true for an integral domain?</p>
+            <ul class="options">
+                <li>
+                    <label>
+                        <input type="radio" name="q20" value="A"> A. It is a commutative ring.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q20" value="B"> B. It has a multiplicative identity (unity).
+                    </label>
+                </li>
+                <li>
+                    <label data-correct="true">
+                        <input type="radio" name="q20" value="C"> C. Every non-zero element has a multiplicative inverse.
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="q20" value="D"> D. It has no zero divisors.
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <button class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const questions = document.querySelectorAll('.question-block');
+            questions.forEach(questionBlock => {
+                const correctLabel = questionBlock.querySelector('label[data-correct="true"]');
+                if (correctLabel) {
+                    correctLabel.classList.add('correct-answer');
+                    // Add checkmark emoji if not already present
+                    if (!correctLabel.querySelector('.checkmark-emoji')) {
+                        const span = document.createElement('span');
+                        span.classList.add('checkmark-emoji');
+                        span.textContent = ' ✅';
+                        // Insert the span right after the input element
+                        const inputElement = correctLabel.querySelector('input[type="radio"]');
+                        if (inputElement) {
+                            correctLabel.insertBefore(span, inputElement.nextSibling);
+                        }
+                    }
+                }
+            });
+
+            // Change button text and disable it after showing answers
+            this.textContent = 'Answers Shown';
+            this.disabled = true;
+        });
+    </script>
+</body>
+</html>

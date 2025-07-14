@@ -1,0 +1,514 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Theory Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa; /* Light off-white background */
+            color: #343a40; /* Dark gray text */
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Quiz Container Styling */
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            margin: 30px auto;
+        }
+
+        /* Heading Styling */
+        h1 {
+            color: #007bff; /* Primary blue */
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 600;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 20px;
+        }
+
+        /* Question Block Styling */
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #e9ecef;
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none; /* No border for the last question */
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-size: 1.25em;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Options Container Styling */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Space between options */
+        }
+
+        /* Hide default radio button */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* Label (Option) Styling */
+        label {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            background-color: #f0f4f8; /* Light blue-gray for options */
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 1.05em;
+            color: #495057;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        label:hover {
+            background-color: #e2e6ea;
+            border-color: #cdd2d6;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style for selected radio button (optional, but good for user feedback before showing answers) */
+        input[type="radio"]:checked + label {
+            background-color: #e7f5ff; /* Lighter blue for selected */
+            border-color: #007bff;
+            color: #0056b3;
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Style for correct answers */
+        label.correct-answer {
+            background-color: #d4edda; /* Light green */
+            border-color: #28a745; /* Green border */
+            color: #155724; /* Dark green text */
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
+        }
+
+        /* Button Styling */
+        button {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            margin: 40px auto 20px auto;
+            padding: 16px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.25em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        button:disabled {
+            background-color: #6c757d; /* Gray for disabled button */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Set Theory Quiz</h1>
+
+        <form id="quizForm">
+            <div class="question-block">
+                <p class="question-text">1. Which of the following statements is equivalent to A ⊆ B?</p>
+                <div class="options-container">
+                    <input type="radio" id="q1a" name="q1" value="A">
+                    <label for="q1a">A. A ∩ B = B</label>
+
+                    <input type="radio" id="q1b" name="q1" value="B">
+                    <label for="q1b" data-correct="true">B. A ∩ B = A</label>
+
+                    <input type="radio" id="q1c" name="q1" value="C">
+                    <label for="q1c">C. A ∪ B = A</label>
+
+                    <input type="radio" id="q1d" name="q1" value="D">
+                    <label for="q1d">D. A - B = A</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">2. If |A| = n, what is the cardinality of the power set of A, denoted P(A)?</p>
+                <div class="options-container">
+                    <input type="radio" id="q2a" name="q2" value="A">
+                    <label for="q2a">A. n</label>
+
+                    <input type="radio" id="q2b" name="q2" value="B">
+                    <label for="q2b">B. n^2</label>
+
+                    <input type="radio" id="q2c" name="q2" value="C">
+                    <label for="q2c" data-correct="true">C. 2^n</label>
+
+                    <input type="radio" id="q2d" name="q2" value="D">
+                    <label for="q2d">D. n!</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">3. According to De Morgan's Laws, (A ∪ B)' is equivalent to:</p>
+                <div class="options-container">
+                    <input type="radio" id="q3a" name="q3" value="A">
+                    <label for="q3a">A. A' ∪ B'</label>
+
+                    <input type="radio" id="q3b" name="q3" value="B">
+                    <label for="q3b" data-correct="true">B. A' ∩ B'</label>
+
+                    <input type="radio" id="q3c" name="q3" value="C">
+                    <label for="q3c">C. A - B</label>
+
+                    <input type="radio" id="q3d" name="q3" value="D">
+                    <label for="q3d">D. A ∪ B</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">4. What is the cardinality of the Cartesian product A × B, if |A| = m and |B| = n?</p>
+                <div class="options-container">
+                    <input type="radio" id="q4a" name="q4" value="A">
+                    <label for="q4a">A. m + n</label>
+
+                    <input type="radio" id="q4b" name="q4" value="B">
+                    <label for="q4b" data-correct="true">B. m × n</label>
+
+                    <input type="radio" id="q4c" name="q4" value="C">
+                    <label for="q4c">C. m^n</label>
+
+                    <input type="radio" id="q4d" name="q4" value="D">
+                    <label for="q4d">D. n^m</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">5. The set difference A - B is equivalent to which of the following?</p>
+                <div class="options-container">
+                    <input type="radio" id="q5a" name="q5" value="A">
+                    <label for="q5a">A. A ∪ B</label>
+
+                    <input type="radio" id="q5b" name="q5" value="B">
+                    <label for="q5b">B. A' ∩ B</label>
+
+                    <input type="radio" id="q5c" name="q5" value="C">
+                    <label for="q5c" data-correct="true">C. A ∩ B'</label>
+
+                    <input type="radio" id="q5d" name="q5" value="D">
+                    <label for="q5d">D. A' ∪ B'</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">6. A relation R on a set A is an equivalence relation if it is:</p>
+                <div class="options-container">
+                    <input type="radio" id="q6a" name="q6" value="A">
+                    <label for="q6a">A. Reflexive and Symmetric</label>
+
+                    <input type="radio" id="q6b" name="q6" value="B">
+                    <label for="q6b">B. Symmetric and Transitive</label>
+
+                    <input type="radio" id="q6c" name="q6" value="C">
+                    <label for="q6c" data-correct="true">C. Reflexive, Symmetric, and Transitive</label>
+
+                    <input type="radio" id="q6d" name="q6" value="D">
+                    <label for="q6d">D. Reflexive and Transitive</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">7. Which of the following sets is uncountable?</p>
+                <div class="options-container">
+                    <input type="radio" id="q7a" name="q7" value="A">
+                    <label for="q7a">A. The set of integers (Z)</label>
+
+                    <input type="radio" id="q7b" name="q7" value="B">
+                    <label for="q7b">B. The set of rational numbers (Q)</label>
+
+                    <input type="radio" id="q7c" name="q7" value="C">
+                    <label for="q7c">C. The set of natural numbers (N)</label>
+
+                    <input type="radio" id="q7d" name="q7" value="D">
+                    <label for="q7d" data-correct="true">D. The set of real numbers (R)</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">8. A function f: A → B is injective (one-to-one) if:</p>
+                <div class="options-container">
+                    <input type="radio" id="q8a" name="q8" value="A">
+                    <label for="q8a">A. For every b ∈ B, there exists a unique a ∈ A such that f(a) = b.</label>
+
+                    <input type="radio" id="q8b" name="q8" value="B">
+                    <label for="q8b" data-correct="true">B. For every a1, a2 ∈ A, if f(a1) = f(a2), then a1 = a2.</label>
+
+                    <input type="radio" id="q8c" name="q8" value="C">
+                    <label for="q8c">C. For every b ∈ B, there exists an a ∈ A such that f(a) = b.</label>
+
+                    <input type="radio" id="q8d" name="q8" value="D">
+                    <label for="q8d">D. The range of f is equal to B.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">9. A function f: A → B is surjective (onto) if:</p>
+                <div class="options-container">
+                    <input type="radio" id="q9a" name="q9" value="A">
+                    <label for="q9a" data-correct="true">A. For every b ∈ B, there exists an a ∈ A such that f(a) = b.</label>
+
+                    <input type="radio" id="q9b" name="q9" value="B">
+                    <label for="q9b">B. For every a1, a2 ∈ A, if a1 ≠ a2, then f(a1) ≠ f(a2).</label>
+
+                    <input type="radio" id="q9c" name="q9" value="C">
+                    <label for="q9c">C. The domain of f is equal to A.</label>
+
+                    <input type="radio" id="q9d" name="q9" value="D">
+                    <label for="q9d">D. It is both injective and bijective.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">10. A function is bijective if it is:</p>
+                <div class="options-container">
+                    <input type="radio" id="q10a" name="q10" value="A">
+                    <label for="q10a">A. Injective only</label>
+
+                    <input type="radio" id="q10b" name="q10" value="B">
+                    <label for="q10b">B. Surjective only</label>
+
+                    <input type="radio" id="q10c" name="q10" value="C">
+                    <label for="q10c" data-correct="true">C. Both injective and surjective</label>
+
+                    <input type="radio" id="q10d" name="q10" value="D">
+                    <label for="q10d">D. Neither injective nor surjective</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">11. Which of the following statements about the empty set (∅) is false?</p>
+                <div class="options-container">
+                    <input type="radio" id="q11a" name="q11" value="A">
+                    <label for="q11a">A. ∅ is a subset of every set.</label>
+
+                    <input type="radio" id="q11b" name="q11" value="B">
+                    <label for="q11b">B. P(∅) = {∅}</label>
+
+                    <input type="radio" id="q11c" name="q11" value="C">
+                    <label for="q11c">C. |∅| = 0</label>
+
+                    <input type="radio" id="q11d" name="q11" value="D">
+                    <label for="q11d" data-correct="true">D. ∅ is an element of every set.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">12. Let N be the set of natural numbers and E be the set of even natural numbers. What is N - E?</p>
+                <div class="options-container">
+                    <input type="radio" id="q12a" name="q12" value="A">
+                    <label for="q12a">A. The set of all natural numbers.</label>
+
+                    <input type="radio" id="q12b" name="q12" value="B">
+                    <label for="q12b">B. The empty set.</label>
+
+                    <input type="radio" id="q12c" name="q12" value="C">
+                    <label for="q12c" data-correct="true">C. The set of all odd natural numbers.</label>
+
+                    <input type="radio" id="q12d" name="q12" value="D">
+                    <label for="q12d">D. The set of integers.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">13. Russell's Paradox primarily highlights a problem with:</p>
+                <div class="options-container">
+                    <input type="radio" id="q13a" name="q13" value="A">
+                    <label for="q13a">A. The Axiom of Choice.</label>
+
+                    <input type="radio" id="q13b" name="q13" value="B">
+                    <label for="q13b" data-correct="true">B. Naive Set Theory, regarding self-referential sets.</label>
+
+                    <input type="radio" id="q13c" name="q13" value="C">
+                    <label for="q13c">C. The concept of infinite sets.</label>
+
+                    <input type="radio" id="q13d" name="q13" value="D">
+                    <label for="q13d">D. The existence of the empty set.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">14. What is the cardinality of the power set of the power set of the empty set, i.e., |P(P(∅))|?</p>
+                <div class="options-container">
+                    <input type="radio" id="q14a" name="q14" value="A">
+                    <label for="q14a">A. 0</label>
+
+                    <input type="radio" id="q14b" name="q14" value="B">
+                    <label for="q14b">B. 1</label>
+
+                    <input type="radio" id="q14c" name="q14" value="C">
+                    <label for="q14c" data-correct="true">C. 2</label>
+
+                    <input type="radio" id="q14d" name="q14" value="D">
+                    <label for="q14d">D. 4</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">15. The symmetric difference of two sets A and B, denoted A Δ B, is defined as:</p>
+                <div class="options-container">
+                    <input type="radio" id="q15a" name="q15" value="A">
+                    <label for="q15a">A. (A ∪ B) ∩ (A ∩ B)</label>
+
+                    <input type="radio" id="q15b" name="q15" value="B">
+                    <label for="q15b" data-correct="true">B. (A - B) ∪ (B - A)</label>
+
+                    <input type="radio" id="q15c" name="q15" value="C">
+                    <label for="q15c">C. (A ∪ B) - (A ∩ B)'</label>
+
+                    <input type="radio" id="q15d" name="q15" value="D">
+                    <label for="q15d">D. A ∩ B'</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">16. When are two ordered pairs (a, b) and (c, d) considered equal?</p>
+                <div class="options-container">
+                    <input type="radio" id="q16a" name="q16" value="A">
+                    <label for="q16a">A. If a = c or b = d.</label>
+
+                    <input type="radio" id="q16b" name="q16" value="B">
+                    <label for="q16b">B. If a = d and b = c.</label>
+
+                    <input type="radio" id="q16c" name="q16" value="C">
+                    <label for="q16c" data-correct="true">C. If a = c and b = d.</label>
+
+                    <input type="radio" id="q16d" name="q16" value="D">
+                    <label for="q16d">D. If {a, b} = {c, d}.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">17. Let U be the universal set. For any set A ⊆ U, what is A ∪ A'?</p>
+                <div class="options-container">
+                    <input type="radio" id="q17a" name="q17" value="A">
+                    <label for="q17a">A. ∅ (Empty set)</label>
+
+                    <input type="radio" id="q17b" name="q17" value="B">
+                    <label for="q17b">B. A (Set A)</label>
+
+                    <input type="radio" id="q17c" name="q17" value="C">
+                    <label for="q17c" data-correct="true">C. U (Universal set)</label>
+
+                    <input type="radio" id="q17d" name="q17" value="D">
+                    <label for="q17d">D. A' (Complement of A)</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">18. If A is a proper subset of B (A ⊂ B), which of the following is true?</p>
+                <div class="options-container">
+                    <input type="radio" id="q18a" name="q18" value="A">
+                    <label for="q18a">A. Every element of A is in B, and A = B.</label>
+
+                    <input type="radio" id="q18b" name="q18" value="B">
+                    <label for="q18b">B. Every element of B is in A, and A ≠ B.</label>
+
+                    <input type="radio" id="q18c" name="q18" value="C">
+                    <label for="q18c" data-correct="true">C. Every element of A is in B, and A ≠ B.</label>
+
+                    <input type="radio" id="q18d" name="q18" value="D">
+                    <label for="q18d">D. A and B have no elements in common.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">19. A relation R on a set A is reflexive if:</p>
+                <div class="options-container">
+                    <input type="radio" id="q19a" name="q19" value="A">
+                    <label for="q19a">A. For every a, b ∈ A, if (a, b) ∈ R, then (b, a) ∈ R.</label>
+
+                    <input type="radio" id="q19b" name="q19" value="B">
+                    <label for="q19b">B. For every a, b, c ∈ A, if (a, b) ∈ R and (b, c) ∈ R, then (a, c) ∈ R.</label>
+
+                    <input type="radio" id="q19c" name="q19" value="C">
+                    <label for="q19c" data-correct="true">C. For every a ∈ A, (a, a) ∈ R.</label>
+
+                    <input type="radio" id="q19d" name="q19" value="D">
+                    <label for="q19d">D. There exist a, b ∈ A such that (a, b) ∈ R.</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">20. What is the result of A ∪ (B ∩ C) using the distributive law?</p>
+                <div class="options-container">
+                    <input type="radio" id="q20a" name="q20" value="A">
+                    <label for="q20a">A. (A ∪ B) ∩ C</label>
+
+                    <input type="radio" id="q20b" name="q20" value="B">
+                    <label for="q20b" data-correct="true">B. (A ∪ B) ∩ (A ∪ C)</label>
+
+                    <input type="radio" id="q20c" name="q20" value="C">
+                    <label for="q20c">C. (A ∩ B) ∪ (A ∩ C)</label>
+
+                    <input type="radio" id="q20d" name="q20" value="D">
+                    <label for="q20d">D. A ∩ (B ∪ C)</label>
+                </div>
+            </div>
+        </form>
+
+        <button id="showAnswersBtn">Show Answers</button>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+            correctLabels.forEach(label => {
+                label.classList.add('correct-answer');
+                // Prepend the checkmark emoji if it's not already there
+                if (!label.textContent.includes('✅')) {
+                    label.innerHTML = '✅ ' + label.innerHTML;
+                }
+            });
+
+            this.textContent = 'Answers Shown';
+            this.disabled = true; // Disable the button after showing answers
+        });
+    </script>
+</body>
+</html>
+```

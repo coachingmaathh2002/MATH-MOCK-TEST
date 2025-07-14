@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Theory Quiz</title>
+    <style>
+        :root {
+            --primary-dark: #2C3E50; /* Dark text, headings */
+            --primary-accent: #3498DB; /* Blue for accents, buttons */
+            --secondary-light: #ECF0F1; /* Light gray for body background */
+            --card-background: #FFFFFF; /* White for question cards */
+            --border-color: #BDC3C7; /* Medium gray for borders */
+            --correct-highlight: #D4EDDA; /* Light green for correct answers */
+            --correct-text: #28A745; /* Darker green for checkmark */
+            --shadow-color: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--secondary-light);
+            color: var(--primary-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            width: 100%;
+            background-color: var(--card-background);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-accent);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            letter-spacing: -0.5px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #F9F9F9;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            font-size: 1.05em;
+            color: var(--primary-dark);
+        }
+
+        .option:hover {
+            background-color: #F0F0F0;
+            border-color: var(--primary-accent);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            /* Adjust size for better visibility */
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-accent);
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: auto;
+            min-width: 200px;
+            margin: 30px auto 0;
+            padding: 15px 30px;
+            background-color: var(--primary-accent);
+            color: var(--card-background);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            text-align: center;
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980B9; /* Darker shade of blue */
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #95A5A6;
+            cursor: not-allowed;
+        }
+
+        /* Styling for correct answer highlight */
+        .option.correct-answer-highlight {
+            background-color: var(--correct-highlight);
+            border-color: var(--correct-text);
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .option.correct-answer-highlight .checkmark {
+            margin-right: 8px;
+            color: var(--correct-text);
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            .question-text {
+                font-size: 1em;
+            }
+            .option {
+                padding: 10px 12px;
+                font-size: 0.95em;
+            }
+            .show-answers-btn {
+                padding: 12px 20px;
+                font-size: 1em;
+                min-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Group Theory Quiz</h1>
+
+        <div class="question">
+            <p class="question-text">1. Which of the following is NOT a group under the specified operation?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="a"> A) Integers under addition (&#x2124;, +)
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="b"> B) Non-zero rational numbers under multiplication (&#x211A;*, &#x00B7;)
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q1" value="c"> C) Natural numbers under addition (&#x2115;, +)
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="d"> D) 2x2 invertible matrices under matrix multiplication (GL<sub>2</sub>(&#x211D;), &#x00B7;)
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">2. What is the order of the element 2 in the group (&#x2124;<sub>6</sub>, +<sub>6</sub>)?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="a"> A) 1
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="b"> B) 2
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q2" value="c"> C) 3
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="d"> D) 6
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">3. According to Lagrange's Theorem, if G is a finite group and H is a subgroup of G, then:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="a"> A) |G| divides |H|
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q3" value="b"> B) |H| divides |G|
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="c"> C) |G| = |H|
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="d"> D) |G| + |H| is prime
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">4. If H is a normal subgroup of a group G, the set of all cosets of H in G forms a group under the operation of coset multiplication. This group is called the:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="a"> A) Subgroup G
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="b"> B) Homomorphic group
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q4" value="c"> C) Quotient group G/H
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="d"> D) Cyclic group
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">5. Which of the following groups is isomorphic to &#x2124;<sub>4</sub>?</p>
+            <div class="options">
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q5" value="a"> A) (&#x2124;<sub>8</sub>, +<sub>8</sub>) / &lt;4&gt;
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="b"> B) The Klein four-group V<sub>4</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="c"> C) S<sub>3</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="d"> D) D<sub>4</sub>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">6. The First Isomorphism Theorem states that if &#x03C6;: G &#x2192; G' is a group homomorphism, then G/Ker(&#x03C6;) is isomorphic to:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q6" value="a"> A) G
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="b"> B) Ker(&#x03C6;)
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q6" value="c"> C) Im(&#x03C6;)
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="d"> D) G'
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">7. Every cyclic group is:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q7" value="a"> A) Simple
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="b"> B) Non-abelian
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q7" value="c"> C) Abelian
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="d"> D) Finite
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">8. How many Sylow 2-subgroups are there in S<sub>3</sub> (the symmetric group on 3 elements)?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q8" value="a"> A) 1
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q8" value="b"> B) 3
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="c"> C) 4
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="d"> D) 6
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">9. The direct product &#x2124;<sub>2</sub> &#x00D7; &#x2124;<sub>3</sub> is isomorphic to:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q9" value="a"> A) &#x2124;<sub>2</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q9" value="b"> B) &#x2124;<sub>3</sub>
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q9" value="c"> C) &#x2124;<sub>6</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q9" value="d"> D) &#x2124;<sub>5</sub>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">10. The kernel of a group homomorphism &#x03C6;: G &#x2192; G' is always a:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q10" value="a"> A) Cyclic subgroup
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q10" value="b"> B) Normal subgroup
+                </label>
+                <label class="option">
+                    <input type="radio" name="q10" value="c"> C) Proper subgroup
+                </label>
+                <label class="option">
+                    <input type="radio" name="q10" value="d"> D) Trivial subgroup
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">11. The center Z(G) of a group G is defined as the set of elements that commute with every element in G. Which of the following is true about Z(G)?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q11" value="a"> A) Z(G) is always cyclic.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q11" value="b"> B) Z(G) is always equal to G.
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q11" value="c"> C) Z(G) is a normal subgroup of G.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q11" value="d"> D) Z(G) is empty if G is non-abelian.
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">12. What is the order of the dihedral group D<sub>n</sub> (symmetries of a regular n-gon)?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q12" value="a"> A) n
+                </label>
+                <label class="option">
+                    <input type="radio" name="q12" value="b"> B) n<sup>2</sup>
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q12" value="c"> C) 2n
+                </label>
+                <label class="option">
+                    <input type="radio" name="q12" value="d"> D) n!
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">13. Which of the following groups is simple?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q13" value="a"> A) &#x2124;<sub>6</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q13" value="b"> B) S<sub>4</sub>
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q13" value="c"> C) A<sub>5</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q13" value="d"> D) D<sub>3</sub>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">14. Cayley's Theorem states that every group is isomorphic to a subgroup of a:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q14" value="a"> A) Cyclic group
+                </label>
+                <label class="option">
+                    <input type="radio" name="q14" value="b"> B) Abelian group
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q14" value="c"> C) Symmetric group
+                </label>
+                <label class="option">
+                    <input type="radio" name="q14" value="d"> D) Quotient group
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">15. The group of units U(n) consists of integers relatively prime to n under multiplication modulo n. What is the order of U(10)?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q15" value="a"> A) 2
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q15" value="b"> B) 4
+                </label>
+                <label class="option">
+                    <input type="radio" name="q15" value="c"> D) 6
+                </label>
+                <label class="option">
+                    <input type="radio" name="q15" value="d"> C) 8
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">16. Which of the following statements is true regarding finite abelian groups?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q16" value="a"> A) Every finite abelian group is cyclic.
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q16" value="b"> B) Every finite abelian group is a direct product of cyclic groups of prime power order.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q16" value="c"> C) Every finite abelian group has a unique composition series.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q16" value="d"> D) Every finite abelian group has trivial center.
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">17. Consider the group (&#x2124;<sub>p</sub>*, &#x00B7;<sub>p</sub>) where p is a prime number. This group is always:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q17" value="a"> A) Non-abelian
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q17" value="b"> B) Cyclic
+                </label>
+                <label class="option">
+                    <input type="radio" name="q17" value="c"> C) Simple (for p>2)
+                </label>
+                <label class="option">
+                    <input type="radio" name="q17" value="d"> D) Of order p
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">18. If G is a group of order 49, then G must be:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q18" value="a"> A) Cyclic
+                </label>
+                <label class="option">
+                    <input type="radio" name="q18" value="b"> B) Non-abelian
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q18" value="c"> C) Abelian
+                </label>
+                <label class="option">
+                    <input type="radio" name="q18" value="d"> D) Simple
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">19. Which of the following is a normal subgroup of S<sub>4</sub>?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q19" value="a"> A) &lt;(1 2)&gt;
+                </label>
+                <label class="option">
+                    <input type="radio" name="q19" value="b"> B) D<sub>4</sub>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q19" value="c"> C) S<sub>3</sub> (as a subgroup of S<sub>4</sub>)
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q19" value="d"> D) A<sub>4</sub>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p class="question-text">20. The commutator subgroup G' of a group G is defined as the subgroup generated by all commutators [x, y] = x<sup>-1</sup>y<sup>-1</sup>xy. A group G is abelian if and only if:</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q20" value="a"> A) G' = G
+                </label>
+                <label class="option">
+                    <input type="radio" name="q20" value="b"> B) G' is cyclic
+                </label>
+                <label class="option" data-correct="true">
+                    <input type="radio" name="q20" value="c"> C) G' = {e} (the trivial subgroup)
+                </label>
+                <label class="option">
+                    <input type="radio" name="q20" value="d"> D) G' is a normal subgroup of G
+                </label>
+            </div>
+        </div>
+
+        <button class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const correctOptions = document.querySelectorAll('label[data-correct="true"]');
+            correctOptions.forEach(option => {
+                option.classList.add('correct-answer-highlight');
+                // Check if the checkmark already exists to prevent duplication
+                if (!option.querySelector('.checkmark')) {
+                    const checkmark = document.createElement('span');
+                    checkmark.classList.add('checkmark');
+                    checkmark.textContent = '✅ ';
+                    // Insert the checkmark right after the radio button, or at the beginning of the text
+                    const inputElement = option.querySelector('input[type="radio"]');
+                    if (inputElement) {
+                        inputElement.parentNode.insertBefore(checkmark, inputElement.nextSibling);
+                    } else {
+                        option.prepend(checkmark); // Fallback if input is not found inside label
+                    }
+                }
+                // Also disable the radio button to prevent further changes
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.disabled = true;
+                }
+            });
+
+            // Disable all other radio buttons as well after answers are shown
+            const allRadios = document.querySelectorAll('input[type="radio"]');
+            allRadios.forEach(radio => {
+                radio.disabled = true;
+            });
+
+            this.textContent = 'Answers Shown';
+            this.disabled = true;
+        });
+    </script>
+</body>
+</html>
