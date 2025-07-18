@@ -1,0 +1,741 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications of Vectors to Geometry Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2c3e50; /* Dark blue */
+            --secondary-blue: #34495e; /* Slightly lighter dark blue */
+            --light-blue: #ecf0f1; /* Very light gray/blue */
+            --text-color: #333;
+            --header-color: #2980b9; /* Mid blue */
+            --accent-color: #f39c12; /* Orange for highlights/buttons */
+            --correct-green: #d4edda; /* Light green */
+            --incorrect-red: #f8d7da; /* Light red */
+            --border-color: #ddd;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --font-main: 'Roboto', sans-serif;
+            --font-secondary: 'Open Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            background-color: var(--light-blue);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            margin-top: 20px;
+            margin-bottom: 50px; /* Space for fixed button/footer if needed */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-family: var(--font-main);
+            color: var(--header-color);
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .timer, .score-display {
+            font-family: var(--font-main);
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-top: 15px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            background-color: var(--light-blue);
+            display: inline-block;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .score-display {
+            color: var(--accent-color);
+            margin-left: 20px;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #fdfdfd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-family: var(--font-main);
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary-blue);
+        }
+
+        .options div {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 4px; /* Align with text */
+        }
+
+        .options label {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            display: block; /* Ensure label takes full width */
+        }
+
+        .options label:hover:not(.correct):not(.incorrect) {
+            background-color: #f5f5f5;
+            border-color: #c0c0c0;
+        }
+
+        /* MathJax styling - ensure it doesn't break layout */
+        .question-text .MathJax, .options label .MathJax {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+
+        /* Specific styles for correct/incorrect answers */
+        .correct {
+            background-color: var(--correct-green) !important;
+            border-color: #28a745 !important;
+            font-weight: 700;
+            color: #155724;
+        }
+
+        .incorrect {
+            background-color: var(--incorrect-red) !important;
+            border-color: #dc3545 !important;
+            font-weight: 700;
+            color: #721c24;
+        }
+
+        #submit-quiz {
+            display: block;
+            width: 250px;
+            margin: 40px auto 20px auto;
+            padding: 15px 30px;
+            background-color: var(--header-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #submit-quiz:hover:not(:disabled) {
+            background-color: #2273a6;
+            transform: translateY(-2px);
+        }
+
+        #submit-quiz:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Applications of Vectors to Geometry Quiz</h1>
+            <div id="timer" class="timer">Time: 00:00</div>
+            <div id="score-display" class="score-display"></div>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <p class="question-text">1. What is the vector equation of the line passing through the points \(A(1, -2, 3)\) and \(B(4, 0, -1)\)?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q1" id="q1_optionA" value="A">
+                        <label for="q1_optionA">A. \(\mathbf{r} = (1, -2, 3) + t(3, 2, -4)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q1" id="q1_optionB" value="B">
+                        <label for="q1_optionB">B. \(\mathbf{r} = (4, 0, -1) + t(1, -2, 3)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q1" id="q1_optionC" value="C">
+                        <label for="q1_optionC" data-correct="true">C. \(\mathbf{r} = (1, -2, 3) + t(3, 2, -4)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q1" id="q1_optionD" value="D">
+                        <label for="q1_optionD">D. \(\mathbf{r} = (1, -2, 3) + t(5, -2, 2)\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <p class="question-text">2. Find the scalar equation of the plane passing through the point \(P(2, 1, -3)\) with a normal vector \(\mathbf{n} = (4, -2, 5)\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q2" id="q2_optionA" value="A">
+                        <label for="q2_optionA">A. \(4x - 2y + 5z = 9\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q2" id="q2_optionB" value="B">
+                        <label for="q2_optionB" data-correct="true">B. \(4x - 2y + 5z = -9\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q2" id="q2_optionC" value="C">
+                        <label for="q2_optionC">C. \(2x + y - 3z = 0\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q2" id="q2_optionD" value="D">
+                        <label for="q2_optionD">D. \(4x - 2y + 5z = 19\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <p class="question-text">3. Calculate the angle between the vectors \(\mathbf{u} = (1, 2, 3)\) and \(\mathbf{v} = (4, 0, -1)\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q3" id="q3_optionA" value="A">
+                        <label for="q3_optionA">A. \(\arccos\left(\frac{1}{\sqrt{26}}\right)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q3" id="q3_optionB" value="B">
+                        <label for="q3_optionB">B. \(\arccos\left(\frac{1}{\sqrt{17}}\right)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q3" id="q3_optionC" value="C" data-correct="true">
+                        <label for="q3_optionC">C. \(\arccos\left(\frac{1}{\sqrt{26} \cdot \sqrt{17}}\right)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q3" id="q3_optionD" value="D">
+                        <label for="q3_optionD">D. \(\arccos\left(\frac{1}{\sqrt{13}}\right)\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <p class="question-text">4. Determine the area of the parallelogram formed by the vectors \(\mathbf{a} = (2, -1, 3)\) and \(\mathbf{b} = (0, 4, -2)\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q4" id="q4_optionA" value="A">
+                        <label for="q4_optionA">A. \( \sqrt{104} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q4" id="q4_optionB" value="B">
+                        <label for="q4_optionB" data-correct="true">B. \( \sqrt{224} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q4" id="q4_optionC" value="C">
+                        <label for="q4_optionC">C. \( \sqrt{180} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q4" id="q4_optionD" value="D">
+                        <label for="q4_optionD">D. \( \sqrt{116} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <p class="question-text">5. What is the volume of the parallelepiped formed by vectors \(\mathbf{u} = (1, 0, 1)\), \(\mathbf{v} = (2, 1, 0)\), and \(\mathbf{w} = (0, 1, 3)\)?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q5" id="q5_optionA" value="A">
+                        <label for="q5_optionA">A. 3</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q5" id="q5_optionB" value="B" data-correct="true">
+                        <label for="q5_optionB">B. 5</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q5" id="q5_optionC" value="C">
+                        <label for="q5_optionC">C. 7</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q5" id="q5_optionD" value="D">
+                        <label for="q5_optionD">D. 9</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <p class="question-text">6. Find the projection of vector \(\mathbf{a} = (3, -1, 2)\) onto vector \(\mathbf{b} = (1, 2, -1)\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q6" id="q6_optionA" value="A">
+                        <label for="q6_optionA">A. \(\frac{1}{6}(1, 2, -1)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q6" id="q6_optionB" value="B" data-correct="true">
+                        <label for="q6_optionB">B. \(0\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q6" id="q6_optionC" value="C">
+                        <label for="q6_optionC">C. \(\frac{2}{3}(3, -1, 2)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q6" id="q6_optionD" value="D">
+                        <label for="q6_optionD">D. \(\frac{3}{2}(1, 2, -1)\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <p class="question-text">7. What is the distance from the point \(Q(1, 1, 1)\) to the plane \(2x - y + 2z = 5\)?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q7" id="q7_optionA" value="A">
+                        <label for="q7_optionA">A. \(1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q7" id="q7_optionB" value="B">
+                        <label for="q7_optionB">B. \(\frac{1}{3}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q7" id="q7_optionC" value="C" data-correct="true">
+                        <label for="q7_optionC">C. \(\frac{2}{3}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q7" id="q7_optionD" value="D">
+                        <label for="q7_optionD">D. \(2\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <p class="question-text">8. Find the point of intersection of the line \(\mathbf{r} = (1, 2, 3) + t(1, -1, 1)\) and the plane \(x + y + z = 10\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q8" id="q8_optionA" value="A">
+                        <label for="q8_optionA">A. \((3, 0, 5)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q8" id="q8_optionB" value="B" data-correct="true">
+                        <label for="q8_optionB">B. \((4, -1, 6)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q8" id="q8_optionC" value="C">
+                        <label for="q8_optionC">C. \((2, 1, 4)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q8" id="q8_optionD" value="D">
+                        <label for="q8_optionD">D. \((5, -2, 7)\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <p class="question-text">9. Determine if the lines \(\mathbf{r_1} = (1, 0, 1) + t(1, 1, -1)\) and \(\mathbf{r_2} = (0, 1, 2) + s(2, 0, 1)\) intersect.</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q9" id="q9_optionA" value="A">
+                        <label for="q9_optionA">A. Yes, at \((2, 1, 0)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q9" id="q9_optionB" value="B">
+                        <label for="q9_optionB">B. Yes, at \((3, 2, -1)\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q9" id="q9_optionC" value="C" data-correct="true">
+                        <label for="q9_optionC">C. No, they are skew.</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q9" id="q9_optionD" value="D">
+                        <label for="q9_optionD">D. No, they are parallel.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <p class="question-text">10. Find the equation of the plane containing the points \(A(1, 0, 0)\), \(B(0, 1, 0)\), and \(C(0, 0, 1)\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q10" id="q10_optionA" value="A">
+                        <label for="q10_optionA">A. \(x + y + z = 0\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q10" id="q10_optionB" value="B" data-correct="true">
+                        <label for="q10_optionB">B. \(x + y + z = 1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q10" id="q10_optionC" value="C">
+                        <label for="q10_optionC">C. \(x - y - z = 1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q10" id="q10_optionD" value="D">
+                        <label for="q10_optionD">D. \(x + y + z = 3\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question" id="q11">
+                <p class="question-text">11. What is the cosine of the angle between the plane \(2x - y + z = 3\) and the plane \(x + 2y - z = 5\)?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q11" id="q11_optionA" value="A">
+                        <label for="q11_optionA">A. \(\frac{1}{6}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q11" id="q11_optionB" value="B" data-correct="true">
+                        <label for="q11_optionB">B. \(\frac{1}{2}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q11" id="q11_optionC" value="C">
+                        <label for="q11_optionC">C. \(0\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q11" id="q11_optionD" value="D">
+                        <label for="q11_optionD">D. \(\frac{1}{\sqrt{6}}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question" id="q12">
+                <p class="question-text">12. Find the distance from the origin \((0,0,0)\) to the line \(\mathbf{r} = (1, 2, 3) + t(1, 1, 0)\).</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q12" id="q12_optionA" value="A">
+                        <label for="q12_optionA">A. \(\sqrt{14}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q12" id="q12_optionB" value="B">
+                        <label for="q12_optionB">B. \(\sqrt{10}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q12" id="q12_optionC" value="C" data-correct="true">
+                        <label for="q12_optionC">C. \(\sqrt{5}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q12" id="q12_optionD" value="D">
+                        <label for="q12_optionD">D. \(\sqrt{3}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question" id="q13">
+                <p class="question-text">13. The vector equation of a sphere with center \(C(a,b,c)\) and radius \(R\) is given by:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q13" id="q13_optionA" value="A">
+                        <label for="q13_optionA">A. \(|\mathbf{r} - \mathbf{c}|^2 = R\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q13" id="q13_optionB" value="B" data-correct="true">
+                        <label for="q13_optionB">B. \(|\mathbf{r} - \mathbf{c}| = R\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q13" id="q13_optionC" value="C">
+                        <label for="q13_optionC">C. \(\mathbf{r} \cdot \mathbf{c} = R^2\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q13" id="q13_optionD" value="D">
+                        <label for="q13_optionD">D. \(|\mathbf{r} + \mathbf{c}| = R\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question" id="q14">
+                <p class="question-text">14. What is the shortest distance between the skew lines \(\mathbf{r_1} = (1, 2, 3) + t(1, 0, 1)\) and \(\mathbf{r_2} = (0, 1, 0) + s(0, 1, 1)\)?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q14" id="q14_optionA" value="A">
+                        <label for="q14_optionA">A. \(\frac{1}{\sqrt{3}}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q14" id="q14_optionB" value="B" data-correct="true">
+                        <label for="q14_optionB">B. \(\frac{2}{\sqrt{3}}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q14" id="q14_optionC" value="C">
+                        <label for="q14_optionC">C. \(1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q14" id="q14_optionD" value="D">
+                        <label for="q14_optionD">D. \(\frac{3}{\sqrt{3}}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question" id="q15">
+                <p class="question-text">15. The position vector of a point \(P\) is \(\mathbf{p}\). If \(P\) divides the line segment joining \(A\) (position vector \(\mathbf{a}\)) and \(B\) (position vector \(\mathbf{b}\)) in the ratio \(m:n\), then \(\mathbf{p}\) is:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q15" id="q15_optionA" value="A">
+                        <label for="q15_optionA">A. \(\frac{m\mathbf{a} + n\mathbf{b}}{m+n}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q15" id="q15_optionB" value="B" data-correct="true">
+                        <label for="q15_optionB">B. \(\frac{n\mathbf{a} + m\mathbf{b}}{m+n}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q15" id="q15_optionC" value="C">
+                        <label for="q15_optionC">C. \(\frac{m\mathbf{a} - n\mathbf{b}}{m-n}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q15" id="q15_optionD" value="D">
+                        <label for="q15_optionD">D. \(\frac{n\mathbf{a} - m\mathbf{b}}{m-n}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question" id="q16">
+                <p class="question-text">16. If \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) are coplanar vectors, then their scalar triple product is:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q16" id="q16_optionA" value="A">
+                        <label for="q16_optionA">A. Positive</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q16" id="q16_optionB" value="B">
+                        <label for="q16_optionB">B. Negative</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q16" id="q16_optionC" value="C" data-correct="true">
+                        <label for="q16_optionC">C. Zero</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q16" id="q16_optionD" value="D">
+                        <label for="q16_optionD">D. Non-zero</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question" id="q17">
+                <p class="question-text">17. The equation of a plane parallel to the xy-plane and passing through the point \((1, 2, 3)\) is:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q17" id="q17_optionA" value="A">
+                        <label for="q17_optionA">A. \(x = 1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q17" id="q17_optionB" value="B">
+                        <label for="q17_optionB">B. \(y = 2\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q17" id="q17_optionC" value="C" data-correct="true">
+                        <label for="q17_optionC">C. \(z = 3\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q17" id="q17_optionD" value="D">
+                        <label for="q17_optionD">D. \(x + y = 3\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question" id="q18">
+                <p class="question-text">18. If \(\mathbf{a}\) and \(\mathbf{b}\) are two non-zero vectors, and \(|\mathbf{a} + \mathbf{b}| = |\mathbf{a} - \mathbf{b}|\), then:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q18" id="q18_optionA" value="A">
+                        <label for="q18_optionA">A. \(\mathbf{a}\) is parallel to \(\mathbf{b}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q18" id="q18_optionB" value="B" data-correct="true">
+                        <label for="q18_optionB">B. \(\mathbf{a}\) is perpendicular to \(\mathbf{b}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q18" id="q18_optionC" value="C">
+                        <label for="q18_optionC">C. \(|\mathbf{a}| = |\mathbf{b}|\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q18" id="q18_optionD" value="D">
+                        <label for="q18_optionD">D. \(\mathbf{a} = \mathbf{b}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question" id="q19">
+                <p class="question-text">19. The normal form of the equation of a plane is \(\mathbf{r} \cdot \hat{\mathbf{n}} = p\). Here, \(p\) represents:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q19" id="q19_optionA" value="A">
+                        <label for="q19_optionA">A. The length of the normal vector</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q19" id="q19_optionB" value="B">
+                        <label for="q19_optionB" data-correct="true">B. The perpendicular distance from the origin to the plane</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q19" id="q19_optionC" value="C">
+                        <label for="q19_optionC">C. The angle the plane makes with the x-axis</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q19" id="q19_optionD" value="D">
+                        <label for="q19_optionD">D. The area of the plane</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question" id="q20">
+                <p class="question-text">20. Given a triangle with vertices \(A(1, 0, 0)\), \(B(0, 1, 0)\), and \(C(0, 0, 1)\), what is its area?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" name="q20" id="q20_optionA" value="A">
+                        <label for="q20_optionA">A. \(1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q20" id="q20_optionB" value="B">
+                        <label for="q20_optionB">B. \(\frac{1}{2}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q20" id="q20_optionC" value="C" data-correct="true">
+                        <label for="q20_optionC">C. \(\frac{\sqrt{3}}{2}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="q20" id="q20_optionD" value="D">
+                        <label for="q20_optionD">D. \(\sqrt{3}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="submit-quiz">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        let seconds = 0;
+        let timerInterval;
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('score-display');
+        const submitButton = document.getElementById('submit-quiz');
+        const quizForm = document.getElementById('quiz-form');
+        const questions = document.querySelectorAll('.question');
+        const totalQuestions = questions.length;
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const remainingSeconds = totalSeconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function updateTimer() {
+            seconds++;
+            timerDisplay.textContent = `Time: ${formatTime(seconds)}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function handleSubmitQuiz() {
+            stopTimer();
+            submitButton.disabled = true;
+            submitButton.textContent = "Quiz Submitted";
+
+            let score = 0;
+
+            questions.forEach((question, index) => {
+                const questionNumber = index + 1;
+                const radios = question.querySelectorAll(`input[name="q${questionNumber}"]`);
+                let selectedOption = null;
+                let correctLabel = null;
+
+                radios.forEach(radio => {
+                    const label = document.querySelector(`label[for="${radio.id}"]`);
+                    if (label.dataset.correct === 'true') {
+                        correctLabel = label;
+                    }
+                    if (radio.checked) {
+                        selectedOption = { radio: radio, label: label };
+                    }
+                    // Disable all radio buttons after submission
+                    radio.disabled = true;
+                });
+
+                if (selectedOption) {
+                    if (selectedOption.label.dataset.correct === 'true') {
+                        score++;
+                        selectedOption.label.classList.add('correct');
+                        selectedOption.label.innerHTML += ' ✅'; // Add checkmark
+                    } else {
+                        selectedOption.label.classList.add('incorrect');
+                        selectedOption.label.innerHTML += ' ❌'; // Add cross
+                        if (correctLabel) {
+                            correctLabel.classList.add('correct');
+                            correctLabel.innerHTML += ' ✅'; // Show correct answer
+                        }
+                    }
+                } else {
+                    // If no option was selected, still highlight the correct one
+                    if (correctLabel) {
+                        correctLabel.classList.add('correct');
+                        correctLabel.innerHTML += ' ✅';
+                    }
+                }
+            });
+
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+            scoreDisplay.style.display = 'inline-block'; // Make sure score is visible
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', startTimer);
+        submitButton.addEventListener('click', handleSubmitQuiz);
+    </script>
+</body>
+</html>
+```

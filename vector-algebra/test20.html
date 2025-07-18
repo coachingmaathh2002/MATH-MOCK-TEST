@@ -1,0 +1,744 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Components Quiz</title>
+    <!-- MathJax for rendering LaTeX equations -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --secondary-blue: #6c757d;
+            --light-blue: #e0f2ff;
+            --dark-gray: #343a40;
+            --medium-gray: #f8f9fa;
+            --light-gray: #ffffff;
+            --success-green: #d4edda;
+            --error-red: #f8d7da;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--medium-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: var(--secondary-blue);
+        }
+
+        .timer-display, .score-display {
+            font-weight: bold;
+            padding: 8px 15px;
+            background-color: var(--light-blue);
+            border-radius: 5px;
+            min-width: 120px; /* Ensure consistent width */
+            text-align: center;
+        }
+
+        .question-block {
+            background-color: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-item label {
+            display: block;
+            padding: 12px 15px;
+            background-color: var(--medium-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            font-size: 1.05em;
+            color: var(--dark-gray);
+        }
+
+        .option-item label:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary-blue);
+        }
+
+        input[type="radio"] {
+            display: none; /* Hide default radio button */
+        }
+
+        input[type="radio"]:checked + label {
+            background-color: var(--light-blue);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* Styling for correct/incorrect answers after submission */
+        .correct-answer {
+            background-color: var(--success-green) !important;
+            border-color: #28a745 !important;
+            color: #155724 !important;
+            font-weight: 600;
+        }
+
+        .incorrect-selection {
+            background-color: var(--error-red) !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+            font-weight: 600;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: var(--primary-blue);
+            color: var(--light-gray);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        .submit-button:disabled {
+            background-color: var(--secondary-blue);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* MathJax specific styling adjustments */
+        .question-text .MathJax, .option-item .MathJax {
+            display: inline-block; /* For inline math */
+            vertical-align: middle;
+            margin: 0 2px;
+        }
+        .MathJax_Display { /* For display math */
+            margin: 1em 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vector Components Quiz</h1>
+            <p>Test your knowledge on vector components in 2D and 3D.</p>
+            <div class="quiz-info">
+                <div id="timer-display" class="timer-display">Time: 00:00</div>
+                <div id="score-display" class="score-display">Score: - / 20</div>
+            </div>
+        </header>
+
+        <main id="quiz-questions">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p class="question-text">1. Given a vector \(\vec{v}\) with magnitude \(|\vec{v}| = 10\) and direction \(30^\circ\) counter-clockwise from the positive x-axis in 2D, what are its Cartesian components \( (v_x, v_y) \)?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q1_a" name="q1" value="A">
+                        <label for="q1_a">A. \((5, 5\sqrt{3})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1_b" name="q1" value="B">
+                        <label for="q1_b">B. \((5\sqrt{3}, 5)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1_c" name="q1" value="C">
+                        <label for="q1_c" data-correct="true">C. \((5\sqrt{3}, 5)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1_d" name="q1" value="D">
+                        <label for="q1_d">D. \((8.66, 5)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p class="question-text">2. If a vector \(\vec{A} = 3\hat{i} - 4\hat{j}\), what is the magnitude of \(\vec{A}\)?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q2_a" name="q2" value="A">
+                        <label for="q2_a">A. 1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2_b" name="q2" value="B">
+                        <label for="q2_b">B. 5</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2_c" name="q2" value="C" data-correct="true">
+                        <label for="q2_c" data-correct="true">C. 5</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2_d" name="q2" value="D">
+                        <label for="q2_d">D. 7</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p class="question-text">3. What is the unit vector in the direction of \(\vec{B} = 2\hat{i} - 2\hat{j} + \hat{k}\)?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q3_a" name="q3" value="A">
+                        <label for="q3_a">A. \(\frac{1}{3}(2\hat{i} - 2\hat{j} + \hat{k})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3_b" name="q3" value="B" data-correct="true">
+                        <label for="q3_b" data-correct="true">B. \(\frac{1}{3}(2\hat{i} - 2\hat{j} + \hat{k})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3_c" name="q3" value="C">
+                        <label for="q3_c">C. \(\frac{1}{\sqrt{5}}(2\hat{i} - 2\hat{j} + \hat{k})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3_d" name="q3" value="D">
+                        <label for="q3_d">D. \(2\hat{i} - 2\hat{j} + \hat{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p class="question-text">4. For vectors \(\vec{U} = \hat{i} + 2\hat{j} - \hat{k}\) and \(\vec{V} = 3\hat{i} - \hat{j} + 2\hat{k}\), calculate the dot product \(\vec{U} \cdot \vec{V}\).</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q4_a" name="q4" value="A">
+                        <label for="q4_a">A. 3</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4_b" name="q4" value="B">
+                        <label for="q4_b">B. -1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4_c" name="q4" value="C" data-correct="true">
+                        <label for="q4_c" data-correct="true">C. -1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4_d" name="q4" value="D">
+                        <label for="q4_d">D. 7</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p class="question-text">5. Which of the following statements is true about the scalar projection of vector \(\vec{A}\) onto vector \(\vec{B}\)?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q5_a" name="q5" value="A">
+                        <label for="q5_a">A. It is always a vector quantity.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5_b" name="q5" value="B">
+                        <label for="q5_b">B. It is calculated as \(\vec{A} \times \vec{B}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5_c" name="q5" value="C" data-correct="true">
+                        <label for="q5_c" data-correct="true">C. It is given by \(\frac{\vec{A} \cdot \vec{B}}{|\vec{B}|}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5_d" name="q5" value="D">
+                        <label for="q5_d">D. It is always positive.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p class="question-text">6. Given \(\vec{P} = 2\hat{i} + \hat{j}\) and \(\vec{Q} = 4\hat{i} - 2\hat{j}\), what is \(\vec{P} + 2\vec{Q}\)?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q6_a" name="q6" value="A">
+                        <label for="q6_a">A. \(6\hat{i} - \hat{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6_b" name="q6" value="B">
+                        <label for="q6_b">B. \(10\hat{i} - 3\hat{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6_c" name="q6" value="C" data-correct="true">
+                        <label for="q6_c" data-correct="true">C. \(10\hat{i} - 3\hat{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6_d" name="q6" value="D">
+                        <label for="q6_d">D. \(10\hat{i} + 5\hat{j}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p class="question-text">7. Two vectors \(\vec{A}\) and \(\vec{B}\) are perpendicular if their dot product \(\vec{A} \cdot \vec{B}\) is:</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q7_a" name="q7" value="A">
+                        <label for="q7_a">A. 1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7_b" name="q7" value="B" data-correct="true">
+                        <label for="q7_b" data-correct="true">B. 0</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7_c" name="q7" value="C">
+                        <label for="q7_c">C. Undefined</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7_d" name="q7" value="D">
+                        <label for="q7_d">D. Their magnitudes multiplied</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p class="question-text">8. Calculate the cross product \(\vec{C} \times \vec{D}\) for \(\vec{C} = \hat{i} + \hat{j}\) and \(\vec{D} = \hat{i} - \hat{k}\).</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q8_a" name="q8" value="A">
+                        <label for="q8_a">A. \(\hat{i} + \hat{j} + \hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8_b" name="q8" value="B" data-correct="true">
+                        <label for="q8_b" data-correct="true">B. \(-\hat{i} + \hat{j} - \hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8_c" name="q8" value="C">
+                        <label for="q8_c">C. \(-\hat{i} - \hat{j} - \hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8_d" name="q8" value="D">
+                        <label for="q8_d">D. \(\hat{i} - \hat{j} + \hat{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p class="question-text">9. The vector projection of \(\vec{A} = 3\hat{i} + 4\hat{j}\) onto the x-axis is:</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q9_a" name="q9" value="A">
+                        <label for="q9_a">A. \(4\hat{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9_b" name="q9" value="B">
+                        <label for="q9_b">B. \(5\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9_c" name="q9" value="C" data-correct="true">
+                        <label for="q9_c" data-correct="true">C. \(3\hat{i}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9_d" name="q9" value="D">
+                        <label for="q9_d">D. \(\frac{3}{5}\hat{i}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p class="question-text">10. If \(\vec{F} = F_x \hat{i} + F_y \hat{j} + F_z \hat{k}\) is a force vector, what does \(F_z\) represent?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q10_a" name="q10" value="A">
+                        <label for="q10_a">A. The magnitude of the force.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10_b" name="q10" value="B">
+                        <label for="q10_b">B. The force component in the y-direction.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10_c" name="q10" value="C" data-correct="true">
+                        <label for="q10_c" data-correct="true">C. The force component in the z-direction.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10_d" name="q10" value="D">
+                        <label for="q10_d">D. The direction of the force.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p class="question-text">11. The area of the parallelogram formed by vectors \(\vec{A} = 2\hat{i} + \hat{j}\) and \(\vec{B} = \hat{i} - 3\hat{j}\) is given by the magnitude of:</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q11_a" name="q11" value="A">
+                        <label for="q11_a">A. \(\vec{A} \cdot \vec{B}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11_b" name="q11" value="B" data-correct="true">
+                        <label for="q11_b" data-correct="true">B. \(\vec{A} \times \vec{B}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11_c" name="q11" value="C">
+                        <label for="q11_c">C. \(|\vec{A}| + |\vec{B}|\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11_d" name="q11" value="D">
+                        <label for="q11_d">D. \(\frac{\vec{A}}{|\vec{A}|}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p class="question-text">12. What is the angle between vectors \(\vec{A} = \hat{i} + \hat{j}\) and \(\vec{B} = \hat{i} - \hat{j}\)?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q12_a" name="q12" value="A">
+                        <label for="q12_a">A. \(0^\circ\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12_b" name="q12" value="B">
+                        <label for="q12_b">B. \(45^\circ\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12_c" name="q12" value="C" data-correct="true">
+                        <label for="q12_c" data-correct="true">C. \(90^\circ\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12_d" name="q12" value="D">
+                        <label for="q12_d">D. \(180^\circ\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p class="question-text">13. The vector \(\vec{r} = x\hat{i} + y\hat{j} + z\hat{k}\) represents a position vector from the origin. What is its magnitude?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q13_a" name="q13" value="A">
+                        <label for="q13_a">A. \(x+y+z\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13_b" name="q13" value="B" data-correct="true">
+                        <label for="q13_b" data-correct="true">B. \(\sqrt{x^2+y^2+z^2}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13_c" name="q13" value="C">
+                        <label for="q13_c">C. \((x, y, z)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13_d" name="q13" value="D">
+                        <label for="q13_d">D. \(xyz\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p class="question-text">14. If a vector \(\vec{A}\) is parallel to vector \(\vec{B}\), then \(\vec{A} \times \vec{B}\) is:</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q14_a" name="q14" value="A">
+                        <label for="q14_a">A. A unit vector</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14_b" name="q14" value="B">
+                        <label for="q14_b">B. A scalar value equal to \(|\vec{A}||\vec{B}|\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14_c" name="q14" value="C" data-correct="true">
+                        <label for="q14_c" data-correct="true">C. The zero vector</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14_d" name="q14" value="D">
+                        <label for="q14_d">D. A vector perpendicular to both \(\vec{A}\) and \(\vec{B}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p class="question-text">15. Express the vector from point \(P(1, 2, 3)\) to point \(Q(4, 0, 1)\) in component form.</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q15_a" name="q15" value="A">
+                        <label for="q15_a">A. \(3\hat{i} + 2\hat{j} + 2\hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15_b" name="q15" value="B" data-correct="true">
+                        <label for="q15_b" data-correct="true">B. \(3\hat{i} - 2\hat{j} - 2\hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15_c" name="q15" value="C">
+                        <label for="q15_c">C. \(-3\hat{i} + 2\hat{j} + 2\hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15_d" name="q15" value="D">
+                        <label for="q15_d">D. \(5\hat{i} + 2\hat{j} + 4\hat{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p class="question-text">16. The scalar triple product of vectors \(\vec{A}, \vec{B}, \vec{C}\) is defined as \(\vec{A} \cdot (\vec{B} \times \vec{C})\). Geometrically, what does its absolute value represent?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q16_a" name="q16" value="A">
+                        <label for="q16_a">A. The area of the parallelogram formed by \(\vec{A}\) and \(\vec{B}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16_b" name="q16" value="B" data-correct="true">
+                        <label for="q16_b" data-correct="true">B. The volume of the parallelepiped formed by \(\vec{A}, \vec{B}, \vec{C}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16_c" name="q16" value="C">
+                        <label for="q16_c">C. The angle between \(\vec{A}\) and \(\vec{B}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16_d" name="q16" value="D">
+                        <label for="q16_d">D. The length of the diagonal of the parallelepiped.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p class="question-text">17. Consider a vector \(\vec{R}\) in 3D space with components \((x, y, z)\). Which of the following is an incorrect representation in terms of standard basis vectors?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q17_a" name="q17" value="A">
+                        <label for="q17_a">A. \(x\hat{i} + y\hat{j} + z\hat{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17_b" name="q17" value="B">
+                        <label for="q17_b">B. \(x(1,0,0) + y(0,1,0) + z(0,0,1)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17_c" name="q17" value="C">
+                        <label for="q17_c" data-correct="true">C. \( (x,y,z) \cdot (\hat{i}, \hat{j}, \hat{k}) \)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17_d" name="q17" value="D">
+                        <label for="q17_d">D. A linear combination of orthogonal unit vectors.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p class="question-text">18. The vector \( \vec{u} = \frac{1}{\sqrt{2}}\hat{i} + \frac{1}{\sqrt{2}}\hat{j} \) is a unit vector. What is its direction in the xy-plane?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q18_a" name="q18" value="A">
+                        <label for="q18_a">A. \(0^\circ\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18_b" name="q18" value="B" data-correct="true">
+                        <label for="q18_b" data-correct="true">B. \(45^\circ\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18_c" name="q18" value="C">
+                        <label for="q18_c">C. \(90^\circ\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18_d" name="q18" value="D">
+                        <label for="q18_d">D. \(135^\circ\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p class="question-text">19. In cylindrical coordinates \((r, \theta, z)\), a vector's components are typically expressed using basis vectors \(\hat{e}_r, \hat{e}_\theta, \hat{e}_z\). Which of these basis vectors generally changes direction with position?</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q19_a" name="q19" value="A">
+                        <label for="q19_a">A. Only \(\hat{e}_z\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19_b" name="q19" value="B">
+                        <label for="q19_b">B. Only \(\hat{e}_\theta\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19_c" name="q19" value="C" data-correct="true">
+                        <label for="q19_c" data-correct="true">C. \(\hat{e}_r\) and \(\hat{e}_\theta\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19_d" name="q19" value="D">
+                        <label for="q19_d">D. None of them, they are fixed.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p class="question-text">20. A particle is displaced from \(P_1(1, -1, 2)\) to \(P_2(3, 1, 0)\) by a force \(\vec{F} = 2\hat{i} + 3\hat{j} - \hat{k}\) Newtons. What is the work done by the force? (Work \(W = \vec{F} \cdot \vec{d}\), where \(\vec{d}\) is the displacement vector)</p>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <input type="radio" id="q20_a" name="q20" value="A">
+                        <label for="q20_a">A. 4 Joules</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20_b" name="q20" value="B">
+                        <label for="q20_b">B. 8 Joules</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20_c" name="q20" value="C" data-correct="true">
+                        <label for="q20_c" data-correct="true">C. 10 Joules</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20_d" name="q20" value="D">
+                        <label for="q20_d">D. 12 Joules</label>
+                    </li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <button id="submit-quiz" class="submit-button">Submit Quiz</button>
+        </footer>
+    </div>
+
+    <script>
+        const timerDisplay = document.getElementById('timer-display');
+        const scoreDisplay = document.getElementById('score-display');
+        const submitButton = document.getElementById('submit-quiz');
+        const quizQuestionsContainer = document.getElementById('quiz-questions');
+
+        let secondsElapsed = 0;
+        let timerInterval;
+        let quizSubmitted = false;
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                timerDisplay.textContent = `Time: ${formatTime(secondsElapsed)}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function submitQuiz() {
+            if (quizSubmitted) return; // Prevent multiple submissions
+
+            stopTimer();
+            quizSubmitted = true;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Quiz Submitted';
+
+            let score = 0;
+            const questionBlocks = quizQuestionsContainer.querySelectorAll('.question-block');
+            const totalQuestions = questionBlocks.length;
+
+            questionBlocks.forEach(block => {
+                const radios = block.querySelectorAll('input[type="radio"]');
+                let selectedOptionLabel = null;
+                let correctOptionLabel = null;
+
+                radios.forEach(radio => {
+                    const label = radio.nextElementSibling; // Get the label associated with the radio
+                    
+                    // Identify the correct answer label
+                    if (label.dataset.correct === 'true') {
+                        correctOptionLabel = label;
+                    }
+
+                    // Identify the user's selected answer label
+                    if (radio.checked) {
+                        selectedOptionLabel = label;
+                    }
+
+                    // Disable all radio buttons after submission
+                    radio.disabled = true;
+                });
+
+                // Highlight correct answer for all questions
+                if (correctOptionLabel) {
+                    correctOptionLabel.classList.add('correct-answer');
+                    correctOptionLabel.innerHTML += ' &#x2705;'; // Add checkmark emoji
+                }
+
+                // Check if user's selection was correct/incorrect
+                if (selectedOptionLabel) {
+                    if (selectedOptionLabel.dataset.correct === 'true') {
+                        score++;
+                    } else {
+                        selectedOptionLabel.classList.add('incorrect-selection');
+                        selectedOptionLabel.innerHTML += ' &#x274C;'; // Add cross emoji
+                    }
+                }
+            });
+
+            scoreDisplay.textContent = `Score: ${score} / ${totalQuestions}`;
+        }
+
+        // Event listener for the submit button
+        submitButton.addEventListener('click', submitQuiz);
+
+        // Start the timer when the page loads
+        document.addEventListener('DOMContentLoaded', startTimer);
+    </script>
+</body>
+</html>
+```

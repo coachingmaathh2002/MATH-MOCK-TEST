@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalar & Vector Products Quiz</title>
+    <!-- Favicon using SVG for a simple checkmark -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext x='0' y='14'%3E%E2%9C%85%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    
+    <!-- Comprehensive CSS Styling -->
+    <style>
+        :root {
+            --primary-blue: #3F51B5; /* Indigo 500 */
+            --light-blue: #C5CAE9;   /* Indigo 100 */
+            --dark-blue: #303F9F;    /* Indigo 700 */
+            --gray-bg: #e8eaf6;      /* Indigo 50 */
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #bbdefb; /* Light Blue 100 */
+            --correct-green: #e8f5e9; /* Light Green 50 */
+            --incorrect-red: #ffebee; /* Red 50 */
+            --correct-border: #4CAF50; /* Green 500 */
+            --incorrect-border: #F44336; /* Red 500 */
+            --button-hover: #303F9F;
+            --disabled-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--gray-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            box-sizing: border-box;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--dark-blue);
+            margin-top: 0;
+            font-size: 2.5em;
+            letter-spacing: -0.8px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        #timer, #scoreDisplay {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        #scoreDisplay {
+            color: var(--dark-blue);
+            margin-top: 25px;
+            font-size: 1.8em;
+            padding: 10px;
+            background-color: var(--light-blue);
+            border-radius: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .question {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .question h3 {
+            margin-top: 0;
+            color: var(--dark-blue);
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .option-item label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 15px 20px;
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            flex-grow: 1;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+
+        .option-item label:hover:not(.correct):not(.incorrect-selected) {
+            background-color: var(--light-blue);
+            border-color: var(--primary-blue);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 15px;
+            min-width: 20px; 
+            min-height: 20px;
+            accent-color: var(--primary-blue);
+            cursor: pointer;
+            flex-shrink: 0; /* Prevent radio button from shrinking */
+        }
+
+        /* Styles for correct/incorrect answers after submission */
+        .option-item label.correct {
+            background-color: var(--correct-green);
+            border-color: var(--correct-border);
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+        }
+
+        .option-item label.incorrect-selected {
+            background-color: var(--incorrect-red);
+            border-color: var(--incorrect-border);
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.2);
+        }
+
+        .option-item label.correct::after,
+        .option-item label.incorrect-selected::after {
+            content: ''; 
+            margin-left: auto; /* Push emoji to the right */
+            font-size: 1.3em;
+            line-height: 1; /* Ensure emoji aligns well */
+        }
+
+        .option-item label.correct::after {
+            content: ' ✅';
+        }
+
+        .option-item label.incorrect-selected::after {
+            content: ' ❌';
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px 25px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            margin-top: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--button-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:disabled {
+            background-color: var(--disabled-color);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* MathJax specific styling for better alignment */
+        .option-item label .MathJax {
+            display: inline;
+        }
+        .question h3 .MathJax {
+            display: inline;
+        }
+        .option-item label .mjx-chtml {
+            vertical-align: -0.125em; /* Fine-tune vertical alignment for MathJax elements */
+        }
+    </style>
+    
+    <!-- MathJax CDN Script -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <header>
+            <h1>Scalar & Vector Products Quiz</h1>
+            <div id="timer">Time: 00:00</div>
+            <div id="scoreDisplay"></div>
+        </header>
+
+        <form id="quizForm">
+            <div class="question">
+                <h3>1. What is the scalar product (dot product) of two vectors \(\mathbf{a}\) and \(\mathbf{b}\) defined as?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a">A) \(|\mathbf{a}||\mathbf{b}|\sin\theta\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1b" name="q1" value="B">
+                        <label for="q1b" data-correct="true">B) \(|\mathbf{a}||\mathbf{b}|\cos\theta\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c">C) \(|\mathbf{a}||\mathbf{b}|\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d">D) \(\mathbf{a} \times \mathbf{b}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>2. What is the magnitude of the vector product (cross product) of two vectors \(\mathbf{a}\) and \(\mathbf{b}\) defined as?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a" data-correct="true">A) \(|\mathbf{a}||\mathbf{b}|\sin\theta\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b">B) \(|\mathbf{a}||\mathbf{b}|\cos\theta\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2c" name="q2" value="C">
+                        <label for="q2c">C) \(|\mathbf{a}||\mathbf{b}|\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D) \(\mathbf{a} \cdot \mathbf{b}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>3. If two non-zero vectors \(\mathbf{a}\) and \(\mathbf{b}\) are perpendicular, what is their dot product?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A) \(|\mathbf{a}||\mathbf{b}|\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3b" name="q3" value="B">
+                        <label for="q3b">B) 1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c" data-correct="true">C) 0</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D) Undefined</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>4. If two non-zero vectors \(\mathbf{a}\) and \(\mathbf{b}\) are parallel, what is their cross product?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a">A) \(|\mathbf{a}||\mathbf{b}|\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4b" name="q4" value="B">
+                        <label for="q4b">B) 1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c" data-correct="true">C) \(\mathbf{0}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D) Undefined</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>5. Given \(\mathbf{a} = 2\mathbf{i} + 3\mathbf{j} - \mathbf{k}\) and \(\mathbf{b} = \mathbf{i} - 2\mathbf{j} + 4\mathbf{k}\), what is \(\mathbf{a} \cdot \mathbf{b}\)?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a" data-correct="true">A) -8</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5b" name="q5" value="B">
+                        <label for="q5b">B) 4</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5c" name="q5" value="C">
+                        <label for="q5c">C) \(-8\mathbf{i} + 9\mathbf{j} - 7\mathbf{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d">D) \(2\mathbf{i} - 6\mathbf{j} - 4\mathbf{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>6. Given \(\mathbf{a} = \mathbf{i} - 2\mathbf{j}\) and \(\mathbf{b} = 3\mathbf{k}\), what is \(\mathbf{a} \times \mathbf{b}\)?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a" data-correct="true">A) \(-6\mathbf{i} - 3\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6b" name="q6" value="B">
+                        <label for="q6b">B) \(3\mathbf{i} + 6\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c">C) \(-6\mathbf{i} + 3\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d">D) \(-3\mathbf{i} - 6\mathbf{j}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>7. The dot product \(\mathbf{a} \cdot \mathbf{b}\) can be interpreted as the magnitude of \(\mathbf{a}\) multiplied by:</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a">A) The magnitude of \(\mathbf{b}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7b" name="q7" value="B">
+                        <label for="q7b" data-correct="true">B) The component of \(\mathbf{b}\) parallel to \(\mathbf{a}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7c" name="q7" value="C">
+                        <label for="q7c">C) The component of \(\mathbf{b}\) perpendicular to \(\mathbf{a}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D) The area of the parallelogram formed by \(\mathbf{a}\) and \(\mathbf{b}\).</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>8. The magnitude of \(\mathbf{a} \times \mathbf{b}\) represents:</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a">A) The volume of the parallelepiped formed by \(\mathbf{a}\), \(\mathbf{b}\), and a third vector.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8b" name="q8" value="B">
+                        <label for="q8b">B) The area of the triangle formed by \(\mathbf{a}\) and \(\mathbf{b}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c" data-correct="true">C) The area of the parallelogram formed by \(\mathbf{a}\) and \(\mathbf{b}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d">D) The angle between \(\mathbf{a}\) and \(\mathbf{b}\).</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>9. If \(\mathbf{u} \cdot \mathbf{v} = 10\), \(|\mathbf{u}| = 5\), \(|\mathbf{v}| = 4\), what is the cosine of the angle \(\theta\) between \(\mathbf{u}\) and \(\mathbf{v}\)?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a" data-correct="true">A) 0.5</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b">B) 0.8</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9c" name="q9" value="C">
+                        <label for="q9c">C) 0.2</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D) 0.1</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>10. For any vector \(\mathbf{a}\), what is \(\mathbf{a} \cdot \mathbf{a}\)?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A) 0</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B) 1</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10c" name="q10" value="C">
+                        <label for="q10c" data-correct="true">C) \(|\mathbf{a}|^2\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D) \(\mathbf{a}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>11. Which of the following is true for the vector triple product \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c})\)?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a" data-correct="true">A) \((\mathbf{a} \cdot \mathbf{b})\mathbf{c} - (\mathbf{a} \cdot \mathbf{c})\mathbf{b}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11b" name="q11" value="B">
+                        <label for="q11b">B) \((\mathbf{a} \cdot \mathbf{b})\mathbf{c} + (\mathbf{a} \cdot \mathbf{c})\mathbf{b}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C) \((\mathbf{a} \cdot \mathbf{c})\mathbf{b} - (\mathbf{a} \cdot \mathbf{b})\mathbf{c}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D) \((\mathbf{a} \times \mathbf{b}) \cdot \mathbf{c}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>12. The scalar triple product \(\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c})\) represents:</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a">A) The area of the parallelogram formed by \(\mathbf{a}\), \(\mathbf{b}\), and \(\mathbf{c}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12b" name="q12" value="B">
+                        <label for="q12b" data-correct="true">B) The volume of the parallelepiped formed by \(\mathbf{a}\), \(\mathbf{b}\), and \(\mathbf{c}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c">C) The angle between \(\mathbf{a}\) and the plane containing \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D) A vector perpendicular to the plane containing \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>13. Which property is <em>not</em> true for the cross product?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A) \(\mathbf{a} \times \mathbf{b} = -(\mathbf{b} \times \mathbf{a})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13b" name="q13" value="B">
+                        <label for="q13b">B) \(\mathbf{a} \times (\mathbf{b} + \mathbf{c}) = (\mathbf{a} \times \mathbf{b}) + (\mathbf{a} \times \mathbf{c})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c">C) \(k(\mathbf{a} \times \mathbf{b}) = (k\mathbf{a}) \times \mathbf{b}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d" data-correct="true">D) \(\mathbf{a} \times \mathbf{b} = \mathbf{b} \times \mathbf{a}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>14. A constant force \(\mathbf{F} = (3\mathbf{i} + 4\mathbf{j})\) Newtons acts on an object, displacing it by \(\mathbf{d} = (5\mathbf{i} - 2\mathbf{j})\) meters. What is the work done by the force?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a" data-correct="true">A) 7 Joules</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B) 23 Joules</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14c" name="q14" value="C">
+                        <label for="q14c">C) 15 Joules</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D) -8 Joules</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>15. A force \(\mathbf{F} = (2\mathbf{i} + \mathbf{j})\) Newtons is applied at a point whose position vector is \(\mathbf{r} = (\mathbf{i} - 3\mathbf{j})\) meters from the origin. What is the torque \(\mathbf{\tau} = \mathbf{r} \times \mathbf{F}\)?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A) \(-7\mathbf{k}\) Nm</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15b" name="q15" value="B">
+                        <label for="q15b" data-correct="true">B) \(7\mathbf{k}\) Nm</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15c" name="q15" value="C">
+                        <label for="q15c">C) \(-5\mathbf{k}\) Nm</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D) \(5\mathbf{k}\) Nm</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>16. The vertices of a triangle are \(A(1, 0, 0)\), \(B(0, 1, 0)\), and \(C(0, 0, 1)\). What is the area of the triangle?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a" data-correct="true">A) \(\frac{\sqrt{3}}{2}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16b" name="q16" value="B">
+                        <label for="q16b">B) \(\sqrt{3}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16c" name="q16" value="C">
+                        <label for="q16c">C) \(1\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D) \(\frac{1}{2}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>17. The scalar projection of vector \(\mathbf{a}\) onto vector \(\mathbf{b}\) is given by:</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a" data-correct="true">A) \(\frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{b}|}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17b" name="q17" value="B">
+                        <label for="q17b">B) \(\frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{a}|}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17c" name="q17" value="C">
+                        <label for="q17c">C) \(\frac{\mathbf{a} \times \mathbf{b}}{|\mathbf{b}|}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D) \(\frac{|\mathbf{a}||\mathbf{b}|}{\mathbf{a} \cdot \mathbf{b}}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>18. Which pair of vectors is orthogonal?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a">A) \(\mathbf{u} = (1, 2, 3), \mathbf{v} = (2, 1, 0)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18b" name="q18" value="B">
+                        <label for="q18b">B) \(\mathbf{u} = (1, -1, 1), \mathbf{v} = (1, 1, 1)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c" data-correct="true">C) \(\mathbf{u} = (2, -3, 1), \mathbf{v} = (1, 1, 1)\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d">D) \(\mathbf{u} = (0, 1, 0), \mathbf{v} = (1, 1, 0)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>19. Which statement about the scalar product is <em>false</em>?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a">A) \(\mathbf{a} \cdot \mathbf{b} = \mathbf{b} \cdot \mathbf{a}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b">B) \(\mathbf{a} \cdot (\mathbf{b} + \mathbf{c}) = \mathbf{a} \cdot \mathbf{b} + \mathbf{a} \cdot \mathbf{c}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19c" name="q19" value="C">
+                        <label for="q19c">C) \(k(\mathbf{a} \cdot \mathbf{b}) = (k\mathbf{a}) \cdot \mathbf{b}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d" data-correct="true">D) \(\mathbf{a} \cdot \mathbf{a} = 0\) if \(\mathbf{a} \neq \mathbf{0}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>20. Two adjacent sides of a parallelogram are given by vectors \(\mathbf{u} = \mathbf{i} + 2\mathbf{j} - \mathbf{k}\) and \(\mathbf{v} = 3\mathbf{j} + \mathbf{k}\). What is the area of the parallelogram?</h3>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a">A) \(\sqrt{19}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B) \(\sqrt{26}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20c" name="q20" value="C">
+                        <label for="q20c" data-correct="true">C) \(\sqrt{35}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d">D) \(\sqrt{42}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="button" id="submitBtn" class="submit-btn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const submitBtn = document.getElementById('submitBtn');
+        const quizForm = document.getElementById('quizForm');
+        let seconds = 0;
+        let timerInterval;
+
+        // Function to format time as MM:SS
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const remainingSeconds = totalSeconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        // Function to update the timer every second
+        function updateTimer() {
+            seconds++;
+            timerDisplay.textContent = `Time: ${formatTime(seconds)}`;
+        }
+
+        // Start timer when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            timerInterval = setInterval(updateTimer, 1000);
+            scoreDisplay.textContent = ''; // Ensure score display is empty initially
+        });
+
+        // Event listener for the submit button
+        submitBtn.addEventListener('click', () => {
+            clearInterval(timerInterval); // Stop the timer
+
+            let score = 0;
+            const totalQuestions = document.querySelectorAll('.question').length;
+
+            document.querySelectorAll('.question').forEach(questionDiv => {
+                const radios = questionDiv.querySelectorAll('input[type="radio"]');
+                let selectedLabel = null;
+                let correctLabel = null;
+
+                radios.forEach(radio => {
+                    const label = radio.closest('label'); // Get the label associated with the radio button
+                    
+                    // Disable the radio button to prevent further changes
+                    radio.disabled = true;
+
+                    // Identify the correct answer label
+                    if (label.dataset.correct === 'true') {
+                        correctLabel = label;
+                    }
+                    // Identify the user's selected answer label
+                    if (radio.checked) {
+                        selectedLabel = label;
+                    }
+                });
+
+                // Highlight the correct answer with green background and checkmark
+                if (correctLabel) {
+                    correctLabel.classList.add('correct');
+                }
+
+                // If the user selected an answer and it was incorrect, highlight it with red background and cross
+                if (selectedLabel && selectedLabel !== correctLabel) {
+                    selectedLabel.classList.add('incorrect-selected');
+                }
+
+                // Calculate score
+                if (selectedLabel && selectedLabel.dataset.correct === 'true') {
+                    score++;
+                }
+            });
+
+            // Display the final score
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+            scoreDisplay.style.animation = 'fadeIn 0.5s ease-out'; // Animate score display
+
+            // Disable the submit button and change its text
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Quiz Submitted';
+            submitBtn.style.cursor = 'not-allowed';
+        });
+    </script>
+</body>
+</html>

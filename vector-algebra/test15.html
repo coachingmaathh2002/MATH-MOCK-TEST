@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalar & Vector Triple Products Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue-gray: #f0f4f8;
+            --dark-gray: #333;
+            --medium-gray: #666;
+            --white: #fff;
+            --border-gray: #ddd;
+            --correct-green: #d4edda;
+            --incorrect-red: #f8d7da;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-blue-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        #timer, #score {
+            font-size: 1.4em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+            align-self: center;
+        }
+
+        #score {
+            background-color: #28a745; /* A different green for score */
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-block p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid var(--border-gray);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+
+        .option:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary-blue);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        .option label {
+            flex-grow: 1;
+            cursor: pointer;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        .option.correct {
+            background-color: var(--correct-green);
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background-color: var(--incorrect-red);
+            border-color: #dc3545;
+        }
+
+        .option.correct .feedback-icon,
+        .option.incorrect .feedback-icon {
+            margin-left: auto;
+            font-size: 1.3em;
+        }
+
+        button#submitBtn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            font-weight: 700;
+        }
+
+        button#submitBtn:hover:not(:disabled) {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button#submitBtn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .feedback-icon {
+            display: none;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        /* MathJax styling - ensure it doesn't break layout */
+        .question-block p .MathJax_Display,
+        .option label .MathJax_Display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .question-block p .MathJax,
+        .option label .MathJax {
+            font-size: 1.1em !important;
+        }
+
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Scalar & Vector Triple Products Quiz</h1>
+        <div id="timer">Time: 00:00</div>
+        <div id="score" style="display: none;"></div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p>1. The scalar triple product of three vectors \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) is defined as:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a">A. \((\mathbf{a} \times \mathbf{b}) \times \mathbf{c}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="B">
+                        <label for="q1b">B. \(\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c})\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="C" data-correct="true">
+                        <label for="q1c">C. \(\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c})\) or \([\mathbf{a}, \mathbf{b}, \mathbf{c}]\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d">D. \((\mathbf{a} \cdot \mathbf{b}) \mathbf{c}\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p>2. Geometrically, the absolute value of the scalar triple product \([\mathbf{a}, \mathbf{b}, \mathbf{c}]\) represents:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a">A. The area of the parallelogram formed by \(\mathbf{a}\) and \(\mathbf{b}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="B" data-correct="true">
+                        <label for="q2b">B. The volume of the parallelepiped formed by \(\mathbf{a}, \mathbf{b}, \mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="C">
+                        <label for="q2c">C. The length of the vector \(\mathbf{a} + \mathbf{b} + \mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D. The angle between \(\mathbf{a}\) and the plane containing \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p>3. Which of the following properties is TRUE for the scalar triple product?</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] = -[\mathbf{b}, \mathbf{a}, \mathbf{c}]\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="B">
+                        <label for="q3b">B. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] = [\mathbf{a}, \mathbf{c}, \mathbf{b}]\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="C" data-correct="true">
+                        <label for="q3c">C. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] = [\mathbf{b}, \mathbf{c}, \mathbf{a}]\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] = 0\) if \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) are linearly independent.</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p>4. If two vectors in a scalar triple product are identical, e.g., \([\mathbf{a}, \mathbf{a}, \mathbf{b}]\), what is its value?</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a">A. \(|\mathbf{a}|^2 |\mathbf{b}|\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="B">
+                        <label for="q4b">B. A vector perpendicular to \(\mathbf{a}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="C" data-correct="true">
+                        <label for="q4c">C. 0</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D. It is undefined.</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p>5. Three vectors \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) are coplanar if and only if:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a">A. \(\mathbf{a} \times \mathbf{b} = \mathbf{0}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="B">
+                        <label for="q5b">B. \(\mathbf{a} \cdot \mathbf{b} = 0\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="C">
+                        <label for="q5c">C. \(\mathbf{a} + \mathbf{b} + \mathbf{c} = \mathbf{0}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="D" data-correct="true">
+                        <label for="q5d">D. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] = 0\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p>6. Given \(\mathbf{a} = 2\mathbf{i} - \mathbf{j} + \mathbf{k}\), \(\mathbf{b} = \mathbf{i} + 3\mathbf{j} - 2\mathbf{k}\), and \(\mathbf{c} = 3\mathbf{i} + \mathbf{j} + 4\mathbf{k}\), calculate \([\mathbf{a}, \mathbf{b}, \mathbf{c}]\).</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a">A. 15</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6b" name="q6" value="B">
+                        <label for="q6b">B. -15</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c">C. 20</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6d" name="q6" value="D" data-correct="true">
+                        <label for="q6d">D. 30</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p>7. The vector triple product \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c})\) results in:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a">A. A scalar quantity.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7b" name="q7" value="B">
+                        <label for="q7b">B. A vector perpendicular to the plane containing \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7c" name="q7" value="C" data-correct="true">
+                        <label for="q7c">C. A vector lying in the plane containing \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D. A vector parallel to \(\mathbf{a}\).</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p>8. Which of the following is the correct expansion for the vector triple product \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c})\)?</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a">A. \((\mathbf{a} \cdot \mathbf{b})\mathbf{c} - (\mathbf{a} \cdot \mathbf{c})\mathbf{b}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8b" name="q8" value="B">
+                        <label for="q8b">B. \((\mathbf{b} \cdot \mathbf{c})\mathbf{a} - (\mathbf{a} \cdot \mathbf{c})\mathbf{b}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c">C. \((\mathbf{a} \cdot \mathbf{b})\mathbf{c} - (\mathbf{b} \cdot \mathbf{c})\mathbf{a}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8d" name="q8" value="D" data-correct="true">
+                        <label for="q8d">D. \((\mathbf{a} \cdot \mathbf{c})\mathbf{b} - (\mathbf{a} \cdot \mathbf{b})\mathbf{c}\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p>9. Is the vector triple product associative, i.e., is \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c}) = (\mathbf{a} \times \mathbf{b}) \times \mathbf{c}\) generally true?</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a">A. Yes, always.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9b" name="q9" value="B" data-correct="true">
+                        <label for="q9b">B. No, generally not.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9c" name="q9" value="C">
+                        <label for="q9c">C. Only if \(\mathbf{a}\) is parallel to \(\mathbf{b}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D. Only if \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) are mutually orthogonal.</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p>10. Given \(\mathbf{a} = \mathbf{i} + \mathbf{j}\), \(\mathbf{b} = \mathbf{j} + \mathbf{k}\), \(\mathbf{c} = \mathbf{k} + \mathbf{i}\), find \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c})\).</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A. \(\mathbf{i} + \mathbf{j} + \mathbf{k}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B. \(\mathbf{i} - \mathbf{j} - \mathbf{k}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10c" name="q10" value="C" data-correct="true">
+                        <label for="q10c">C. \(-\mathbf{i} + \mathbf{j}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D. \(\mathbf{0}\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p>11. The scalar product \((\mathbf{a} \times \mathbf{b}) \cdot (\mathbf{c} \times \mathbf{d})\) can be expanded as:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a">A. \((\mathbf{a} \cdot \mathbf{c})(\mathbf{b} \cdot \mathbf{d}) + (\mathbf{a} \cdot \mathbf{d})(\mathbf{b} \cdot \mathbf{c})\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11b" name="q11" value="B" data-correct="true">
+                        <label for="q11b">B. \((\mathbf{a} \cdot \mathbf{c})(\mathbf{b} \cdot \mathbf{d}) - (\mathbf{a} \cdot \mathbf{d})(\mathbf{b} \cdot \mathbf{c})\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] \mathbf{d}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D. \([\mathbf{a}, \mathbf{b}, \mathbf{d}] \mathbf{c}\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p>12. Simplify the expression \((\mathbf{a} \times \mathbf{b}) \times (\mathbf{c} \times \mathbf{d})\).</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a">A. \([\mathbf{a}, \mathbf{b}, \mathbf{c}] \mathbf{d} - [\mathbf{a}, \mathbf{b}, \mathbf{d}] \mathbf{c}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12b" name="q12" value="B">
+                        <label for="q12b">B. \([\mathbf{a}, \mathbf{c}, \mathbf{d}] \mathbf{b} - [\mathbf{b}, \mathbf{c}, \mathbf{d}] \mathbf{a}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12c" name="q12" value="C" data-correct="true">
+                        <label for="q12c">C. Both A and B are correct.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D. None of the above.</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p>13. Lagrange's Identity states that \(|\mathbf{a} \times \mathbf{b}|^2\) is equal to:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A. \(|\mathbf{a}|^2 |\mathbf{b}|^2 + (\mathbf{a} \cdot \mathbf{b})^2\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13b" name="q13" value="B" data-correct="true">
+                        <label for="q13b">B. \(|\mathbf{a}|^2 |\mathbf{b}|^2 - (\mathbf{a} \cdot \mathbf{b})^2\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c">C. \((\mathbf{a} \cdot \mathbf{a})(\mathbf{b} \cdot \mathbf{b}) - (\mathbf{a} \cdot \mathbf{b})\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d">D. \(|\mathbf{a} + \mathbf{b}|^2\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p>14. The Jacobi Identity for vector products is given by:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a">A. \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c}) + \mathbf{b} \times (\mathbf{c} \times \mathbf{a}) = \mathbf{0}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B. \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c}) + \mathbf{b} \times (\mathbf{c} \times \mathbf{a}) + \mathbf{c} \times (\mathbf{a} \times \mathbf{b}) = \mathbf{0}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14c" name="q14" value="C" data-correct="true">
+                        <label for="q14c">C. \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c}) + \mathbf{b} \times (\mathbf{c} \times \mathbf{a}) + \mathbf{c} \times (\mathbf{a} \times \mathbf{b}) = \mathbf{0}\) (Vector Form)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D. \(\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c}) = \mathbf{b} \cdot (\mathbf{c} \times \mathbf{a})\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p>15. If \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c}) = \mathbf{0}\) and \(\mathbf{b}\) and \(\mathbf{c}\) are non-parallel, then \(\mathbf{a}\) must be:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A. Parallel to \(\mathbf{b}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15b" name="q15" value="B">
+                        <label for="q15b">B. Parallel to \(\mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15c" name="q15" value="C" data-correct="true">
+                        <label for="q15c">C. Coplanar with \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D. Perpendicular to \(\mathbf{b}\) and \(\mathbf{c}\).</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p>16. For what value of \(x\) are the vectors \(\mathbf{a} = 2\mathbf{i} + 3\mathbf{j} - \mathbf{k}\), \(\mathbf{b} = \mathbf{i} - \mathbf{j} + 2\mathbf{k}\), and \(\mathbf{c} = x\mathbf{i} + \mathbf{j} - 3\mathbf{k}\) coplanar?</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q16a" name="q16" value="A" data-correct="true">
+                        <label for="q16a">A. \(x = -2\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16b" name="q16" value="B">
+                        <label for="q16b">B. \(x = 7\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16c" name="q16" value="C">
+                        <label for="q16c">C. \(x = 4\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D. \(x = 6\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p>17. The volume of a tetrahedron with adjacent edges given by vectors \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) is:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a">A. \(|[\mathbf{a}, \mathbf{b}, \mathbf{c}]|\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17b" name="q17" value="B" data-correct="true">
+                        <label for="q17b">B. \(\frac{1}{6}|[\mathbf{a}, \mathbf{b}, \mathbf{c}]|\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17c" name="q17" value="C">
+                        <label for="q17c">C. \(\frac{1}{2}|[\mathbf{a}, \mathbf{b}, \mathbf{c}]|\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D. \(|\mathbf{a} \times \mathbf{b}| \cdot |\mathbf{c}|\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p>18. If \(\mathbf{a}, \mathbf{b}, \mathbf{c}\) are non-coplanar vectors, then the vectors \(\mathbf{a}+\mathbf{b}, \mathbf{b}+\mathbf{c}, \mathbf{c}+\mathbf{a}\) are:</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a">A. Always coplanar.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18b" name="q18" value="B" data-correct="true">
+                        <label for="q18b">B. Non-coplanar.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c">C. Orthogonal to each other.</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d">D. Linearly dependent.</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p>19. Evaluate \(\mathbf{i} \cdot (\mathbf{j} \times \mathbf{k})\).</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a">A. 0</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b">B. \(\mathbf{i}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19c" name="q19" value="C" data-correct="true">
+                        <label for="q19c">C. 1</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d">D. -1</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p>20. Which of the following is equivalent to \(\mathbf{a} \times (\mathbf{b} \times \mathbf{c})\)?</p>
+                <div class="options-container">
+                    <div class="option">
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a">A. \((\mathbf{a} \times \mathbf{b}) \times \mathbf{c}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B. \(-\mathbf{c} \times (\mathbf{a} \times \mathbf{b})\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20c" name="q20" value="C">
+                        <label for="q20c">C. \((\mathbf{c} \times \mathbf{b}) \times \mathbf{a}\)</label>
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20d" name="q20" value="D" data-correct="true">
+                        <label for="q20d">D. \(-\mathbf{a} \times (\mathbf{c} \times \mathbf{b})\)</label>
+                        <span class="feedback-icon"></span>
+                </div>
+            </div>
+            </div>
+            
+            <button type="button" id="submitBtn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        const quizForm = document.getElementById('quizForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('score');
+        let timeElapsed = 0;
+        let timerInterval;
+
+        // Function to format time as MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        // Start the timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeElapsed++;
+                timerDisplay.textContent = `Time: ${formatTime(timeElapsed)}`;
+            }, 1000);
+        }
+
+        // Stop the timer
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Quiz Submission Logic
+        submitBtn.addEventListener('click', () => {
+            stopTimer(); // Stop the timer
+            let score = 0;
+            const totalQuestions = 20;
+
+            // Disable all radio buttons after submission
+            const radioButtons = quizForm.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.disabled = true;
+            });
+
+            // Iterate through each question
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const questionBlock = quizForm.querySelector(`.question-block:nth-of-type(${i})`);
+
+                // Find the correct option for the current question
+                const correctOptionInput = quizForm.querySelector(`input[name="${questionName}"][data-correct="true"]`);
+                const correctOptionDiv = correctOptionInput ? correctOptionInput.closest('.option') : null;
+
+                if (selectedOption) {
+                    const selectedOptionDiv = selectedOption.closest('.option');
+
+                    if (selectedOption.dataset.correct === 'true') {
+                        score++;
+                        selectedOptionDiv.classList.add('correct');
+                        selectedOptionDiv.querySelector('.feedback-icon').style.display = 'inline';
+                        selectedOptionDiv.querySelector('.feedback-icon').textContent = ' ✅';
+                    } else {
+                        selectedOptionDiv.classList.add('incorrect');
+                        selectedOptionDiv.querySelector('.feedback-icon').style.display = 'inline';
+                        selectedOptionDiv.querySelector('.feedback-icon').textContent = ' ❌';
+                        // Highlight the correct answer if the user's choice was wrong
+                        if (correctOptionDiv) {
+                            correctOptionDiv.classList.add('correct');
+                            correctOptionDiv.querySelector('.feedback-icon').style.display = 'inline';
+                            correctOptionDiv.querySelector('.feedback-icon').textContent = ' ✅';
+                        }
+                    }
+                } else {
+                    // If no option was selected, just highlight the correct one
+                    if (correctOptionDiv) {
+                        correctOptionDiv.classList.add('correct');
+                        correctOptionDiv.querySelector('.feedback-icon').style.display = 'inline';
+                        correctOptionDiv.querySelector('.feedback-icon').textContent = ' ✅';
+                    }
+                }
+            }
+
+            // Display the final score
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+            scoreDisplay.style.display = 'block';
+            
+            // Disable the submit button and change its text
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Quiz Submitted';
+
+            // Ensure MathJax re-renders updated content (if any text changes affected math)
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typeset();
+            }
+        });
+
+        // Initialize the quiz: start timer and typeset MathJax
+        startTimer();
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typeset();
+            }
+        });
+    </script>
+</body>
+</html>

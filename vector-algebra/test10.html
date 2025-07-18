@@ -1,0 +1,709 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Vector Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --secondary-blue: #007bff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --correct-green: #d4edda;
+            --correct-green-border: #28a745;
+            --incorrect-red: #f8d7da;
+            --incorrect-red-border: #dc3545;
+            --text-color: #495057;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--medium-gray);
+            color: var(--primary-blue);
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+        }
+
+        .timer-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .timer, .score-display {
+            padding: 8px 15px;
+            background-color: var(--medium-gray);
+            border-radius: var(--border-radius);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            position: relative; /* For feedback icons */
+        }
+
+        .question-block h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3em;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: block;
+            padding: 12px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            background-color: var(--white);
+            position: relative;
+            padding-right: 40px; /* Space for feedback icons */
+        }
+
+        .option-label:hover:not(.correct):not(.incorrect) {
+            background-color: #f0f4f8;
+            border-color: var(--secondary-blue);
+        }
+
+        input[type="radio"] {
+            display: none; /* Hide default radio button */
+        }
+
+        input[type="radio"]:checked + .option-label {
+            border-color: var(--primary-blue);
+            background-color: #e6f0fa;
+        }
+
+        .option-label.correct {
+            background-color: var(--correct-green);
+            border-color: var(--correct-green-border);
+        }
+
+        .option-label.incorrect {
+            background-color: var(--incorrect-red);
+            border-color: var(--incorrect-red-border);
+        }
+
+        .feedback-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.4em;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 25px;
+            margin-top: 30px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #004085;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* MathJax styling - ensure it renders well within labels */
+        .option-label .MathJax_Display {
+            display: inline-block !important; /* Ensure block math doesn't break layout */
+            margin: 0 !important;
+        }
+        .option-label .mjx-chtml {
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>University Vector Quiz</h1>
+            <p>Topic: Vectors: Directed Line Segments, Equality, Addition, and Scalar Multiplication</p>
+            <div class="timer-score">
+                <div class="timer" id="timer">Time: 00:00</div>
+                <div class="score-display" id="scoreDisplay">Score: --/20</div>
+            </div>
+        </div>
+
+        <form id="quizForm">
+            <div class="question-block">
+                <h2>1. Which of the following statements about a directed line segment \(\vec{AB}\) is true?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a" class="option-label">A) It represents only magnitude, not direction.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q1b" name="q1" value="B">
+                        <label for="q1b" class="option-label" data-correct="true">B) Its direction is from point A to point B.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c" class="option-label">C) It is synonymous with a scalar quantity.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d" class="option-label">D) It has no specific initial or terminal point.</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>2. Two vectors \(\mathbf{u}\) and \(\mathbf{v}\) are said to be equal if:</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a" class="option-label">A) They have the same magnitude but possibly different directions.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b" class="option-label">B) They are parallel to each other.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q2c" name="q2" value="C">
+                        <label for="q2c" class="option-label" data-correct="true">C) They have the same magnitude and the same direction.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d" class="option-label">D) They originate from the same initial point.</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>3. Given points \(A(1, 2)\), \(B(4, 6)\), \(C(2, 1)\), and \(D(5, 5)\). Which of the following pairs of vectors are equal?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a" class="option-label">A) \(\vec{AB}\) and \(\vec{CD}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q3b" name="q3" value="B">
+                        <label for="q3b" class="option-label" data-correct="true">B) \(\vec{AB}\) and \(\vec{CD}\) are not equal, but \(\vec{AB}\) has components \(\langle 3, 4 \rangle\) and \(\vec{CD}\) has components \(\langle 3, 4 \rangle\), so they are equal.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c" class="option-label">C) \(\vec{AC}\) and \(\vec{BD}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d" class="option-label">D) \(\vec{BA}\) and \(\vec{DC}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>4. If \(\mathbf{u} = \langle 3, -1 \rangle\) and \(\mathbf{v} = \langle -2, 5 \rangle\), what is \(\mathbf{u} + \mathbf{v}\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a" class="option-label">A) \(\langle 1, 4 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q4b" name="q4" value="B" data-correct="true">
+                        <label for="q4b" class="option-label">B) \(\langle 1, 4 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c" class="option-label">C) \(\langle 5, -6 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d" class="option-label">D) \(\langle -6, -5 \rangle\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>5. Which property of vector addition states that \(\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a" class="option-label">A) Associative property</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q5b" name="q5" value="B" data-correct="true">
+                        <label for="q5b" class="option-label">B) Commutative property</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q5c" name="q5" value="C">
+                        <label for="q5c" class="option-label">C) Distributive property</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d" class="option-label">D) Identity property</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>6. If \(\mathbf{w} = \langle 2, -3, 1 \rangle\), what is \(4\mathbf{w}\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a" class="option-label">A) \(\langle 8, -3, 4 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q6b" name="q6" value="B">
+                        <label for="q6b" class="option-label">B) \(\langle 2, -12, 1 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q6c" name="q6" value="C" data-correct="true">
+                        <label for="q6c" class="option-label">C) \(\langle 8, -12, 4 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d" class="option-label">D) \(\langle 6, 1, 5 \rangle\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>7. The zero vector, denoted by \(\mathbf{0}\), has what properties?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a" class="option-label">A) Magnitude of one and arbitrary direction.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q7b" name="q7" value="B">
+                        <label for="q7b" class="option-label" data-correct="true">B) Magnitude of zero and no specific direction.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q7c" name="q7" value="C">
+                        <label for="q7c" class="option-label">C) Magnitude of zero and points towards the origin.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d" class="option-label">D) Magnitude of one and points towards the origin.</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>8. If \(\mathbf{a} = \langle 1, 2 \rangle\) and \(\mathbf{b} = \langle -3, 4 \rangle\), calculate \(2\mathbf{a} - \mathbf{b}\).</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a" class="option-label">A) \(\langle -1, 8 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q8b" name="q8" value="B">
+                        <label for="q8b" class="option-label" data-correct="true">B) \(\langle 5, 0 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c" class="option-label">C) \(\langle -5, 8 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d" class="option-label">D) \(\langle -1, 0 \rangle\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>9. The vector from point \(P(x_1, y_1, z_1)\) to point \(Q(x_2, y_2, z_2)\) is given by:</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a" class="option-label">A) \(\langle x_1+x_2, y_1+y_2, z_1+z_2 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b" class="option-label" data-correct="true">B) \(\langle x_2-x_1, y_2-y_1, z_2-z_1 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q9c" name="q9" value="C">
+                        <label for="q9c" class="option-label">C) \(\langle x_1-x_2, y_1-y_2, z_1-z_2 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d" class="option-label">D) \(\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>10. What is the geometric interpretation of scalar multiplication \(c\mathbf{v}\) where \(c > 0\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a" class="option-label">A) It changes the direction of \(\mathbf{v}\).</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b" class="option-label" data-correct="true">B) It scales the magnitude of \(\mathbf{v}\) by a factor of \(c\) without changing its direction.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q10c" name="q10" value="C">
+                        <label for="q10c" class="option-label">C) It rotates the vector \(\mathbf{v}\) by \(c\) degrees.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d" class="option-label">D) It shifts the vector \(\mathbf{v}\) by \(c\) units.</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>11. Given vectors \(\mathbf{u} = 2\mathbf{i} - \mathbf{j} + 3\mathbf{k}\) and \(\mathbf{v} = -\mathbf{i} + 4\mathbf{j} - 2\mathbf{k}\). Find \(\mathbf{u} - 2\mathbf{v}\).</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a" class="option-label">A) \(4\mathbf{i} - 9\mathbf{j} + 7\mathbf{k}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q11b" name="q11" value="B" data-correct="true">
+                        <label for="q11b" class="option-label">B) \(4\mathbf{i} - 9\mathbf{j} + 7\mathbf{k}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c" class="option-label">C) \(3\mathbf{i} - 5\mathbf{j} + 5\mathbf{k}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d" class="option-label">D) \(3\mathbf{i} + 3\mathbf{j} + \mathbf{k}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>12. If \(\mathbf{p}\) is a position vector of a point \(P\) and \(\mathbf{q}\) is a position vector of a point \(Q\), then the vector \(\vec{PQ}\) is given by:</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a" class="option-label">A) \(\mathbf{p} + \mathbf{q}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q12b" name="q12" value="B">
+                        <label for="q12b" class="option-label" data-correct="true">B) \(\mathbf{q} - \mathbf{p}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c" class="option-label">C) \(\mathbf{p} - \mathbf{q}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d" class="option-label">D) \(\frac{1}{2}(\mathbf{p} + \mathbf{q})\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>13. The magnitude of the vector \(\mathbf{v} = \langle -3, 0, 4 \rangle\) is:</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a" class="option-label">A) \(1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q13b" name="q13" value="B">
+                        <label for="q13b" class="option-label">B) \(7\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q13c" name="q13" value="C" data-correct="true">
+                        <label for="q13c" class="option-label">C) \(5\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d" class="option-label">D) \(\sqrt{7}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>14. Given \(\mathbf{u} = \langle 1, 1 \rangle\) and \(\mathbf{v} = \langle -1, 1 \rangle\). Which of the following is a unit vector in the same direction as \(\mathbf{u} + \mathbf{v}\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a" class="option-label">A) \(\langle 0, 1 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q14b" name="q14" value="B" data-correct="true">
+                        <label for="q14b" class="option-label">B) \(\langle 0, 1 \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q14c" name="q14" value="C">
+                        <label for="q14c" class="option-label">C) \(\langle 0, \frac{1}{\sqrt{2}} \rangle\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d" class="option-label">D) \(\langle 1, 0 \rangle\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>15. The triangle inequality for vectors states that:</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a" class="option-label">A) \(|\mathbf{u} + \mathbf{v}| = |\mathbf{u}| + |\mathbf{v}|\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q15b" name="q15" value="B" data-correct="true">
+                        <label for="q15b" class="option-label">B) \(|\mathbf{u} + \mathbf{v}| \le |\mathbf{u}| + |\mathbf{v}|\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q15c" name="q15" value="C">
+                        <label for="q15c" class="option-label">C) \(|\mathbf{u} - \mathbf{v}| \le |\mathbf{u}| + |\mathbf{v}|\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d" class="option-label">D) \(|\mathbf{u} \cdot \mathbf{v}| \le |\mathbf{u}| |\mathbf{v}|\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>16. If \(\mathbf{a} = 2\mathbf{i} + 3\mathbf{j}\) and \(\mathbf{b} = x\mathbf{i} + 6\mathbf{j}\) are equal vectors, what is the value of \(x\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a" class="option-label">A) \(3\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q16b" name="q16" value="B">
+                        <label for="q16b" class="option-label">B) \(6\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q16c" name="q16" value="C" data-correct="true">
+                        <label for="q16c" class="option-label">C) \(2\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d" class="option-label">D) \(0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>17. Consider a regular hexagon ABCDEF with center O. Which vector is equal to \(\vec{AB} + \vec{BC}\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a" class="option-label">A) \(\vec{AC}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q17b" name="q17" value="B" data-correct="true">
+                        <label for="q17b" class="option-label">B) \(\vec{AC}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q17c" name="q17" value="C">
+                        <label for="q17c" class="option-label">C) \(\vec{AD}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d" class="option-label">D) \(\vec{AO}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>18. If \(\mathbf{v} = \langle 1, 2, 3 \rangle\), for what scalar \(k\) is \(k\mathbf{v}\) a unit vector?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a" class="option-label">A) \(k = 1\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q18b" name="q18" value="B" data-correct="true">
+                        <label for="q18b" class="option-label">B) \(k = \frac{1}{\sqrt{14}}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c" class="option-label">C) \(k = \sqrt{14}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d" class="option-label">D) \(k = 14\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>19. Let \(\mathbf{r} = \langle x, y \rangle\). Describe the set of all points \((x, y)\) such that \(||\mathbf{r}|| = 5\).</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a" class="option-label">A) A line passing through the origin.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b" class="option-label" data-correct="true">B) A circle centered at the origin with radius 5.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q19c" name="q19" value="C">
+                        <label for="q19c" class="option-label">C) A sphere centered at the origin with radius 5.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d" class="option-label">D) A square with side length 5.</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h2>20. Which of the following is equivalent to \(\mathbf{u} - \mathbf{v}\)?</h2>
+                <div class="options-grid">
+                    <div>
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a" class="option-label">A) \(\mathbf{v} - \mathbf{u}\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q20b" name="q20" value="B" data-correct="true">
+                        <label for="q20b" class="option-label">B) \(\mathbf{u} + (-\mathbf{v})\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q20c" name="q20" value="C">
+                        <label for="q20c" class="option-label">C) \(|\mathbf{u}| - |\mathbf{v}|\)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d" class="option-label">D) A scalar quantity.</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="submitQuiz" class="submit-btn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        let seconds = 0;
+        let timerInterval;
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const submitBtn = document.getElementById('submitQuiz');
+        const quizForm = document.getElementById('quizForm');
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const remainingSeconds = totalSeconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                timerDisplay.textContent = `Time: ${formatTime(seconds)}`;
+            }, 1000);
+        }
+
+        function gradeQuiz() {
+            clearInterval(timerInterval); // Stop the timer
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Quiz Submitted';
+
+            let score = 0;
+            const questionBlocks = document.querySelectorAll('.question-block');
+
+            questionBlocks.forEach(questionBlock => {
+                const questionName = questionBlock.querySelector('input[type="radio"]').name;
+                const selectedOptionInput = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const allOptionInputs = quizForm.querySelectorAll(`input[name="${questionName}"]`);
+                
+                let correctOptionLabel = null;
+
+                // Find the correct option and highlight it
+                allOptionInputs.forEach(input => {
+                    const label = input.nextElementSibling; // Get the label associated with the input
+                    if (input.dataset.correct === 'true') {
+                        correctOptionLabel = label;
+                        label.classList.add('correct');
+                        label.insertAdjacentHTML('beforeend', '<span class="feedback-icon">✅</span>');
+                    }
+                    // Disable all options after submission
+                    input.disabled = true;
+                });
+
+                if (selectedOptionInput) {
+                    const selectedOptionLabel = selectedOptionInput.nextElementSibling;
+                    if (selectedOptionInput.dataset.correct === 'true') {
+                        score++;
+                        // Already highlighted green by the loop above
+                    } else {
+                        selectedOptionLabel.classList.add('incorrect');
+                        selectedOptionLabel.insertAdjacentHTML('beforeend', '<span class="feedback-icon">❌</span>');
+                    }
+                }
+            });
+
+            scoreDisplay.textContent = `Your Score: ${score}/${questionBlocks.length}`;
+            scoreDisplay.style.backgroundColor = '#e0f7fa'; /* Light blue for score display */
+            scoreDisplay.style.color = 'var(--primary-blue)';
+        }
+
+        // Event Listeners
+        window.addEventListener('load', startTimer);
+        submitBtn.addEventListener('click', gradeQuiz);
+    </script>
+</body>
+</html>
+```

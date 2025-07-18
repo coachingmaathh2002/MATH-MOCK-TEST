@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalar and Vector Products Quiz</title>
+    <!-- MathJax CDN for LaTeX rendering -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --secondary-gray: #6c757d;
+            --light-gray: #f8f9fa;
+            --dark-text: #343a40;
+            --border-color: #dee2e6;
+            --correct-green: #d4edda; /* Light green */
+            --correct-green-border: #a2d9ab; /* Slightly darker green for border */
+            --incorrect-red: #f8d7da; /* Light red */
+            --incorrect-red-border: #e6b1b8; /* Slightly darker red for border */
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .timer-display, .score-display {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--secondary-gray);
+        }
+
+        .score-display {
+            color: var(--primary-blue);
+            text-align: center;
+            width: 100%;
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--white);
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: block;
+            background-color: var(--light-gray);
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .option-label:hover:not(.correct-answer):not(.incorrect-selection) {
+            background-color: #e9ecef;
+            border-color: var(--primary-blue);
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 10px;
+            vertical-align: middle;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .option-label.correct-answer {
+            background-color: var(--correct-green);
+            border-color: var(--correct-green-border);
+            font-weight: bold;
+        }
+
+        .option-label.incorrect-selection {
+            background-color: var(--incorrect-red);
+            border-color: var(--incorrect-red-border);
+        }
+
+        /* MathJax specific styling */
+        .MathJax_Display {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            text-align: center !important;
+        }
+
+        .MathJax_CHTML {
+            font-size: 1.1em !important;
+        }
+
+        /* Button styling */
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px 25px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 30px;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .submit-button:disabled {
+            background-color: var(--secondary-gray);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Checkmark and Crossmark styling */
+        .mark {
+            margin-left: 8px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Scalar (Dot) and Vector (Cross) Products Quiz</h1>
+
+        <div class="header-info">
+            <div id="timer-display" class="timer-display">Time: 00:00</div>
+            <div id="score-display" class="score-display" style="display: none;"></div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p class="question-text">1. Given two vectors \(\mathbf{A}\) and \(\mathbf{B}\), what is the geometric interpretation of the scalar (dot) product \(\mathbf{A} \cdot \mathbf{B}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q1" value="A"> <span>A. The area of the parallelogram formed by \(\mathbf{A}\) and \(\mathbf{B}\).</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"> <span>B. The product of their magnitudes and the cosine of the angle between them.</span></label>
+                    <label class="option-label"><input type="radio" name="q1" value="C"> <span>C. A vector perpendicular to both \(\mathbf{A}\) and \(\mathbf{B}\).</span></label>
+                    <label class="option-label"><input type="radio" name="q1" value="D"> <span>D. The volume of the parallelepiped formed by \(\mathbf{A}\), \(\mathbf{B}\), and a third vector \(\mathbf{C}\).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p class="question-text">2. If \(\mathbf{A} = 2\mathbf{i} + 3\mathbf{j} - \mathbf{k}\) and \(\mathbf{B} = \mathbf{i} - 2\mathbf{j} + 4\mathbf{k}\), what is \(\mathbf{A} \cdot \mathbf{B}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q2" value="A"> <span>A. \(8\)</span></label>
+                    <label class="option-label"><input type="radio" name="q2" value="B"> <span>B. \(-4\mathbf{i} + 9\mathbf{j} - 7\mathbf{k}\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q2" value="C"> <span>C. \(-8\)</span></label>
+                    <label class="option-label"><input type="radio" name="q2" value="D"> <span>D. \(12\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p class="question-text">3. For two non-zero vectors \(\mathbf{A}\) and \(\mathbf{B}\), if \(\mathbf{A} \cdot \mathbf{B} = 0\), what can be concluded about their relationship?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q3" value="A"> <span>A. They are parallel.</span></label>
+                    <label class="option-label"><input type="radio" name="q3" value="B"> <span>B. They are co-planar.</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q3" value="C"> <span>C. They are orthogonal (perpendicular).</span></label>
+                    <label class="option-label"><input type="radio" name="q3" value="D"> <span>D. They have the same magnitude.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p class="question-text">4. Which of the following statements is true regarding the vector (cross) product \(\mathbf{A} \times \mathbf{B}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q4" value="A"> <span>A. It is a scalar quantity.</span></label>
+                    <label class="option-label"><input type="radio" name="q4" value="B"> <span>B. It is commutative, i.e., \(\mathbf{A} \times \mathbf{B} = \mathbf{B} \times \mathbf{A}\).</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q4" value="C"> <span>C. Its magnitude is the area of the parallelogram formed by \(\mathbf{A}\) and \(\mathbf{B}\).</span></label>
+                    <label class="option-label"><input type="radio" name="q4" value="D"> <span>D. It is zero if \(\mathbf{A}\) and \(\mathbf{B}\) are orthogonal.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p class="question-text">5. If \(\mathbf{A} = \mathbf{i} + 2\mathbf{j}\) and \(\mathbf{B} = 3\mathbf{i} - \mathbf{k}\), what is \(\mathbf{A} \times \mathbf{B}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q5" value="A"> <span>A. \(-2\mathbf{i} + \mathbf{j} + 6\mathbf{k}\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"> <span>B. \(-2\mathbf{i} + \mathbf{j} - 6\mathbf{k}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q5" value="C"> <span>C. \(3\mathbf{i} - 2\mathbf{j} - 3\mathbf{k}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q5" value="D"> <span>D. \(-2\mathbf{i} - \mathbf{j} + 6\mathbf{k}\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p class="question-text">6. The scalar triple product \([\mathbf{A}, \mathbf{B}, \mathbf{C}] = \mathbf{A} \cdot (\mathbf{B} \times \mathbf{C})\) represents:</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q6" value="A"> <span>A. The area of the triangle formed by \(\mathbf{A}, \mathbf{B}, \mathbf{C}\).</span></label>
+                    <label class="option-label"><input type="radio" name="q6" value="B"> <span>B. A vector perpendicular to the plane containing \(\mathbf{A}\) and \(\mathbf{B}\).</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q6" value="C"> <span>C. The volume of the parallelepiped formed by \(\mathbf{A}, \mathbf{B}, \mathbf{C}\).</span></label>
+                    <label class="option-label"><input type="radio" name="q6" value="D"> <span>D. The angle between \(\mathbf{A}\) and the plane containing \(\mathbf{B}\) and \(\mathbf{C}\).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p class="question-text">7. If the scalar triple product \(\mathbf{A} \cdot (\mathbf{B} \times \mathbf{C}) = 0\), what can be concluded about vectors \(\mathbf{A}, \mathbf{B}\), and \(\mathbf{C}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q7" value="A"> <span>A. They are mutually orthogonal.</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q7" value="B"> <span>B. They are coplanar.</span></label>
+                    <label class="option-label"><input type="radio" name="q7" value="C"> <span>C. They are linearly independent.</span></label>
+                    <label class="option-label"><input type="radio" name="q7" value="D"> <span>D. They form a right-handed system.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p class="question-text">8. What is the angle between two vectors \(\mathbf{A}\) and \(\mathbf{B}\) if \(\mathbf{A} \cdot \mathbf{B} = |\mathbf{A}| |\mathbf{B}|\)?</p>
+                <div class="options">
+                    <label class="option-label" data-correct="true"><input type="radio" name="q8" value="A"> <span>A. \(0^\circ\)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="B"> <span>B. \(45^\circ\)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="C"> <span>C. \(90^\circ\)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="D"> <span>D. \(180^\circ\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p class="question-text">9. The projection of vector \(\mathbf{A}\) onto vector \(\mathbf{B}\) is given by:</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q9" value="A"> <span>A. \((\mathbf{A} \times \mathbf{B}) / |\mathbf{B}|^2\)</span></label>
+                    <label class="option-label"><input type="radio" name="q9" value="B"> <span>B. \((\mathbf{A} \cdot \mathbf{B}) / |\mathbf{A}|^2 \cdot \mathbf{A}\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q9" value="C"> <span>C. \((\mathbf{A} \cdot \mathbf{B}) / |\mathbf{B}|^2 \cdot \mathbf{B}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q9" value="D"> <span>D. \(|\mathbf{A}| \cos \theta\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p class="question-text">10. If \(\mathbf{A} \times \mathbf{B} = \mathbf{0}\) for non-zero vectors \(\mathbf{A}\) and \(\mathbf{B}\), what can be concluded about their relationship?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q10" value="A"> <span>A. They are orthogonal.</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q10" value="B"> <span>B. They are parallel.</span></label>
+                    <label class="option-label"><input type="radio" name="q10" value="C"> <span>C. They have equal magnitudes.</span></label>
+                    <label class="option-label"><input type="radio" name="q10" value="D"> <span>D. They are unit vectors.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p class="question-text">11. What is the value of \(\mathbf{i} \cdot (\mathbf{j} \times \mathbf{k})\)?</p>
+                <div class="options">
+                    <label class="option-label" data-correct="true"><input type="radio" name="q11" value="A"> <span>A. \(1\)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="B"> <span>B. \(-1\)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="C"> <span>C. \(0\)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="D"> <span>D. \(\mathbf{i}\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p class="question-text">12. The area of a triangle with adjacent sides represented by vectors \(\mathbf{A}\) and \(\mathbf{B}\) is given by:</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q12" value="A"> <span>A. \(|\mathbf{A} \cdot \mathbf{B}|\)</span></label>
+                    <label class="option-label"><input type="radio" name="q12" value="B"> <span>B. \(|\mathbf{A} \times \mathbf{B}|\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q12" value="C"> <span>C. \(\frac{1}{2} |\mathbf{A} \times \mathbf{B}|\)</span></label>
+                    <label class="option-label"><input type="radio" name="q12" value="D"> <span>D. \(\frac{1}{2} |\mathbf{A}| |\mathbf{B}|\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p class="question-text">13. Which of the following is equivalent to the vector triple product \(\mathbf{A} \times (\mathbf{B} \times \mathbf{C})\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q13" value="A"> <span>A. \((\mathbf{A} \cdot \mathbf{B})\mathbf{C} - (\mathbf{A} \cdot \mathbf{C})\mathbf{B}\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q13" value="B"> <span>B. \((\mathbf{A} \cdot \mathbf{C})\mathbf{B} - (\mathbf{A} \cdot \mathbf{B})\mathbf{C}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q13" value="C"> <span>C. \((\mathbf{B} \cdot \mathbf{C})\mathbf{A} - (\mathbf{A} \cdot \mathbf{C})\mathbf{B}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q13" value="D"> <span>D. \((\mathbf{A} \times \mathbf{B}) \times \mathbf{C}\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p class="question-text">14. If \(\mathbf{A}\) and \(\mathbf{B}\) are two vectors, then \((|\mathbf{A}| |\mathbf{B}|)^2 - (\mathbf{A} \cdot \mathbf{B})^2\) is equal to:</p>
+                <div class="options">
+                    <label class="option-label" data-correct="true"><input type="radio" name="q14" value="A"> <span>A. \(|\mathbf{A} \times \mathbf{B}|^2\)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="B"> <span>B. \(|\mathbf{A}|^2 + |\mathbf{B}|^2\)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="C"> <span>C. \(|\mathbf{A}|^2 |\mathbf{B}|^2 \sin \theta\)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="D"> <span>D. \(0\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p class="question-text">15. Given vectors \(\mathbf{u} = \mathbf{i} + \mathbf{j}\) and \(\mathbf{v} = \mathbf{j} + \mathbf{k}\), what is the cosine of the angle between them?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q15" value="A"> <span>A. \(1\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q15" value="B"> <span>B. \(1/2\)</span></label>
+                    <label class="option-label"><input type="radio" name="q15" value="C"> <span>C. \(1/\sqrt{2}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q15" value="D"> <span>D. \(0\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p class="question-text">16. The work done by a constant force \(\mathbf{F}\) displacing an object by \(\mathbf{d}\) is given by:</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q16" value="A"> <span>A. \(\mathbf{F} \times \mathbf{d}\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q16" value="B"> <span>B. \(\mathbf{F} \cdot \mathbf{d}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q16" value="C"> <span>C. \(|\mathbf{F}| + |\mathbf{d}|\)</span></label>
+                    <label class="option-label"><input type="radio" name="q16" value="D"> <span>D. \(|\mathbf{F}| |\mathbf{d}| \sin \theta\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p class="question-text">17. If \(\mathbf{A}\) is any vector, what is \(\mathbf{A} \times \mathbf{A}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q17" value="A"> <span>A. \(|\mathbf{A}|^2\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q17" value="B"> <span>B. \(\mathbf{0}\) (zero vector)</span></label>
+                    <label class="option-label"><input type="radio" name="q17" value="C"> <span>C. \(1\)</span></label>
+                    <label class="option-label"><input type="radio" name="q17" value="D"> <span>D. A vector perpendicular to \(\mathbf{A}\).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p class="question-text">18. For any three vectors \(\mathbf{A}, \mathbf{B}, \mathbf{C}\), the identity \(\mathbf{A} \cdot (\mathbf{B} \times \mathbf{C}) = (\mathbf{A} \times \mathbf{B}) \cdot \mathbf{C}\) is known as:</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q18" value="A"> <span>A. Lagrange's Identity</span></label>
+                    <label class="option-label"><input type="radio" name="q18" value="B"> <span>B. Jacobi Identity</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q18" value="C"> <span>C. Scalar Triple Product Cyclical Property</span></label>
+                    <label class="option-label"><input type="radio" name="q18" value="D"> <span>D. Dot Product Distributivity</span></label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p class="question-text">19. The torque \(\tau\) produced by a force \(\mathbf{F}\) acting at a position \(\mathbf{r}\) from the pivot is given by:</p>
+                <div class="options">
+                    <label class="option-label" data-correct="true"><input type="radio" name="q19" value="A"> <span>A. \(\mathbf{r} \times \mathbf{F}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="B"> <span>B. \(\mathbf{r} \cdot \mathbf{F}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="C"> <span>C. \(|\mathbf{r}| |\mathbf{F}| \cos \theta\)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="D"> <span>D. \(\mathbf{F} \times \mathbf{r}\)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p class="question-text">20. Given vectors \(\mathbf{A} = \mathbf{i} + \mathbf{j}\) and \(\mathbf{B} = \mathbf{k}\), what is the magnitude of \(\mathbf{A} \times \mathbf{B}\)?</p>
+                <div class="options">
+                    <label class="option-label"><input type="radio" name="q20" value="A"> <span>A. \(0\)</span></label>
+                    <label class="option-label"><input type="radio" name="q20" value="B"> <span>B. \(1\)</span></label>
+                    <label class="option-label" data-correct="true"><input type="radio" name="q20" value="C"> <span>C. \(\sqrt{2}\)</span></label>
+                    <label class="option-label"><input type="radio" name="q20" value="D"> <span>D. \(2\)</span></label>
+                </div>
+            </div>
+
+            <button type="button" id="submit-btn" class="submit-button">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        let timerInterval;
+        let seconds = 0;
+        const timerDisplay = document.getElementById('timer-display');
+        const scoreDisplay = document.getElementById('score-display');
+        const submitButton = document.getElementById('submit-btn');
+        const quizForm = document.getElementById('quizForm');
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerDisplay.textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function calculateScore() {
+            stopTimer();
+            let score = 0;
+            const totalQuestions = 20;
+
+            const questionBlocks = document.querySelectorAll('.question-block');
+
+            questionBlocks.forEach((qBlock, index) => {
+                const questionNumber = index + 1;
+                const selectedOptionInput = qBlock.querySelector(`input[name="q${questionNumber}"]:checked`);
+                const options = qBlock.querySelectorAll(`.option-label`);
+
+                options.forEach(optionLabel => {
+                    const input = optionLabel.querySelector('input');
+                    const isCorrectOption = optionLabel.getAttribute('data-correct') === 'true';
+
+                    // Highlight correct answers
+                    if (isCorrectOption) {
+                        optionLabel.classList.add('correct-answer');
+                        optionLabel.innerHTML += '<span class="mark">✅</span>'; // Add checkmark
+                    }
+
+                    // Check if user's selected answer was incorrect and highlight it
+                    if (selectedOptionInput && input === selectedOptionInput && !isCorrectOption) {
+                        optionLabel.classList.add('incorrect-selection');
+                        optionLabel.innerHTML += '<span class="mark">❌</span>'; // Add crossmark
+                    }
+                });
+
+                // Calculate score
+                if (selectedOptionInput && selectedOptionInput.closest('.option-label').getAttribute('data-correct') === 'true') {
+                    score++;
+                }
+            });
+
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+            scoreDisplay.style.display = 'block'; // Make score visible
+            submitButton.disabled = true;
+            submitButton.textContent = 'Quiz Submitted';
+
+            // Disable all radio buttons after submission
+            const radioButtons = quizForm.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.disabled = true;
+            });
+
+            // Scroll to top to show score
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listener for submit button
+        submitButton.addEventListener('click', calculateScore);
+
+        // Start timer when the page loads
+        window.onload = startTimer;
+    </script>
+</body>
+</html>

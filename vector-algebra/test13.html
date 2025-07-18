@@ -1,0 +1,666 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Components Quiz: 2D & 3D</title>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e7f0ff;
+            --dark-gray: #333;
+            --medium-gray: #666;
+            --light-gray: #f8f9fa;
+            --border-color: #dee2e6;
+            --success-green: #d4edda;
+            --error-red: #f8d7da;
+            --text-color: #212529;
+            --white: #fff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            box-sizing: border-box;
+            margin-bottom: 30px; /* Space for the submit button */
+        }
+
+        h1, h2 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .timer, .score {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--dark-gray);
+        }
+
+        .question-block {
+            background-color: var(--light-blue);
+            border: 1px solid var(--primary-blue);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-block h3 {
+            margin-top: 0;
+            color: var(--dark-gray);
+            font-size: 1.15em;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #f0f8ff;
+            border-color: var(--primary-blue);
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+            accent-color: var(--primary-blue); /* Style radio button */
+        }
+
+        /* Highlighting for results */
+        .option-label.correct {
+            background-color: var(--success-green);
+            border-color: #28a745; /* Darker green */
+            font-weight: bold;
+        }
+
+        .option-label.incorrect {
+            background-color: var(--error-red);
+            border-color: #dc3545; /* Darker red */
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin-top: 30px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        .submit-btn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+
+        /* MathJax specific styling for display equations */
+        .MathJax_Display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            text-align: center !important; /* Ensure block equations are centered */
+        }
+        /* Ensure inline math doesn't break lines awkwardly */
+        mjx-container[display="false"] {
+            white-space: nowrap;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-container {
+                padding: 20px;
+                margin: 10px 0;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .header-info {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            .timer, .score {
+                font-size: 1em;
+            }
+            .question-block {
+                padding: 15px;
+            }
+            .option-label {
+                padding: 10px 12px;
+            }
+            .option-label input[type="radio"] {
+                margin-right: 10px;
+            }
+            .submit-btn {
+                font-size: 1em;
+                padding: 12px 15px;
+            }
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Vector Components Quiz: 2D & 3D</h1>
+        <div class="header-info">
+            <div class="timer" id="quizTimer">Time: 00:00</div>
+            <div class="score" id="quizScore">Score: --/20</div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block" id="q1">
+                <h3>1. A vector \(\mathbf{A}\) has a magnitude of 10 units and makes an angle of \(30^\circ\) with the positive x-axis in the 2D Cartesian plane. What are its x and y components?</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="A"> A. \(A_x = 5, A_y = 5\sqrt{3}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q1" value="B"> B. \(A_x = 5\sqrt{3}, A_y = 5\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="C"> C. \(A_x = 10\sin(30^\circ), A_y = 10\cos(30^\circ)\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="D"> D. \(A_x = 10, A_y = 30\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block" id="q2">
+                <h3>2. Given a vector \(\mathbf{B} = 3\mathbf{i} - 4\mathbf{j}\), what is its magnitude and the angle it makes with the positive x-axis?</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="A"> A. Magnitude = 5, Angle = \(53.13^\circ\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q2" value="B"> B. Magnitude = 5, Angle = \(-53.13^\circ\) (or \(306.87^\circ\))
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="C"> C. Magnitude = 7, Angle = \(-36.87^\circ\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="D"> D. Magnitude = 5, Angle = \(36.87^\circ\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block" id="q3">
+                <h3>3. If \(\mathbf{U} = 2\mathbf{i} + 3\mathbf{j} - \mathbf{k}\) and \(\mathbf{V} = -\mathbf{i} + 2\mathbf{j} + 4\mathbf{k}\), what is the component form of \(\mathbf{U} + \mathbf{V}\)?</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="A"> A. \(\mathbf{i} + 5\mathbf{j} + 5\mathbf{k}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q3" value="B"> B. \(\mathbf{i} + 5\mathbf{j} + 3\mathbf{k}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="C"> C. \(3\mathbf{i} + \mathbf{j} - 5\mathbf{k}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="D"> D. \(\mathbf{i} + 5\mathbf{j} - 5\mathbf{k}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block" id="q4">
+                <h3>4. A vector \(\mathbf{W}\) has components \(W_x = -6\), \(W_y = 8\). What is the unit vector in the direction of \(\mathbf{W}\)?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q4" value="A"> A. \(-\frac{3}{5}\mathbf{i} + \frac{4}{5}\mathbf{j}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="B"> B. \(-\frac{6}{10}\mathbf{i} + \frac{8}{10}\mathbf{j}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="C"> C. \(-\frac{4}{5}\mathbf{i} + \frac{3}{5}\mathbf{j}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="D"> D. \(\frac{6}{10}\mathbf{i} - \frac{8}{10}\mathbf{j}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block" id="q5">
+                <h3>5. The position vector of a point P is \(\mathbf{r} = \langle 1, -2, 3 \rangle\). If the origin is shifted to \((1, 1, 1)\), what are the new components of the position vector of P?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q5" value="A"> A. \(\langle 0, -3, 2 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="B"> B. \(\langle 2, -1, 4 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="C"> C. \(\langle 1, -2, 3 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="D"> D. \(\langle -1, 2, -3 \rangle\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block" id="q6">
+                <h3>6. Find the dot product of \(\mathbf{A} = \mathbf{i} + 2\mathbf{j} - 3\mathbf{k}\) and \(\mathbf{B} = 4\mathbf{i} - \mathbf{j} + 2\mathbf{k}\).</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="A"> A. 12
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q6" value="B"> B. -4
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="C"> C. 4
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="D"> D. \(\langle 4, -2, -6 \rangle\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block" id="q7">
+                <h3>7. Which of the following vectors is orthogonal to \(\mathbf{P} = \langle 2, -1, 3 \rangle\)?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q7" value="A"> A. \(\langle 1, 2, 0 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="B"> B. \(\langle -1, 2, 1 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="C"> C. \(\langle 3, 1, -2 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="D"> D. \(\langle 0, 1, 3 \rangle\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block" id="q8">
+                <h3>8. Calculate the cross product \(\mathbf{C} \times \mathbf{D}\) for \(\mathbf{C} = \langle 1, 0, -1 \rangle\) and \(\mathbf{D} = \langle 0, 2, 3 \rangle\).</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q8" value="A"> A. \(\langle 2, -3, 2 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q8" value="B"> B. \(\langle -2, 3, -2 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q8" value="C"> C. \(\langle 2, 3, 2 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q8" value="D"> D. \(\langle 0, 0, 0 \rangle\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block" id="q9">
+                <h3>9. What is the scalar projection of \(\mathbf{A} = \langle 3, -1 \rangle\) onto \(\mathbf{B} = \langle 2, 5 \rangle\)?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q9" value="A"> A. \(\frac{1}{\sqrt{29}}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q9" value="B"> B. \(\frac{1}{\sqrt{34}}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q9" value="C"> C. \(\frac{7}{\sqrt{29}}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q9" value="D"> D. \(\frac{7}{\sqrt{34}}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block" id="q10">
+                <h3>10. A force vector \(\mathbf{F}\) has components \(F_x = 10\) N, \(F_y = -15\) N, and \(F_z = 20\) N. What is the magnitude of this force?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q10" value="A"> A. \(\sqrt{725}\) N
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q10" value="B"> B. \(\sqrt{325}\) N
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q10" value="C"> C. \(\sqrt{425}\) N
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q10" value="D"> D. \(\sqrt{475}\) N
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block" id="q11">
+                <h3>11. Determine the vector projection of \(\mathbf{A} = \langle 4, 2 \rangle\) onto \(\mathbf{B} = \langle 1, 3 \rangle\).</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q11" value="A"> A. \(\langle 1, 3 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q11" value="B"> B. \(\langle \frac{1}{10}, \frac{3}{10} \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q11" value="C"> C. \(\langle 10, 30 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q11" value="D"> D. \(\langle \frac{7}{5}, \frac{14}{5} \rangle\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block" id="q12">
+                <h3>12. The direction cosines of a vector \(\mathbf{V} = \langle V_x, V_y, V_z \rangle\) are given by:</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q12" value="A"> A. \(\cos\alpha = \frac{V_x}{|\mathbf{V}|}, \cos\beta = \frac{V_y}{|\mathbf{V}|}, \cos\gamma = \frac{V_z}{|\mathbf{V}|}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q12" value="B"> B. \(\cos\alpha = V_x|\mathbf{V}|, \cos\beta = V_y|\mathbf{V}|, \cos\gamma = V_z|\mathbf{V}|\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q12" value="C"> C. \(\cos\alpha = \frac{|\mathbf{V}|}{V_x}, \cos\beta = \frac{|\mathbf{V}|}{V_y}, \cos\gamma = \frac{|\mathbf{V}|}{V_z}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q12" value="D"> D. \(\cos\alpha = V_x, \cos\beta = V_y, \cos\gamma = V_z\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block" id="q13">
+                <h3>13. A vector \(\mathbf{R}\) makes angles of \(60^\circ\) with the x-axis, \(45^\circ\) with the y-axis, and \(\gamma\) with the z-axis. What is the value of \(\cos\gamma\)?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q13" value="A"> A. \(\pm \frac{1}{2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q13" value="B"> B. \(\pm \frac{\sqrt{2}}{2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q13" value="C"> C. \(\pm \frac{\sqrt{3}}{2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q13" value="D"> D. \(\pm 1\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block" id="q14">
+                <h3>14. If \(\mathbf{A} = \langle a_x, a_y, a_z \rangle\), \(\mathbf{B} = \langle b_x, b_y, b_z \rangle\), and \(\mathbf{C} = \langle c_x, c_y, c_z \rangle\), the scalar triple product \(\mathbf{A} \cdot (\mathbf{B} \times \mathbf{C})\) is given by:</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q14" value="A"> A. \(\begin{vmatrix} a_x & a_y & a_z \\ b_x & b_y & b_z \\ c_x & c_y & c_z \end{vmatrix}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q14" value="B"> B. \(\begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ a_x & a_y & a_z \\ b_x & b_y & b_z \end{vmatrix}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q14" value="C"> C. \(\begin{vmatrix} a_x & b_x & c_x \\ a_y & b_y & c_y \\ a_z & b_z & c_z \end{vmatrix}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q14" value="D"> D. \(\mathbf{A} \times \mathbf{B} \cdot \mathbf{C}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block" id="q15">
+                <h3>15. A vector has magnitude 20 and makes an angle of \(120^\circ\) with the positive x-axis. What are its components?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q15" value="A"> A. \(\langle -10, 10\sqrt{3} \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q15" value="B"> B. \(\langle 10, -10\sqrt{3} \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q15" value="C"> C. \(\langle -10\sqrt{3}, 10 \rangle\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q15" value="D"> D. \(\langle 10\sqrt{3}, -10 \rangle\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block" id="q16">
+                <h3>16. What is the area of the parallelogram formed by vectors \(\mathbf{A} = \mathbf{i} + \mathbf{j}\) and \(\mathbf{B} = \mathbf{j} + \mathbf{k}\)?</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q16" value="A"> A. 1
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q16" value="B"> B. \(\sqrt{2}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q16" value="C"> C. \(\sqrt{3}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q16" value="D"> D. 2
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block" id="q17">
+                <h3>17. Consider a particle moving with velocity \(\mathbf{v} = 5\mathbf{i} - 12\mathbf{j}\) m/s. What is the component of its velocity along the direction of \(\mathbf{d} = 3\mathbf{i} + 4\mathbf{j}\)?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q17" value="A"> A. \(-33/5\) m/s
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q17" value="B"> B. \(33/5\) m/s
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q17" value="C"> C. \(-9/25\) m/s
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q17" value="D"> D. \(9/25\) m/s
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block" id="q18">
+                <h3>18. If \(\mathbf{A} = \langle x, y, z \rangle\) is a vector, and its direction cosines are \(\cos\alpha, \cos\beta, \cos\gamma\), which identity holds true?</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q18" value="A"> A. \(\cos^2\alpha + \cos^2\beta + \cos^2\gamma = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q18" value="B"> B. \(\cos\alpha + \cos\beta + \cos\gamma = 1\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q18" value="C"> C. \(\cos^2\alpha + \cos^2\beta + \cos^2\gamma = 1\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q18" value="D"> D. \(\sin^2\alpha + \sin^2\beta + \sin^2\gamma = 1\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block" id="q19">
+                <h3>19. A vector \(\mathbf{F}\) lies in the x-z plane. Its magnitude is 25 N, and it makes an angle of \(53.13^\circ\) with the positive x-axis. What are its components?</h3>
+                <div class="options">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q19" value="A"> A. \(F_x = 15\) N, \(F_y = 0\) N, \(F_z = 20\) N
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q19" value="B"> B. \(F_x = 20\) N, \(F_y = 0\) N, \(F_z = 15\) N
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q19" value="C"> C. \(F_x = 15\) N, \(F_y = 20\) N, \(F_z = 0\) N
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q19" value="D"> D. \(F_x = 20\) N, \(F_y = 15\) N, \(F_z = 0\) N
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block" id="q20">
+                <h3>20. The volume of the parallelepiped spanned by vectors \(\mathbf{u} = \langle 1, 1, 0 \rangle\), \(\mathbf{v} = \langle 0, 1, 1 \rangle\), and \(\mathbf{w} = \langle 1, 0, 1 \rangle\) is given by the absolute value of their scalar triple product. What is this volume?</h3>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q20" value="A"> A. 0
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q20" value="B"> B. 1
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q20" value="C"> C. 2
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q20" value="D"> D. 3
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" id="submitQuiz">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        const quizForm = document.getElementById('quizForm');
+        const submitButton = document.getElementById('submitQuiz');
+        const quizTimer = document.getElementById('quizTimer');
+        const quizScore = document.getElementById('quizScore');
+        let seconds = 0;
+        let timerInterval;
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const remainingSeconds = totalSeconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                quizTimer.textContent = `Time: ${formatTime(seconds)}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function gradeQuiz() {
+            stopTimer();
+            let score = 0;
+            const totalQuestions = 20;
+            const questionBlocks = document.querySelectorAll('.question-block');
+
+            questionBlocks.forEach(qBlock => {
+                const questionName = qBlock.querySelector('input[type="radio"]').name;
+                const selectedOptionInput = qBlock.querySelector(`input[name="${questionName}"]:checked`);
+                
+                // Get all options for the current question
+                const allOptions = qBlock.querySelectorAll('.option-label');
+
+                allOptions.forEach(optionLabel => {
+                    const optionInput = optionLabel.querySelector('input[type="radio"]');
+                    optionInput.disabled = true; // Disable all radio buttons
+
+                    // Highlight the correct answer
+                    if (optionInput.dataset.correct === 'true') {
+                        optionLabel.classList.add('correct');
+                        optionLabel.innerHTML += ' &#x2705;'; // Add checkmark emoji
+                    }
+                });
+
+                // Check if user selected an answer and if it was incorrect
+                if (selectedOptionInput) {
+                    const selectedLabel = selectedOptionInput.closest('.option-label');
+                    if (selectedOptionInput.dataset.correct === 'true') {
+                        score++;
+                    } else {
+                        // If selected option was incorrect, highlight it red and add cross
+                        selectedLabel.classList.add('incorrect');
+                        selectedLabel.innerHTML += ' &#x274C;'; // Add cross emoji
+                    }
+                }
+            });
+
+            quizScore.textContent = `Your Score: ${score}/${totalQuestions}`;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Quiz Submitted';
+            submitButton.style.backgroundColor = 'var(--medium-gray)'; // Change color for disabled state
+        }
+
+        // Event Listeners
+        window.onload = startTimer;
+        submitButton.addEventListener('click', gradeQuiz);
+    </script>
+</body>
+</html>
+```

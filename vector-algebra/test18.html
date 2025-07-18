@@ -1,0 +1,747 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Position Vector & Section Formula Quiz</title>
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --light-blue: #e0f2f7;
+            --dark-gray: #333;
+            --medium-gray: #666;
+            --light-gray: #f4f7f6;
+            --white: #ffffff;
+            --success-green: #d4edda;
+            --success-border: #28a745;
+            --error-red: #f8d7da;
+            --error-border: #dc3545;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .timer, .score-display {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--medium-gray);
+            margin-top: 10px;
+        }
+
+        .score-display {
+            color: var(--primary-blue);
+            font-size: 1.6em;
+            margin-top: 15px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: var(--light-blue);
+            border-radius: 8px;
+            border: 1px solid var(--primary-blue);
+        }
+
+        .question p {
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+            color: var(--dark-gray);
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            padding: 12px 15px;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+
+        .options label:hover {
+            background-color: #f0f0f0;
+            border-color: var(--primary-blue);
+        }
+
+        .options input[type="radio"] {
+            /* Hide default radio button */
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Custom radio button appearance */
+        .options label::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            transition: border-color 0.2s ease;
+        }
+
+        .options input[type="radio"]:checked + label::before {
+            border-color: var(--primary-blue);
+            background-color: var(--primary-blue);
+            box-shadow: inset 0 0 0 4px var(--white); /* Inner circle */
+        }
+
+        .options input[type="radio"]:disabled + label {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 250px;
+            padding: 15px 20px;
+            margin: 30px auto 0;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #004494;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Highlighting for results */
+        .correct-answer {
+            background-color: var(--success-green) !important;
+            border-color: var(--success-border) !important;
+            font-weight: bold;
+        }
+
+        .incorrect-selection {
+            background-color: var(--error-red) !important;
+            border-color: var(--error-border) !important;
+        }
+
+        /* Emoji styling */
+        .feedback-emoji {
+            margin-left: 8px;
+            font-size: 1.1em;
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="header">
+            <h1>Position Vector & Section Formula Quiz</h1>
+            <div class="timer">Time: 00:00</div>
+            <div class="score-display"></div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <p>1. If the position vectors of points A and B are \(\vec{a}\) and \(\vec{b}\) respectively, what is the position vector of a point P that divides the line segment AB internally in the ratio \(m:n\)?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a">A) \(\frac{m\vec{b} - n\vec{a}}{m-n}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q1b" name="q1" value="B" data-correct="true">
+                        <label for="q1b">B) \(\frac{m\vec{b} + n\vec{a}}{m+n}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c">C) \(\frac{n\vec{b} + m\vec{a}}{m+n}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d">D) \(\frac{m\vec{a} + n\vec{b}}{m+n}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <p>2. The position vector of a point P is given by \(\vec{r} = 3\hat{i} - 2\hat{j} + \hat{k}\). What is the magnitude of \(\vec{r}\)?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a">A) \(6\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b">B) \(\sqrt{12}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q2c" name="q2" value="C" data-correct="true">
+                        <label for="q2c">C) \(\sqrt{14}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D) \(\sqrt{10}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <p>3. If the position vectors of A and B are \(\vec{a} = \hat{i} + 2\hat{j} - \hat{k}\) and \(\vec{b} = -2\hat{i} + \hat{j} + 3\hat{k}\), find the vector \(\vec{AB}\).</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A) \(-3\hat{i} + 3\hat{j} + 2\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q3b" name="q3" value="B" data-correct="true">
+                        <label for="q3b">B) \(-3\hat{i} - \hat{j} + 4\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c">C) \(3\hat{i} + \hat{j} - 4\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D) \(-3\hat{i} + 3\hat{j} - 2\hat{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <p>4. Point R divides the line segment PQ externally in the ratio \(m:n\). If \(\vec{p}\) and \(\vec{q}\) are the position vectors of P and Q respectively, what is the position vector of R?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q4a" name="q4" value="A" data-correct="true">
+                        <label for="q4a">A) \(\frac{m\vec{q} - n\vec{p}}{m-n}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q4b" name="q4" value="B">
+                        <label for="q4b">B) \(\frac{m\vec{q} + n\vec{p}}{m+n}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c">C) \(\frac{n\vec{q} - m\vec{p}}{n-m}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D) \(\frac{m\vec{p} - n\vec{q}}{m-n}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <p>5. Find the position vector of the midpoint of the line segment joining points A(\(2, -1, 3\)) and B(\(4, 5, -1\)).</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a">A) \(2\hat{i} + 3\hat{j} + 2\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q5b" name="q5" value="B">
+                        <label for="q5b">B) \(-2\hat{i} - 3\hat{j} - 2\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q5c" name="q5" value="C" data-correct="true">
+                        <label for="q5c">C) \(3\hat{i} + 2\hat{j} + \hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d">D) \(6\hat{i} + 4\hat{j} + 2\hat{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <p>6. Three points A, B, C are collinear. If A divides BC in the ratio \(1:2\), then what is the relationship between their position vectors \(\vec{a}, \vec{b}, \vec{c}\)?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a">A) \(\vec{a} = \frac{\vec{b} + 2\vec{c}}{3}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q6b" name="q6" value="B" data-correct="true">
+                        <label for="q6b">B) \(\vec{a} = \frac{2\vec{b} + \vec{c}}{3}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c">C) \(\vec{b} = 2\vec{a} - \vec{c}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d">D) \(\vec{c} = 2\vec{a} - \vec{b}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <p>7. If the position vectors of vertices of a triangle ABC are \(\vec{a}, \vec{b}, \vec{c}\), what is the position vector of its centroid G?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a">A) \(\frac{\vec{a} + \vec{b} - \vec{c}}{3}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q7b" name="q7" value="B" data-correct="true">
+                        <label for="q7b">B) \(\frac{\vec{a} + \vec{b} + \vec{c}}{3}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q7c" name="q7" value="C">
+                        <label for="q7c">C) \(\frac{2\vec{a} + \vec{b} + \vec{c}}{4}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D) \(\frac{\vec{a} + \vec{b} + \vec{c}}{2}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <p>8. A point P with position vector \(\vec{p}\) divides the line segment joining A(\(2\hat{i} + 3\hat{j}\)) and B(\(5\hat{i} - 3\hat{j}\)) in the ratio \(1:2\). Find \(\vec{p}\).</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a">A) \(4\hat{i} + \hat{j}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q8b" name="q8" value="B" data-correct="true">
+                        <label for="q8b">B) \(3\hat{i} + \hat{j}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c">C) \(\frac{7}{3}\hat{i} + 2\hat{j}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d">D) \(4\hat{i} + 3\hat{j}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <p>9. If points A, B, C are collinear and \(\vec{c} = x\vec{a} + y\vec{b}\), where \(\vec{a}, \vec{b}, \vec{c}\) are position vectors, what is the condition on x and y?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a">A) \(x=y\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b">B) \(x-y=1\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q9c" name="q9" value="C" data-correct="true">
+                        <label for="q9c">C) \(x+y=1\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D) \(x+y=0\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <p>10. The position vectors of P and Q are \(\vec{p} = \hat{i} - 2\hat{j}\) and \(\vec{q} = -2\hat{i} + \hat{j}\). Find the position vector of the point R which divides PQ in the ratio \(2:1\) externally.</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A) \(-3\hat{i} - \hat{j}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B) \(-3\hat{i} + 3\hat{j}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q10c" name="q10" value="C" data-correct="true">
+                        <label for="q10c">C) \(-5\hat{i} + 4\hat{j}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D) \(-4\hat{i} + 3\hat{j}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question" id="q11">
+                <p>11. If the position vectors of vertices A, B, C of a triangle are \(\vec{a}, \vec{b}, \vec{c}\) respectively, and D is the midpoint of BC, find the position vector of D.</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a">A) \(\frac{\vec{a} + \vec{b}}{2}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q11b" name="q11" value="B" data-correct="true">
+                        <label for="q11b">B) \(\frac{\vec{b} + \vec{c}}{2}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C) \(\frac{\vec{a} + \vec{c}}{2}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D) \(\frac{\vec{a} + \vec{b} + \vec{c}}{3}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question" id="q12">
+                <p>12. A point P has coordinates \((x, y, z)\). What is its position vector \(\vec{OP}\) from the origin O?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a">A) \(\hat{i} + \hat{j} + \hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q12b" name="q12" value="B" data-correct="true">
+                        <label for="q12b">B) \(x\hat{i} + y\hat{j} + z\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c">C) \(\sqrt{x^2+y^2+z^2}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D) \(x+y+z\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question" id="q13">
+                <p>13. Find the ratio in which the point \(\vec{r} = 5\hat{i} - 2\hat{j} - \hat{k}\) divides the line segment joining the points \(\vec{a} = \hat{i} + 2\hat{j} + 3\hat{k}\) and \(\vec{b} = 7\hat{i} - 4\hat{j} - 3\hat{k}\).</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A) \(1:2\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q13b" name="q13" value="B" data-correct="true">
+                        <label for="q13b">B) \(2:1\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c">C) \(3:2\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d">D) \(1:3\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question" id="q14">
+                <p>14. If G is the centroid of triangle ABC with position vectors \(\vec{a}, \vec{b}, \vec{c}\), then find the value of \(\vec{GA} + \vec{GB} + \vec{GC}\).</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a">A) \(\vec{a} + \vec{b} + \vec{c}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B) \(3\vec{G}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q14c" name="q14" value="C" data-correct="true">
+                        <label for="q14c">C) \(\vec{0}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D) \(2\vec{G}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question" id="q15">
+                <p>15. The position vector of a point P which divides the line segment joining two points A and B with position vectors \(\vec{a}\) and \(\vec{b}\) respectively, in the ratio \(k:1\), is given by:</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A) \(\frac{\vec{a} + k\vec{b}}{k+1}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q15b" name="q15" value="B" data-correct="true">
+                        <label for="q15b">B) \(\frac{k\vec{b} + \vec{a}}{k+1}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q15c" name="q15" value="C">
+                        <label for="q15c">C) \(\frac{k\vec{b} - \vec{a}}{k-1}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D) \(\frac{\vec{b} + k\vec{a}}{k+1}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question" id="q16">
+                <p>16. Given points A(\(1, 2, 3\)) and B(\(4, 5, 6\)). A point P on the line segment AB is such that \(AP = 2PB\). Find the position vector of P.</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a">A) \(2\hat{i} + 3\hat{j} + 4\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q16b" name="q16" value="B" data-correct="true">
+                        <label for="q16b">B) \(3\hat{i} + 4\hat{j} + 5\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q16c" name="q16" value="C">
+                        <label for="q16c">C) \(2.5\hat{i} + 3.5\hat{j} + 4.5\hat{k}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D) \(3.5\hat{i} + 4.5\hat{j} + 5.5\hat{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question" id="q17">
+                <p>17. The position vectors of four points A, B, C, D are \(\vec{a}, \vec{b}, \vec{c}, \vec{d}\) respectively. If ABCD is a parallelogram, which of the following is true?</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a">A) \(\vec{a} + \vec{b} = \vec{c} + \vec{d}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q17b" name="q17" value="B">
+                        <label for="q17b">B) \(\vec{a} - \vec{c} = \vec{b} - \vec{d}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q17c" name="q17" value="C" data-correct="true">
+                        <label for="q17c">C) \(\vec{a} + \vec{c} = \vec{b} + \vec{d}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D) \(\vec{a} + \vec{d} = \vec{b} + \vec{c}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question" id="q18">
+                <p>18. If the point P divides the line segment joining A and B in the ratio \(1:\lambda\), then the position vector of P is:</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a">A) \(\frac{\vec{a} + \lambda\vec{b}}{1+\lambda}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q18b" name="q18" value="B" data-correct="true">
+                        <label for="q18b">B) \(\frac{\vec{b} + \lambda\vec{a}}{1+\lambda}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c">C) \(\frac{\lambda\vec{b} - \vec{a}}{\lambda-1}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d">D) \(\frac{\vec{a} - \lambda\vec{b}}{1-\lambda}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question" id="q19">
+                <p>19. Let \(\vec{a}\) and \(\vec{b}\) be the position vectors of points A and B respectively. If C is a point on the line AB such that \(2\vec{AC} = 3\vec{CB}\), find the position vector of C.</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q19a" name="q19" value="A" data-correct="true">
+                        <label for="q19a">A) \(\frac{3\vec{b} + 2\vec{a}}{5}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b">B) \(\frac{3\vec{a} + 2\vec{b}}{5}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q19c" name="q19" value="C">
+                        <label for="q19c">C) \(\frac{2\vec{b} - 3\vec{a}}{-1}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d">D) \(\frac{3\vec{b} - 2\vec{a}}{1}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question" id="q20">
+                <p>20. The vertices of a tetrahedron are O(\(0,0,0\)), A(\(1,2,3\)), B(\(2,1,0\)), C(\(3,0,1\)). Find the position vector of its centroid.</p>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a">A) \(\frac{3\hat{i} + 6\hat{j} + 4\hat{k}}{4}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B) \(\frac{3\hat{i} + 4\hat{j} + 6\hat{k}}{4}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q20c" name="q20" value="C" data-correct="true">
+                        <label for="q20c">C) \(\frac{6\hat{i} + 3\hat{j} + 4\hat{k}}{4}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d">D) \(\frac{6\hat{i} + 3\hat{j} + 4\hat{k}}{3}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="button" id="submitQuiz" class="submit-btn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        const timerDisplay = document.querySelector('.timer');
+        const scoreDisplay = document.querySelector('.score-display');
+        const submitButton = document.getElementById('submitQuiz');
+        const quizForm = document.getElementById('quizForm');
+        let startTime;
+        let timerInterval;
+
+        // Function to format time as MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        // Start the timer
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Update the timer display
+        function updateTimer() {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            timerDisplay.textContent = `Time: ${formatTime(elapsedTime)}`;
+        }
+
+        // Stop the timer
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Event listener for quiz submission
+        submitButton.addEventListener('click', function() {
+            stopTimer(); // Stop the timer
+            submitButton.disabled = true; // Disable the submit button
+            submitButton.textContent = 'Quiz Submitted'; // Change button text
+
+            let score = 0;
+            const questions = document.querySelectorAll('.question');
+
+            questions.forEach(questionDiv => {
+                const questionName = questionDiv.querySelector('input[type="radio"]').name;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const correctOption = questionDiv.querySelector('input[data-correct="true"]');
+
+                // Get the label elements for styling
+                const selectedLabel = selectedOption ? selectedOption.nextElementSibling : null;
+                const correctLabel = correctOption.nextElementSibling;
+
+                // Disable all radio buttons for this question
+                questionDiv.querySelectorAll('input[type="radio"]').forEach(input => {
+                    input.disabled = true;
+                });
+
+                // Check if an answer was selected
+                if (selectedOption) {
+                    if (selectedOption.dataset.correct === 'true') {
+                        score++;
+                        selectedLabel.classList.add('correct-answer');
+                        selectedLabel.innerHTML += ' <span class="feedback-emoji">✅</span>';
+                    } else {
+                        selectedLabel.classList.add('incorrect-selection');
+                        selectedLabel.innerHTML += ' <span class="feedback-emoji">❌</span>';
+                        // Also highlight the correct answer if a wrong one was selected
+                        correctLabel.classList.add('correct-answer');
+                        correctLabel.innerHTML += ' <span class="feedback-emoji">✅</span>';
+                    }
+                } else {
+                    // If no answer was selected, just highlight the correct one
+                    correctLabel.classList.add('correct-answer');
+                    correctLabel.innerHTML += ' <span class="feedback-emoji">✅</span>';
+                }
+            });
+
+            // Display the final score
+            scoreDisplay.textContent = `Your Score: ${score}/${questions.length}`;
+            scoreDisplay.style.color = 'var(--primary-blue)';
+        });
+
+        // Start the timer when the page loads
+        document.addEventListener('DOMContentLoaded', startTimer);
+    </script>
+</body>
+</html>
+```

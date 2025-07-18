@@ -1,0 +1,721 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collinearity and Coplanarity Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e0f2ff;
+            --dark-blue: #0056b3;
+            --gray-text: #333;
+            --light-gray-bg: #f8f9fa;
+            --white-bg: #ffffff;
+            --border-color: #dee2e6;
+            --correct-green: #d4edda;
+            --correct-green-border: #28a745;
+            --incorrect-red: #f8d7da;
+            --incorrect-red-border: #dc3545;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray-bg);
+            color: var(--gray-text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--white-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-medium);
+            margin: 20px 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 25px;
+            font-weight: 500;
+            font-size: 2.2em;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background-color: var(--light-blue);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px var(--shadow-light);
+            font-weight: 500;
+            font-size: 1.1em;
+            color: var(--dark-blue);
+        }
+
+        #timer, #score-display {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--primary-blue);
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--white-bg);
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+
+        .question p {
+            font-weight: 500;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--gray-text);
+        }
+
+        .options div {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .options div:hover {
+            background-color: var(--light-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .options label {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        /* Highlighting for results */
+        .correct-answer {
+            background-color: var(--correct-green) !important;
+            border-color: var(--correct-green-border) !important;
+        }
+
+        .incorrect-selection {
+            background-color: var(--incorrect-red) !important;
+            border-color: var(--incorrect-red-border) !important;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 15px 25px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px var(--shadow-medium);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* MathJax styling */
+        .question p .MathJax_Display, .question p .mjx-chtml {
+            display: inline !important; /* Ensure inline MathJax fits nicely */
+        }
+        .MathJax_Display {
+            margin: 10px 0;
+            text-align: left; /* Align block equations nicely */
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Collinearity and Coplanarity of Points Quiz</h1>
+        <div class="quiz-header">
+            <div>Time: <span id="timer">00:00</span></div>
+            <div id="score-display"></div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <p>1. Which of the following conditions ensures that three distinct points \( A, B, C \) in 3D space are collinear?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a">A. \( \vec{AB} \cdot \vec{BC} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q1b" name="q1" value="B" data-correct="true">
+                        <label for="q1b">B. \( \vec{AB} \times \vec{BC} = \vec{0} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c">C. \( |\vec{AC}|^2 = |\vec{AB}|^2 + |\vec{BC}|^2 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d">D. \( \vec{AB} + \vec{BC} = \vec{AC} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <p>2. Given points \( P(1, 2, 3) \), \( Q(4, 5, 6) \), and \( R(7, 8, k) \). For what value of \( k \) are these points collinear?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a">A. \( k=8 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b">B. \( k=9 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q2c" name="q2" value="C" data-correct="true">
+                        <label for="q2c">C. \( k=9 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D. \( k=10 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <p>3. Four points \( A, B, C, D \) are coplanar if and only if the scalar triple product of vectors formed by them is zero. Which combination of vectors correctly represents this condition?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A. \( (\vec{AB} \times \vec{BC}) \cdot \vec{CD} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q3b" name="q3" value="B" data-correct="true">
+                        <label for="q3b">B. \( (\vec{AB} \times \vec{AC}) \cdot \vec{AD} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c">C. \( (\vec{AB} \cdot \vec{AC}) \times \vec{AD} = \vec{0} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D. \( \vec{AB} + \vec{AC} + \vec{AD} = \vec{0} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <p>4. The points \( (1, 1, 1), (2, 3, 4), (3, 5, 7) \) are:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a">A. Vertices of an equilateral triangle</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q4b" name="q4" value="B" data-correct="true">
+                        <label for="q4b">B. Collinear</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c">C. Vertices of a right-angled triangle</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D. Non-collinear</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <p>5. If four points \( A, B, C, D \) are coplanar, then the volume of the tetrahedron formed by these points is:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a">A. Positive</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q5b" name="q5" value="B" data-correct="true">
+                        <label for="q5b">B. Zero</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q5c" name="q5" value="C">
+                        <label for="q5c">C. Negative</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d">D. Undefined</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <p>6. Three points \( A, B, C \) are collinear if and only if the area of the triangle formed by them is:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a">A. Positive</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q6b" name="q6" value="B" data-correct="true">
+                        <label for="q6b">B. Zero</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c">C. Negative</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d">D. Undefined</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <p>7. For what value of \( \lambda \) are the vectors \( \vec{a} = \hat{i} - 2\hat{j} + 3\hat{k} \), \( \vec{b} = 2\hat{i} + 3\hat{j} - 4\hat{k} \), and \( \vec{c} = \lambda\hat{i} - \hat{j} + 2\hat{k} \) coplanar?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a">A. \( \lambda = 1 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q7b" name="q7" value="B" data-correct="true">
+                        <label for="q7b">B. \( \lambda = 3 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q7c" name="q7" value="C">
+                        <label for="q7c">C. \( \lambda = -1 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D. \( \lambda = -3 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <p>8. Which of the following statements is true about collinear points?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a">A. They always lie on a plane.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q8b" name="q8" value="B" data-correct="true">
+                        <label for="q8b">B. They always lie on a straight line.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c">C. They can form a triangle with zero area.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d">D. All of the above are true.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <p>9. The points \( (1, 0, 0), (0, 1, 0), (0, 0, 1), \) and \( (1, 1, 1) \) are:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a">A. Collinear</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b">B. Coplanar</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q9c" name="q9" value="C" data-correct="true">
+                        <label for="q9c">C. Non-coplanar</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D. Form a degenerate tetrahedron</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <p>10. If points \( P, Q, R \) are collinear, then the distance \( PR \) is equal to:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A. \( PQ + QR \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B. \( |PQ - QR| \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q10c" name="q10" value="C" data-correct="true">
+                        <label for="q10c">C. \( PQ + QR \) or \( |PQ - QR| \), depending on the order</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D. \( \sqrt{PQ^2 + QR^2} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question" id="q11">
+                <p>11. The equation of the plane passing through three non-collinear points \( (x_1, y_1, z_1), (x_2, y_2, z_2), (x_3, y_3, z_3) \) can be given by:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a">A. \( (x-x_1)(y-y_2)(z-z_3) = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q11b" name="q11" value="B" data-correct="true">
+                        <label for="q11b">B. \( \begin{vmatrix} x-x_1 & y-y_1 & z-z_1 \\ x_2-x_1 & y_2-y_1 & z_2-z_1 \\ x_3-x_1 & y_3-y_1 & z_3-z_1 \end{vmatrix} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C. \( Ax + By + Cz + D = 0 \) where \( A,B,C,D \) are arbitrary constants</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D. \( (x-x_1) + (y-y_1) + (z-z_1) = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question" id="q12">
+                <p>12. If points \( (1, 2, 3), (2, 3, 1), (3, 1, 2) \) are given, they form:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q12a" name="q12" value="A" data-correct="true">
+                        <label for="q12a">A. An equilateral triangle</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q12b" name="q12" value="B">
+                        <label for="q12b">B. A right-angled triangle</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c">C. Collinear points</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D. An isosceles triangle</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question" id="q13">
+                <p>13. Consider the lines \( L_1: \frac{x-1}{2} = \frac{y-2}{3} = \frac{z-3}{4} \) and \( L_2: \frac{x-4}{2} = \frac{y-5}{3} = \frac{z-6}{4} \). Are these lines collinear?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A. Yes, they are the same line.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q13b" name="q13" value="B" data-correct="true">
+                        <label for="q13b">B. No, they are parallel but distinct.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c">C. They are intersecting lines.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d">D. They are skew lines.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question" id="q14">
+                <p>14. What is the necessary condition for two lines \( \vec{r} = \vec{a_1} + t\vec{b_1} \) and \( \vec{r} = \vec{a_2} + s\vec{b_2} \) to be coplanar?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a">A. \( \vec{b_1} = k\vec{b_2} \) for some scalar \( k \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B. \( (\vec{a_2} - \vec{a_1}) \cdot (\vec{b_1} \times \vec{b_2}) = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q14c" name="q14" value="C" data-correct="true">
+                        <label for="q14c">C. Both A and B are necessary conditions</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D. \( \vec{a_1} \cdot \vec{a_2} = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question" id="q15">
+                <p>15. If three planes intersect at a single point, are the normal vectors to these planes necessarily coplanar?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A. Yes, always.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q15b" name="q15" value="B" data-correct="true">
+                        <label for="q15b">B. No, not necessarily.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q15c" name="q15" value="C">
+                        <label for="q15c">C. Only if the planes are mutually orthogonal.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D. Only if the point is the origin.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question" id="q16">
+                <p>16. Given points \( A(1, 0, 1), B(2, 2, 0), C(0, 1, 2) \). Find the area of the triangle ABC. This area will be zero if the points are collinear.</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a">A. \( \sqrt{11} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q16b" name="q16" value="B" data-correct="true">
+                        <label for="q16b">B. \( \frac{\sqrt{22}}{2} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q16c" name="q16" value="C">
+                        <label for="q16c">C. \( \frac{\sqrt{33}}{2} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D. \( 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question" id="q17">
+                <p>17. The position vectors of four points \( A, B, C, D \) are \( \vec{a}, \vec{b}, \vec{c}, \vec{d} \) respectively. If these points are coplanar, then there exist scalars \( x, y, z, w \) (not all zero) such that:</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a">A. \( x\vec{a} + y\vec{b} + z\vec{c} + w\vec{d} = \vec{0} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q17b" name="q17" value="B" data-correct="true">
+                        <label for="q17b">B. \( x\vec{a} + y\vec{b} + z\vec{c} + w\vec{d} = \vec{0} \) and \( x+y+z+w = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q17c" name="q17" value="C">
+                        <label for="q17c">C. \( x\vec{a} + y\vec{b} + z\vec{c} = \vec{d} \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D. \( (\vec{a} - \vec{b}) \cdot (\vec{c} - \vec{d}) = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question" id="q18">
+                <p>18. Which statement is generally false?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a">A. Any two points are always collinear.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q18b" name="q18" value="B">
+                        <label for="q18b">B. Any three points are always coplanar.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c">C. Any three non-collinear points define a unique plane.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q18d" name="q18" value="D" data-correct="true">
+                        <label for="q18d">D. Any four points are always coplanar.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question" id="q19">
+                <p>19. The condition for three points \( (x_1, y_1), (x_2, y_2), (x_3, y_3) \) in 2D to be collinear is that the determinant of their coordinates plus a column of ones is zero. What is this determinant?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a">A. \( \begin{vmatrix} x_1 & y_1 & 0 \\ x_2 & y_2 & 0 \\ x_3 & y_3 & 0 \end{vmatrix} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q19b" name="q19" value="B" data-correct="true">
+                        <label for="q19b">B. \( \begin{vmatrix} x_1 & y_1 & 1 \\ x_2 & y_2 & 1 \\ x_3 & y_3 & 1 \end{vmatrix} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q19c" name="q19" value="C">
+                        <label for="q19c">C. \( \begin{vmatrix} x_1 & y_1 \\ x_2 & y_2 \end{vmatrix} = 0 \)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d">D. \( (x_2-x_1)(y_3-y_2) - (y_2-y_1)(x_3-x_2) = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question" id="q20">
+                <p>20. If two planes are parallel, are their normal vectors collinear?</p>
+                <div class="options">
+                    <div>
+                        <input type="radio" id="q20a" name="q20" value="A" data-correct="true">
+                        <label for="q20a">A. Yes, always.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B. No, only if they are the same plane.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q20c" name="q20" value="C">
+                        <label for="q20c">C. Only if they are perpendicular to the x-axis.</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d">D. Only if they pass through the origin.</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="submitQuiz" class="submit-btn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        let timerInterval;
+        let quizTime = 0; // in seconds
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('timer');
+            timerInterval = setInterval(() => {
+                quizTime++;
+                timerDisplay.textContent = formatTime(quizTime);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function handleSubmit() {
+            stopTimer();
+            const quizForm = document.getElementById('quizForm');
+            const questions = quizForm.querySelectorAll('.question');
+            let score = 0;
+
+            questions.forEach(questionDiv => {
+                const questionName = questionDiv.querySelector('input[type="radio"]').name;
+                const selectedOption = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const correctOptionLabel = questionDiv.querySelector('label[data-correct="true"]');
+                const correctOptionInput = correctOptionLabel ? document.getElementById(correctOptionLabel.getAttribute('for')) : null;
+
+
+                // Highlight correct answer
+                if (correctOptionLabel) {
+                    correctOptionLabel.parentElement.classList.add('correct-answer');
+                    correctOptionLabel.innerHTML += ' &#x2705;'; // Checkmark emoji
+                }
+
+                if (selectedOption) {
+                    const selectedLabel = quizForm.querySelector(`label[for="${selectedOption.id}"]`);
+
+                    if (selectedOption.dataset.correct === 'true') {
+                        score++;
+                    } else {
+                        // If selected option is wrong, highlight it red
+                        if (selectedLabel) {
+                            selectedLabel.parentElement.classList.add('incorrect-selection');
+                            selectedLabel.innerHTML += ' &#x274C;'; // Cross emoji
+                        }
+                    }
+                }
+
+                // Disable all radio buttons for this question
+                questionDiv.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = true;
+                });
+            });
+
+            document.getElementById('score-display').textContent = `Your Score: ${score}/${questions.length}`;
+            const submitButton = document.getElementById('submitQuiz');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Quiz Submitted';
+            submitButton.style.cursor = 'not-allowed';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startTimer();
+            document.getElementById('submitQuiz').addEventListener('click', handleSubmit);
+
+            // Trigger MathJax typesetting for dynamically added or modified content if needed,
+            // though for initial load and class changes, it's usually automatic.
+            // MathJax.typesetPromise();
+        });
+    </script>
+</body>
+</html>
+```

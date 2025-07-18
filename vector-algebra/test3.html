@@ -1,0 +1,769 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vectors Quiz: Directed Line Segments, Equality, Addition, Scalar Multiplication</title>
+    <!-- MathJax CDN for LaTeX rendering -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e7f0fe;
+            --dark-gray: #343a40;
+            --medium-gray: #6c757d;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+            --correct-green: #d4edda;
+            --incorrect-red: #f8d7da;
+            --border-color: #dee2e6;
+            --box-shadow-color: rgba(0, 0, 0, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--box-shadow-color);
+            padding: 30px 40px;
+            max-width: 900px;
+            width: 100%;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        .quiz-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 25px;
+            background-color: var(--light-blue);
+            border-radius: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        #timer-display {
+            color: var(--primary-blue);
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        #score-display {
+            color: var(--dark-gray);
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .question-block {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+            font-weight: 600;
+        }
+
+        .question-text p {
+            margin: 0;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            position: relative; /* For feedback icons */
+        }
+
+        .option-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-item:hover {
+            background-color: #f0f0f0;
+            border-color: var(--primary-blue);
+        }
+
+        input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 4px; /* Align with text baseline */
+            flex-shrink: 0;
+            transform: scale(1.2); /* Make radio button slightly larger */
+        }
+
+        .option-label {
+            flex-grow: 1;
+            cursor: pointer;
+            font-size: 1.1em;
+            display: block; /* Ensure label takes full width */
+        }
+
+        /* Styles for correct/incorrect answers after submission */
+        .question-block.correct-answer .option-item[data-correct="true"] {
+            background-color: var(--correct-green);
+            border-color: #28a745; /* Darker green border */
+        }
+
+        .question-block.incorrect-selection .option-item.selected-incorrect {
+            background-color: var(--incorrect-red);
+            border-color: #dc3545; /* Darker red border */
+        }
+        
+        .feedback-icon {
+            margin-left: 10px;
+            font-size: 1.2em;
+            line-height: 1;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 25px;
+            margin-top: 30px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* MathJax specific styling */
+        .MathJax_Display {
+            margin: 1em 0 !important;
+        }
+        .question-text .MathJax_CHTML {
+            vertical-align: middle;
+        }
+        .option-label .MathJax_CHTML {
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Vectors Quiz</h1>
+        <div class="quiz-header-info">
+            <div id="score-display">Score: 0/20</div>
+            <div id="timer-display">Time: 00:00</div>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Question 1 -->
+            <div class="question-block" id="q1">
+                <p class="question-text">1. Which of the following best describes a vector?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a" class="option-label">A. A quantity with magnitude only.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1b" name="q1" value="B" data-correct="true">
+                        <label for="q1b" class="option-label">B. A quantity with both magnitude and direction.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c" class="option-label">C. A quantity that can only be represented by a single real number.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d" class="option-label">D. A directed line segment with no specific magnitude.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block" id="q2">
+                <p class="question-text">2. Two vectors \(\mathbf{a}\) and \(\mathbf{b}\) are equal if:</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a" class="option-label">A. They have the same magnitude, regardless of direction.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b" class="option-label">B. They are parallel and have the same magnitude.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2c" name="q2" value="C" data-correct="true">
+                        <label for="q2c" class="option-label">C. They have the same magnitude and the same direction.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d" class="option-label">D. They represent the same displacement from the origin.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block" id="q3">
+                <p class="question-text">3. Given points \(A(1, -2)\) and \(B(4, 3)\), what is the vector \(\vec{AB}\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a" class="option-label">A. \(\begin{pmatrix} 5 \\ 1 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3b" name="q3" value="B" data-correct="true">
+                        <label for="q3b" class="option-label">B. \(\begin{pmatrix} 3 \\ 5 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c" class="option-label">C. \(\begin{pmatrix} -3 \\ -5 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d" class="option-label">D. \(\begin{pmatrix} -5 \\ -1 \end{pmatrix}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block" id="q4">
+                <p class="question-text">4. If \(\mathbf{u} = \begin{pmatrix} 2 \\ -1 \\ 3 \end{pmatrix}\) and \(\mathbf{v} = \begin{pmatrix} -4 \\ 5 \\ 0 \end{pmatrix}\), what is \(\mathbf{u} + \mathbf{v}\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a" class="option-label">A. \(\begin{pmatrix} -2 \\ 4 \\ 3 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4b" name="q4" value="B" data-correct="true">
+                        <label for="q4b" class="option-label">B. \(\begin{pmatrix} -2 \\ 4 \\ 3 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c" class="option-label">C. \(\begin{pmatrix} 6 \\ -6 \\ 3 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d" class="option-label">D. \(\begin{pmatrix} 2 \\ -4 \\ -3 \end{pmatrix}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block" id="q5">
+                <p class="question-text">5. Given vector \(\mathbf{w} = \begin{pmatrix} -3 \\ 0 \\ 7 \end{pmatrix}\), what is \( -2\mathbf{w} \)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a" class="option-label">A. \(\begin{pmatrix} -6 \\ 0 \\ 14 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5b" name="q5" value="B">
+                        <label for="q5b" class="option-label">B. \(\begin{pmatrix} 6 \\ 0 \\ -7 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5c" name="q5" value="C" data-correct="true">
+                        <label for="q5c" class="option-label">C. \(\begin{pmatrix} 6 \\ 0 \\ -14 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d" class="option-label">D. \(\begin{pmatrix} 6 \\ 0 \\ 14 \end{pmatrix}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block" id="q6">
+                <p class="question-text">6. If \(\mathbf{a} = 2\mathbf{i} - \mathbf{j} + 3\mathbf{k}\) and \(\mathbf{b} = -\mathbf{i} + 4\mathbf{j} - \mathbf{k}\), calculate \(3\mathbf{a} - \mathbf{b}\).</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a" class="option-label">A. \(5\mathbf{i} - 7\mathbf{j} + 10\mathbf{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6b" name="q6" value="B" data-correct="true">
+                        <label for="q6b" class="option-label">B. \(7\mathbf{i} - 7\mathbf{j} + 10\mathbf{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c" class="option-label">C. \(7\mathbf{i} + \mathbf{j} + 8\mathbf{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d" class="option-label">D. \(5\mathbf{i} + \mathbf{j} + 8\mathbf{k}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block" id="q7">
+                <p class="question-text">7. What is the magnitude of the vector \(\mathbf{v} = \begin{pmatrix} -3 \\ 4 \\ 0 \end{pmatrix}\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a" class="option-label">A. \(\sqrt{7}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7b" name="q7" value="B">
+                        <label for="q7b" class="option-label">B. \(5\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7c" name="q7" value="C" data-correct="true">
+                        <label for="q7c" class="option-label">C. \(5\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d" class="option-label">D. \(\sqrt{12}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block" id="q8">
+                <p class="question-text">8. Find the unit vector in the direction of \(\mathbf{u} = \begin{pmatrix} 6 \\ -8 \end{pmatrix}\).</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a" class="option-label">A. \(\begin{pmatrix} 0.6 \\ -0.8 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8b" name="q8" value="B" data-correct="true">
+                        <label for="q8b" class="option-label">B. \(\begin{pmatrix} 0.6 \\ -0.8 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c" class="option-label">C. \(\begin{pmatrix} 6/\sqrt{100} \\ -8/\sqrt{100} \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d" class="option-label">D. \(\begin{pmatrix} 10 \\ -10 \end{pmatrix}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block" id="q9">
+                <p class="question-text">9. If \(\vec{OP}\) is the position vector of point \(P(x, y, z)\), then \(\vec{OP}\) is represented as:</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a" class="option-label">A. \(\langle x, y, z \rangle\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b" class="option-label">B. \(x\mathbf{i} + y\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9c" name="q9" value="C" data-correct="true">
+                        <label for="q9c" class="option-label">C. \(x\mathbf{i} + y\mathbf{j} + z\mathbf{k}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d" class="option-label">D. \((x, y, z)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block" id="q10">
+                <p class="question-text">10. Given vectors \(\mathbf{a} = \begin{pmatrix} 2 \\ 1 \end{pmatrix}\) and \(\mathbf{b} = \begin{pmatrix} -4 \\ -2 \end{pmatrix}\). Are \(\mathbf{a}\) and \(\mathbf{b}\) collinear?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a" class="option-label">A. No, because their components are different.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10b" name="q10" value="B" data-correct="true">
+                        <label for="q10b" class="option-label">B. Yes, because \(\mathbf{b} = -2\mathbf{a}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10c" name="q10" value="C">
+                        <label for="q10c" class="option-label">C. No, because they point in opposite directions.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d" class="option-label">D. Yes, because their magnitudes are proportional.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block" id="q11">
+                <p class="question-text">11. In a parallelogram \(ABCD\), with \(\vec{AB} = \mathbf{u}\) and \(\vec{AD} = \mathbf{v}\), what is \(\vec{AC}\) in terms of \(\mathbf{u}\) and \(\mathbf{v}\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a" class="option-label">A. \(\mathbf{u} - \mathbf{v}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11b" name="q11" value="B">
+                        <label for="q11b" class="option-label">B. \(\mathbf{v} - \mathbf{u}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11c" name="q11" value="C" data-correct="true">
+                        <label for="q11c" class="option-label">C. \(\mathbf{u} + \mathbf{v}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d" class="option-label">D. \(2\mathbf{u} + 2\mathbf{v}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block" id="q12">
+                <p class="question-text">12. If \(P\) has position vector \(\mathbf{p}\) and \(Q\) has position vector \(\mathbf{q}\), what is the position vector of the midpoint \(M\) of the line segment \(PQ\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a" class="option-label">A. \(\mathbf{p} - \mathbf{q}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12b" name="q12" value="B">
+                        <label for="q12b" class="option-label">B. \(\mathbf{p} + \mathbf{q}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12c" name="q12" value="C" data-correct="true">
+                        <label for="q12c" class="option-label">C. \(\frac{1}{2}(\mathbf{p} + \mathbf{q})\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d" class="option-label">D. \(\frac{1}{2}(\mathbf{p} - \mathbf{q})\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block" id="q13">
+                <p class="question-text">13. Calculate \(\begin{pmatrix} 5 \\ -2 \\ 1 \end{pmatrix} - \begin{pmatrix} 3 \\ 4 \\ -2 \end{pmatrix}\).</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a" class="option-label">A. \(\begin{pmatrix} 2 \\ 2 \\ -1 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13b" name="q13" value="B">
+                        <label for="q13b" class="option-label">B. \(\begin{pmatrix} 8 \\ 2 \\ -1 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13c" name="q13" value="C" data-correct="true">
+                        <label for="q13c" class="option-label">C. \(\begin{pmatrix} 2 \\ -6 \\ 3 \end{pmatrix}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d" class="option-label">D. \(\begin{pmatrix} 8 \\ -6 \\ -1 \end{pmatrix}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block" id="q14">
+                <p class="question-text">14. Which statement about the triangle law of vector addition is correct?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a" class="option-label">A. If two vectors are represented by two sides of a triangle taken in the same order, their resultant is represented by the third side taken in the same order.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14b" name="q14" value="B" data-correct="true">
+                        <label for="q14b" class="option-label">B. If two vectors are represented by two sides of a triangle taken in the same order, their resultant is represented by the third side taken in the opposite order.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14c" name="q14" value="C">
+                        <label for="q14c" class="option-label">C. The sum of two vectors is always zero if they form a closed triangle.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d" class="option-label">D. The triangle law applies only to vectors of equal magnitude.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block" id="q15">
+                <p class="question-text">15. What is the result of adding a vector \(\mathbf{v}\) to its negative vector \(-\mathbf{v}\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a" class="option-label">A. A vector with twice the magnitude of \(\mathbf{v}\).</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15b" name="q15" value="B">
+                        <label for="q15b" class="option-label">B. A unit vector.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15c" name="q15" value="C" data-correct="true">
+                        <label for="q15c" class="option-label">C. The zero vector.</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d" class="option-label">D. A scalar value of zero.</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block" id="q16">
+                <p class="question-text">16. If \(\mathbf{p} = \begin{pmatrix} x \\ 5 \end{pmatrix}\) and \(\mathbf{q} = \begin{pmatrix} -3 \\ y \end{pmatrix}\) are equal vectors, what are the values of \(x\) and \(y\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a" class="option-label">A. \(x=3, y=-5\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16b" name="q16" value="B">
+                        <label for="q16b" class="option-label">B. \(x=5, y=-3\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16c" name="q16" value="C" data-correct="true">
+                        <label for="q16c" class="option-label">C. \(x=-3, y=5\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d" class="option-label">D. \(x=-5, y=3\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block" id="q17">
+                <p class="question-text">17. Given \(\mathbf{a} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}\) and \(\mathbf{b} = \begin{pmatrix} 3 \\ -1 \end{pmatrix}\). If \(c\mathbf{a} + d\mathbf{b} = \begin{pmatrix} 5 \\ 5 \end{pmatrix}\), find the values of \(c\) and \(d\).</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a" class="option-label">A. \(c=2, d=1\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17b" name="q17" value="B" data-correct="true">
+                        <label for="q17b" class="option-label">B. \(c=4, d=1\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17c" name="q17" value="C">
+                        <label for="q17c" class="option-label">C. \(c=1, d=2\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d" class="option-label">D. \(c=1, d=4\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block" id="q18">
+                <p class="question-text">18. If vector \(\mathbf{u}\) is parallel to vector \(\mathbf{v}\), which of the following must be true for some scalar \(k \neq 0\)?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a" class="option-label">A. \(\mathbf{u} + \mathbf{v} = \mathbf{0}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18b" name="q18" value="B">
+                        <label for="q18b" class="option-label">B. \(\mathbf{u} \cdot \mathbf{v} = 0\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18c" name="q18" value="C" data-correct="true">
+                        <label for="q18c" class="option-label">C. \(\mathbf{u} = k\mathbf{v}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d" class="option-label">D. \(|\mathbf{u}| = k|\mathbf{v}|\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block" id="q19">
+                <p class="question-text">19. A displacement vector of \(5\mathbf{i} + 2\mathbf{j}\) is followed by another displacement of \(-3\mathbf{i} + 6\mathbf{j}\). What is the total resultant displacement?</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a" class="option-label">A. \(8\mathbf{i} + 8\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b" class="option-label">B. \(2\mathbf{i} - 4\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19c" name="q19" value="C" data-correct="true">
+                        <label for="q19c" class="option-label">C. \(2\mathbf{i} + 8\mathbf{j}\)</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d" class="option-label">D. \(-2\mathbf{i} + 8\mathbf{j}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block" id="q20">
+                <p class="question-text">20. If \(A, B, C, D\) are four points such that \(\vec{AB} = \mathbf{u}\) and \(\vec{DC} = \mathbf{u}\), then \(ABCD\) must be a:</p>
+                <ul class="options">
+                    <li class="option-item">
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a" class="option-label">A. Rectangle</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b" class="option-label">B. Rhombus</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20c" name="q20" value="C" data-correct="true">
+                        <label for="q20c" class="option-label">C. Parallelogram</label>
+                    </li>
+                    <li class="option-item">
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d" class="option-label">D. Trapezoid</label>
+                    </li>
+                </ul>
+            </div>
+            
+            <button type="button" id="submit-quiz-btn" class="submit-btn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        let timerInterval;
+        let secondsElapsed = 0;
+        const totalQuestions = 20;
+
+        const timerDisplay = document.getElementById('timer-display');
+        const scoreDisplay = document.getElementById('score-display');
+        const submitButton = document.getElementById('submit-quiz-btn');
+        const quizForm = document.getElementById('quiz-form');
+        const questionBlocks = document.querySelectorAll('.question-block');
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `Time: ${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function updateTimerDisplay() {
+            secondsElapsed++;
+            timerDisplay.textContent = formatTime(secondsElapsed);
+        }
+
+        function startTimer() {
+            secondsElapsed = 0;
+            timerDisplay.textContent = formatTime(secondsElapsed); // Initial display
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function submitQuiz() {
+            stopTimer();
+            let score = 0;
+
+            questionBlocks.forEach(questionBlock => {
+                const questionName = questionBlock.querySelector('input[type="radio"]').name;
+                const selectedOption = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const correctOptionLabel = questionBlock.querySelector('label[data-correct="true"]');
+                const allRadiosInBlock = questionBlock.querySelectorAll(`input[name="${questionName}"]`);
+                
+                // Disable all radio buttons for the current question
+                allRadiosInBlock.forEach(radio => radio.disabled = true);
+
+                if (selectedOption) {
+                    const selectedLabel = questionBlock.querySelector(`label[for="${selectedOption.id}"]`);
+                    
+                    if (selectedLabel.dataset.correct === 'true') {
+                        score++;
+                        questionBlock.classList.add('correct-answer'); // Mark question as correctly answered
+                        selectedLabel.parentElement.classList.add('correct-answer');
+                        selectedLabel.innerHTML += ' <span class="feedback-icon">✅</span>';
+                    } else {
+                        questionBlock.classList.add('incorrect-selection'); // Mark question as incorrectly answered
+                        selectedLabel.parentElement.classList.add('incorrect-selection', 'selected-incorrect');
+                        selectedLabel.innerHTML += ' <span class="feedback-icon">❌</span>';
+                        
+                        // Highlight the correct answer even if user chose incorrectly
+                        if (correctOptionLabel) {
+                            correctOptionLabel.parentElement.classList.add('correct-answer');
+                            correctOptionLabel.innerHTML += ' <span class="feedback-icon">✅</span>';
+                        }
+                    }
+                } else {
+                    // If no option was selected, just highlight the correct one
+                    if (correctOptionLabel) {
+                        correctOptionLabel.parentElement.classList.add('correct-answer');
+                        correctOptionLabel.innerHTML += ' <span class="feedback-icon">✅</span>';
+                    }
+                }
+            });
+
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+            submitButton.disabled = true;
+            submitButton.textContent = "Quiz Submitted";
+        }
+
+        // Event listener for the submit button
+        submitButton.addEventListener('click', submitQuiz);
+
+        // Start the timer when the page loads
+        document.addEventListener('DOMContentLoaded', startTimer);
+    </script>
+</body>
+</html>
+```

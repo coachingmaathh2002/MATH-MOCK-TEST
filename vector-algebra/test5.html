@@ -1,0 +1,646 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collinearity & Coplanarity Quiz</title>
+    <!-- MathJax CDN for LaTeX rendering -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --dark-text: #343a40;
+            --border-color: #dee2e6;
+            --correct-bg: #d4edda; /* Light green */
+            --incorrect-bg: #f8d7da; /* Light red */
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #timer, #scoreDisplay {
+            padding: 5px 15px;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        #scoreDisplay {
+            background-color: #28a745; /* Green for score */
+            display: none; /* Hidden until quiz submitted */
+        }
+
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--white);
+            transition: background-color 0.3s ease;
+        }
+
+        .question-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .options label:hover {
+            background-color: var(--light-bg);
+            border-color: var(--primary-color);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .submit-btn:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+        }
+
+        /* Styling for correct/incorrect answers after submission */
+        .options label.correct-answer {
+            background-color: var(--correct-bg);
+            border-color: #28a745; /* Darker green border */
+            font-weight: bold;
+        }
+
+        .options label.incorrect-selection {
+            background-color: var(--incorrect-bg);
+            border-color: #dc3545; /* Darker red border */
+        }
+
+        /* MathJax specific styling */
+        .question-title .MathJax_Display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .options .MathJax_Display {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Collinearity & Coplanarity Quiz</h1>
+            <p>Test your understanding of points in 2D and 3D space.</p>
+        </header>
+
+        <div class="quiz-info">
+            <div id="scoreDisplay"></div>
+            <div id="timer">00:00</div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <div class="question-title">1. Three points \(A, B, C\) are collinear if the area of the triangle formed by them is:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q1" value="a"> A. Positive
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q1" value="b"> B. Zero
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="c"> C. Negative
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="d"> D. Undefined
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <div class="question-title">2. Given points \(A(x_1, y_1)\), \(B(x_2, y_2)\), and \(C(x_3, y_3)\). They are collinear if:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q2" value="a"> A. \((x_2-x_1)(y_3-y_2) - (x_3-x_2)(y_2-y_1) \neq 0\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q2" value="b"> B. \(x_1(y_2-y_3) + x_2(y_3-y_1) + x_3(y_1-y_2) = 0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="c"> C. The slope of AB is the negative reciprocal of BC.
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="d"> D. \(x_1+x_2+x_3 = 0\) and \(y_1+y_2+y_3 = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <div class="question-title">3. For three distinct points \(A, B, C\) in 3D space, which of the following is true if they are collinear?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q3" value="a"> A. \(\vec{AB} \cdot \vec{BC} = 0\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q3" value="b"> B. \(\vec{AB} \times \vec{BC} = \vec{0}\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="c"> C. \(|\vec{AB}| + |\vec{BC}| < |\vec{AC}|\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="d"> D. The scalar triple product of \(\vec{OA}, \vec{OB}, \vec{OC}\) is zero.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <div class="question-title">4. Four points \(A, B, C, D\) are coplanar if the volume of the tetrahedron formed by them is:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q4" value="a"> A. Positive
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q4" value="b"> B. Zero
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="c"> C. Negative
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="d"> D. Equal to the sum of their coordinates
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <div class="question-title">5. Given four points \(A(\mathbf{a}), B(\mathbf{b}), C(\mathbf{c}), D(\mathbf{d})\) in 3D space. They are coplanar if:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q5" value="a"> A. \(\vec{AB} \cdot (\vec{AC} \times \vec{AD}) \neq 0\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q5" value="b"> B. The scalar triple product \((\mathbf{b}-\mathbf{a}) \cdot ((\mathbf{c}-\mathbf{a}) \times (\mathbf{d}-\mathbf{a})) = 0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="c"> C. All four points lie on the same line.
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="d"> D. \(\vec{AB} \cdot \vec{CD} = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <div class="question-title">6. Which of the following sets of points are collinear?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q6" value="a"> A. \((1,1), (2,3), (3,6)\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q6" value="b"> B. \((1,2), (3,4), (5,6)\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="c"> C. \((0,0), (1,1), (1,0)\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="d"> D. \((-1,0), (0,1), (1,0)\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <div class="question-title">7. For three points \(P_1(x_1, y_1, z_1)\), \(P_2(x_2, y_2, z_2)\), \(P_3(x_3, y_3, z_3)\) to be collinear, the rank of the matrix formed by their homogeneous coordinates \(\begin{pmatrix} x_1 & y_1 & z_1 & 1 \\ x_2 & y_2 & z_2 & 1 \\ x_3 & y_3 & z_3 & 1 \end{pmatrix}\) must be:</div>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q7" value="a"> A. Less than or equal to 2
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="b"> B. Equal to 3
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="c"> C. Equal to 4
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="d"> D. Equal to 1
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <div class="question-title">8. If two lines in 3D space are parallel, then any three points, one from the first line and two from the second, must be:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q8" value="a"> A. Collinear
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q8" value="b"> B. Coplanar
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="c"> C. Non-coplanar
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="d"> D. Orthogonal
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <div class="question-title">9. Consider a line passing through points \(P(1, 2, 3)\) and \(Q(3, 6, 9)\). Which of the following points is collinear with P and Q?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q9" value="a"> A. \((0, 0, 0)\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q9" value="b"> B. \((2, 4, 6)\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="c"> C. \((1, 1, 1)\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="d"> D. \((4, 8, 10)\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <div class="question-title">10. Four points \((x_1, y_1, z_1), (x_2, y_2, z_2), (x_3, y_3, z_3), (x_4, y_4, z_4)\) are coplanar if the determinant of the matrix formed by their coordinates (with an added column of 1s) is:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q10" value="a"> A. Non-zero
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q10" value="b"> B. Zero
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="c"> C. Positive
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="d"> D. Negative
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <div class="question-title">11. If three points \((1, -1, k)\), \((2, 0, -1)\), and \((3, 1, 1)\) are collinear, what is the value of \(k\)?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q11" value="a"> A. \(-3\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q11" value="b"> B. \(-3\) (Error in original question, should be -3, -1, 1)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="c"> C. \(0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="d"> D. \(1\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <div class="question-title">12. A set of vectors \(\{\mathbf{v}_1, \mathbf{v}_2, \mathbf{v}_3\}\) are coplanar if:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q12" value="a"> A. They are linearly independent.
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q12" value="b"> B. Their scalar triple product is zero.
+                    </label>
+                    <label>
+                        <input type="radio" name="q12" value="c"> C. Any two of them are orthogonal.
+                    </label>
+                    <label>
+                        <input type="radio" name="q12" value="d"> D. Their dot product is non-zero.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <div class="question-title">13. Which of the following statements about collinearity is false?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q13" value="a"> A. Any two distinct points are always collinear.
+                    </label>
+                    <label>
+                        <input type="radio" name="q13" value="b"> B. If points A, B, C are collinear, then B lies on the line segment AC or A lies on BC or C lies on AB.
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q13" value="c"> C. Collinear points can only exist in 2D space.
+                    </label>
+                    <label>
+                        <input type="radio" name="q13" value="d"> D. If three points are collinear, the slope between any two pairs is the same (if defined).
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <div class="question-title">14. The line passing through \(P(x_0, y_0, z_0)\) with direction vector \(\mathbf{d} = (a, b, c)\) contains all points \((x, y, z)\) such that:</div>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q14" value="a"> A. \((x-x_0)/a = (y-y_0)/b = (z-z_0)/c\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="b"> B. \(ax + by + cz = 0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="c"> C. \(x+y+z = x_0+y_0+z_0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="d"> D. \(\vec{OP} \cdot \mathbf{d} = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <div class="question-title">15. What is the geometric interpretation of the scalar triple product \(\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c})\) being zero?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q15" value="a"> A. The vectors are orthogonal.
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q15" value="b"> B. The vectors are coplanar.
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="c"> C. The vectors are linearly independent.
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="d"> D. The vectors form a right-handed system.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <div class="question-title">16. The points \((0, 0, 0)\), \((1, 1, 0)\), \((1, 0, 1)\), and \((0, 1, 1)\) are:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q16" value="a"> A. Collinear
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q16" value="b"> B. Coplanar
+                    </label>
+                    <label>
+                        <input type="radio" name="q16" value="c"> C. Non-coplanar
+                    </label>
+                    <label>
+                        <input type="radio" name="q16" value="d"> D. Vertices of a square
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <div class="question-title">17. A set of points in 3D space are coplanar if they all lie on the same:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q17" value="a"> A. Line
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q17" value="b"> B. Plane
+                    </label>
+                    <label>
+                        <input type="radio" name="q17" value="c"> C. Sphere
+                    </label>
+                    <label>
+                        <input type="radio" name="q17" value="d"> D. Origin
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <div class="question-title">18. The equation of a plane passing through three non-collinear points \(P_1(x_1, y_1, z_1)\), \(P_2(x_2, y_2, z_2)\), \(P_3(x_3, y_3, z_3)\) can be found using the determinant:</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q18" value="a"> A. \(\begin{vmatrix} x & y & z \\ x_1 & y_1 & z_1 \\ x_2 & y_2 & z_2 \end{vmatrix} = 0\)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q18" value="b"> B. \(\begin{vmatrix} x-x_1 & y-y_1 & z-z_1 \\ x_2-x_1 & y_2-y_1 & z_2-z_1 \\ x_3-x_1 & y_3-y_1 & z_3-z_1 \end{vmatrix} = 0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q18" value="c"> C. \((x-x_1)(x_2-x_1) + (y-y_1)(y_2-y_1) + (z-z_1)(z_2-z_1) = 0\)
+                    </label>
+                    <label>
+                        <input type="radio" name="q18" value="d"> D. \(ax+by+cz+d=0\) where \(a,b,c,d\) are arbitrary constants.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <div class="question-title">19. If two planes intersect, their intersection is always a:</div>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q19" value="a"> A. Line
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="b"> B. Point
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="c"> C. Plane
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="d"> D. Curve
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <div class="question-title">20. What is the minimum number of distinct points required to define a unique plane in 3D space?</div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q20" value="a"> A. 2
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q20" value="b"> B. 3 (non-collinear)
+                    </label>
+                    <label>
+                        <input type="radio" name="q20" value="c"> C. 4
+                    </label>
+                    <label>
+                        <input type="radio" name="q20" value="d"> D. Any number of points can define a plane.
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="submitBtn" class="submit-btn">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const submitBtn = document.getElementById('submitBtn');
+        const quizForm = document.getElementById('quizForm');
+        const questionBlocks = document.querySelectorAll('.question-block');
+
+        let startTime;
+        let timerInterval;
+        let quizSubmitted = false;
+
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsedTime / 60).toString().padStart(2, '0');
+            const seconds = (elapsedTime % 60).toString().padStart(2, '0');
+            timerDisplay.textContent = `${minutes}:${seconds}`;
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function submitQuiz() {
+            if (quizSubmitted) return; // Prevent multiple submissions
+
+            stopTimer();
+            quizSubmitted = true;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Quiz Submitted';
+            scoreDisplay.style.display = 'block';
+
+            let score = 0;
+            const totalQuestions = questionBlocks.length;
+
+            questionBlocks.forEach((qBlock, index) => {
+                const questionName = `q${index + 1}`;
+                const selectedOption = quizForm.elements[questionName].value;
+                let isCorrect = false;
+
+                const labels = qBlock.querySelectorAll('.options label');
+                labels.forEach(label => {
+                    const input = label.querySelector('input[type="radio"]');
+                    const isCorrectOption = label.hasAttribute('data-correct');
+
+                    // Highlight correct answer
+                    if (isCorrectOption) {
+                        label.classList.add('correct-answer');
+                        label.innerHTML += ' &#x2705;'; // Checkmark emoji
+                    }
+
+                    // Check user's selection
+                    if (input.checked) {
+                        if (isCorrectOption) {
+                            score++;
+                            isCorrect = true;
+                        } else {
+                            label.classList.add('incorrect-selection');
+                            label.innerHTML += ' &#x274C;'; // Cross emoji
+                        }
+                    }
+
+                    // Disable all radio buttons after submission
+                    input.disabled = true;
+                });
+            });
+
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+        }
+
+        // Event Listeners
+        submitBtn.addEventListener('click', submitQuiz);
+
+        // Start timer when page loads
+        document.addEventListener('DOMContentLoaded', startTimer);
+
+        // Ensure MathJax renders content dynamically added or modified
+        // This is important if questions were loaded dynamically, but for static HTML, it's usually automatic.
+        // However, it's good practice for robustness.
+        if (typeof MathJax !== 'undefined') {
+            MathJax.typesetPromise();
+        }
+    </script>
+</body>
+</html>
+```
