@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Order Linear Differential Equations Quiz</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e6f2ff;
+            --dark-gray: #333;
+            --medium-gray: #666;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+            --correct-green: #e9fbe9; /* Light green for correct answers */
+            --border-color: #dee2e6;
+            --box-shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--box-shadow-color);
+            padding: 30px 40px;
+            max-width: 900px;
+            width: 100%;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question h2 {
+            color: var(--dark-gray);
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options label {
+            display: block;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            display: flex; /* For MathJax alignment */
+            align-items: center;
+        }
+
+        .options label:hover {
+            background-color: var(--light-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 15px;
+            /* Adjust size of radio button if needed */
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-blue); /* Custom color for checked radio */
+        }
+
+        .options label.correct {
+            background-color: var(--correct-green);
+            border-color: #8bc34a; /* A slightly darker green for border */
+        }
+
+        .options label.correct:hover {
+            background-color: var(--correct-green); /* Keep green on hover once correct */
+            border-color: #8bc34a;
+        }
+
+        button {
+            display: block;
+            width: 250px;
+            padding: 15px 25px;
+            margin: 30px auto 0;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* MathJax specific styles to ensure alignment */
+        .options .MathJax_Display {
+            display: inline-block !important; /* Forces inline display for block math in options */
+            text-align: left !important;
+            margin-left: 0 !important;
+        }
+
+        .options .mjx-container {
+            vertical-align: middle;
+        }
+        
+        /* Ensure radio button and math are aligned */
+        .options label input[type="radio"] + * {
+            vertical-align: middle;
+        }
+
+        /* Override MathJax default styling for better integration with labels */
+        mjx-container {
+            display: inline-block;
+            vertical-align: middle; /* Adjust vertical alignment if needed */
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Second Order Linear Differential Equations Quiz</h1>
+
+    <div class="quiz-container">
+        <div class="question">
+            <h2>1. What is the general solution to the homogeneous differential equation \(y'' - 5y' + 6y = 0\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q1" value="a"> A) \(y(x) = C_1 e^{-2x} + C_2 e^{3x}\)</label>
+                <label data-correct="true"><input type="radio" name="q1" value="b"> B) \(y(x) = C_1 e^{2x} + C_2 e^{3x}\)</label>
+                <label><input type="radio" name="q1" value="c"> C) \(y(x) = C_1 e^{-2x} + C_2 e^{-3x}\)</label>
+                <label><input type="radio" name="q1" value="d"> D) \(y(x) = C_1 e^{x} + C_2 e^{6x}\)</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <h2>2. Find the general solution to \(y'' + 4y' + 4y = 0\).</h2>
+            <div class="options">
+                <label><input type="radio" name="q2" value="a"> A) \(y(x) = C_1 e^{-2x} + C_2 e^{2x}\)</label>
+                <label><input type="radio" name="q2" value="b"> B) \(y(x) = C_1 e^{-2x} \cos(2x) + C_2 e^{-2x} \sin(2x)\)</label>
+                <label data-correct="true"><input type="radio" name="q2" value="c"> C) \(y(x) = C_1 e^{-2x} + C_2 x e^{-2x}\)</label>
+                <label><input type="radio" name="q2" value="d"> D) \(y(x) = C_1 e^{2x} + C_2 x e^{2x}\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>3. What is the general solution to \(y'' + 9y = 0\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q3" value="a"> A) \(y(x) = C_1 \cos(x) + C_2 \sin(x)\)</label>
+                <label data-correct="true"><input type="radio" name="q3" value="b"> B) \(y(x) = C_1 \cos(3x) + C_2 \sin(3x)\)</label>
+                <label><input type="radio" name="q3" value="c"> C) \(y(x) = C_1 e^{3x} + C_2 e^{-3x}\)</label>
+                <label><input type="radio" name="q3" value="d"> D) \(y(x) = C_1 e^{3ix} + C_2 e^{-3ix}\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>4. Given the differential equation \(y'' - y' - 2y = 0\) with initial conditions \(y(0) = 2\) and \(y'(0) = 1\), what is the particular solution?</h2>
+            <div class="options">
+                <label><input type="radio" name="q4" value="a"> A) \(y(x) = 2e^{2x} + e^{-x}\)</label>
+                <label data-correct="true"><input type="radio" name="q4" value="b"> B) \(y(x) = e^{2x} + e^{-x}\)</label>
+                <label><input type="radio" name="q4" value="c"> C) \(y(x) = 2e^{2x} - e^{-x}\)</label>
+                <label><input type="radio" name="q4" value="d"> D) \(y(x) = e^{2x} + 2e^{-x}\)</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <h2>5. The solution to \(y'' - 2y' + y = 0\) with \(y(0) = 1\) and \(y'(0) = 0\) is:</h2>
+            <div class="options">
+                <label><input type="radio" name="q5" value="a"> A) \(y(x) = e^x + x e^x\)</label>
+                <label data-correct="true"><input type="radio" name="q5" value="b"> B) \(y(x) = e^x - x e^x\)</label>
+                <label><input type="radio" name="q5" value="c"> C) \(y(x) = e^x + 2x e^x\)</label>
+                <label><input type="radio" name="q5" value="d"> D) \(y(x) = e^x\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>6. For the differential equation \(y'' + 2y' + 5y = 0\) with \(y(0) = 0\) and \(y'(0) = 2\), find \(y(x)\).</h2>
+            <div class="options">
+                <label><input type="radio" name="q6" value="a"> A) \(y(x) = e^{-x} \cos(2x)\)</label>
+                <label data-correct="true"><input type="radio" name="q6" value="b"> B) \(y(x) = e^{-x} \sin(2x)\)</label>
+                <label><input type="radio" name="q6" value="c"> C) \(y(x) = e^{-x} \cos(2x) + e^{-x} \sin(2x)\)</label>
+                <label><input type="radio" name="q6" value="d"> D) \(y(x) = 2e^{-x} \sin(2x)\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>7. What is the form of the particular solution \(y_p\) for \(y'' - y' - 6y = 12\), using the method of undetermined coefficients?</h2>
+            <div class="options">
+                <label><input type="radio" name="q7" value="a"> A) \(A e^{kx}\)</label>
+                <label data-correct="true"><input type="radio" name="q7" value="b"> B) \(A\)</label>
+                <label><input type="radio" name="q7" value="c"> C) \(Ax\)</label>
+                <label><input type="radio" name="q7" value="d"> D) \(Ax^2\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>8. Determine the form of \(y_p\) for \(y'' - 4y' + 5y = x^2\).</h2>
+            <div class="options">
+                <label><input type="radio" name="q8" value="a"> A) \(Ax^2\)</label>
+                <label data-correct="true"><input type="radio" name="q8" value="b"> B) \(Ax^2 + Bx + C\)</label>
+                <label><input type="radio" name="q8" value="c"> C) \(Ax^2 + Bx\)</label>
+                <label><input type="radio" name="q8" value="d"> D) \(Ax^2 e^{kx}\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>9. What is the correct form for the particular solution \(y_p\) of \(y'' + 3y' + 2y = e^{3x}\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q9" value="a"> A) \(Ax e^{3x}\)</label>
+                <label data-correct="true"><input type="radio" name="q9" value="b"> B) \(A e^{3x}\)</label>
+                <label><input type="radio" name="q9" value="c"> C) \(A x^2 e^{3x}\)</label>
+                <label><input type="radio" name="q9" value="d"> D) \(A e^{x}\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>10. Find the form of \(y_p\) for \(y'' + y = \cos(2x)\).</h2>
+            <div class="options">
+                <label><input type="radio" name="q10" value="a"> A) \(A \cos(x) + B \sin(x)\)</label>
+                <label data-correct="true"><input type="radio" name="q10" value="b"> B) \(A \cos(2x) + B \sin(2x)\)</label>
+                <label><input type="radio" name="q10" value="c"> C) \(Ax \cos(2x) + Bx \sin(2x)\)</label>
+                <label><input type="radio" name="q10" value="d"> D) \(A \cos(2x)\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>11. For \(y'' - y = xe^{2x}\), the appropriate form for \(y_p\) is:</h2>
+            <div class="options">
+                <label><input type="radio" name="q11" value="a"> A) \(Axe^{2x}\)</label>
+                <label data-correct="true"><input type="radio" name="q11" value="b"> B) \((Ax + B)e^{2x}\)</label>
+                <label><input type="radio" name="q11" value="c"> C) \(Axe^{2x} + Be^{2x}\)</label>
+                <label><input type="radio" name="q11" value="d"> D) \(Ax^2e^{2x}\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>12. What is the correct form of \(y_p\) for \(y'' - 2y' + y = e^x\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q12" value="a"> A) \(A e^x\)</label>
+                <label><input type="radio" name="q12" value="b"> B) \(Ax e^x\)</label>
+                <label data-correct="true"><input type="radio" name="q12" value="c"> C) \(Ax^2 e^x\)</label>
+                <label><input type="radio" name="q12" value="d"> D) \(Ax^3 e^x\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>13. For the differential equation \(y'' + 4y = \sin(2x)\), what is the form of the particular solution \(y_p\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q13" value="a"> A) \(A \sin(2x) + B \cos(2x)\)</label>
+                <label data-correct="true"><input type="radio" name="q13" value="b"> B) \(Ax \sin(2x) + Bx \cos(2x)\)</label>
+                <label><input type="radio" name="q13" value="c"> C) \(A x^2 \sin(2x) + B x^2 \cos(2x)\)</label>
+                <label><input type="radio" name="q13" value="d"> D) \(A \sin(2x)\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>14. Which method is generally more versatile for finding particular solutions to non-homogeneous second-order linear differential equations, especially when the forcing function is not a simple exponential, polynomial, or trigonometric function?</h2>
+            <div class="options">
+                <label><input type="radio" name="q14" value="a"> A) Method of Undetermined Coefficients</label>
+                <label data-correct="true"><input type="radio" name="q14" value="b"> B) Variation of Parameters</label>
+                <label><input type="radio" name="q14" value="c"> C) Laplace Transforms</label>
+                <label><input type="radio" name="q14" value="d"> D) Power Series Method</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>15. If \(y_1(x)\) and \(y_2(x)\) are two linearly independent solutions to a homogeneous second-order linear differential equation, what is their Wronskian, \(W(y_1, y_2)(x)\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q15" value="a"> A) Always zero</label>
+                <label><input type="radio" name="q15" value="b"> B) A constant value</label>
+                <label data-correct="true"><input type="radio" name="q15" value="c"> C) Never zero for any x in the interval</label>
+                <label><input type="radio" name="q15" value="d"> D) Can be zero at isolated points</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>16. The characteristic equation for \(ay'' + by' + cy = 0\) is:</h2>
+            <div class="options">
+                <label><input type="radio" name="q16" value="a"> A) \(a\lambda + b = 0\)</label>
+                <label data-correct="true"><input type="radio" name="q16" value="b"> B) \(a\lambda^2 + b\lambda + c = 0\)</label>
+                <label><input type="radio" name="q16" value="c"> C) \(a\lambda^2 - b\lambda + c = 0\)</label>
+                <label><input type="radio" name="q16" value="d"> D) \(a\lambda^2 + b\lambda - c = 0\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>17. If the characteristic equation of a second-order homogeneous linear differential equation has complex conjugate roots \(\lambda = \alpha \pm i\beta\), the general solution is:</h2>
+            <div class="options">
+                <label><input type="radio" name="q17" value="a"> A) \(y(x) = C_1 e^{\alpha x} + C_2 e^{\beta x}\)</label>
+                <label><input type="radio" name="q17" value="b"> B) \(y(x) = C_1 e^{\alpha x} \cos(\beta x) + C_2 e^{\alpha x} \sin(\beta x)\)</label>
+                <label data-correct="true"><input type="radio" name="q17" value="c"> C) \(y(x) = e^{\alpha x} (C_1 \cos(\beta x) + C_2 \sin(\beta x))\)</label>
+                <label><input type="radio" name="q17" value="d"> D) \(y(x) = C_1 \cos(\beta x) + C_2 \sin(\beta x)\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>18. According to the Superposition Principle, if \(y_p_1\) is a particular solution to \(ay'' + by' + cy = g_1(x)\) and \(y_p_2\) is a particular solution to \(ay'' + by' + cy = g_2(x)\), then a particular solution to \(ay'' + by' + cy = g_1(x) + g_2(x)\) is:</h2>
+            <div class="options">
+                <label><input type="radio" name="q18" value="a"> A) \(y_p_1 - y_p_2\)</label>
+                <label data-correct="true"><input type="radio" name="q18" value="b"> B) \(y_p_1 + y_p_2\)</label>
+                <label><input type="radio" name="q18" value="c"> C) \(y_p_1 \cdot y_p_2\)</label>
+                <label><input type="radio" name="q18" value="d"> D) \(y_p_1 / y_p_2\)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>19. For the differential equation \(y'' + \omega^2 y = 0\), representing a simple harmonic oscillator, what does \(\omega\) typically represent?</h2>
+            <div class="options">
+                <label><input type="radio" name="q19" value="a"> A) Damping coefficient</label>
+                <label><input type="radio" name="q19" value="b"> B) Resonance frequency</label>
+                <label data-correct="true"><input type="radio" name="q19" value="c"> C) Angular frequency</label>
+                <label><input type="radio" name="q19" value="d"> D) Amplitude</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h2>20. Consider the equation \(y'' + y' - 6y = 0\). If \(y(x) = e^{rx}\) is a solution, what are the possible values of \(r\)?</h2>
+            <div class="options">
+                <label><input type="radio" name="q20" value="a"> A) \(r = 1, 6\)</label>
+                <label><input type="radio" name="q20" value="b"> B) \(r = -1, 6\)</label>
+                <label data-correct="true"><input type="radio" name="q20" value="c"> C) \(r = 2, -3\)</label>
+                <label><input type="radio" name="q20" value="d"> D) \(r = -2, 3\)</label>
+            </div>
+        </div>
+
+        <button id="showAnswersBtn">Show Answers</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const questions = document.querySelectorAll('.question');
+
+            showAnswersBtn.addEventListener('click', function() {
+                questions.forEach(question => {
+                    const correctLabel = question.querySelector('label[data-correct="true"]');
+                    if (correctLabel) {
+                        correctLabel.classList.add('correct');
+                        // Prepend checkmark if not already present
+                        if (!correctLabel.textContent.startsWith('✅ ')) {
+                            // Use innerHTML to preserve MathJax rendering
+                            correctLabel.innerHTML = '✅ ' + correctLabel.innerHTML;
+                        }
+                    }
+                });
+                this.textContent = 'Answers Shown';
+                this.disabled = true; // Disable the button after showing answers
+            });
+        });
+    </script>
+</body>
+</html>

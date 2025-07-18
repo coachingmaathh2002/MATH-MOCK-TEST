@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clairaut's Equation Quiz</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #007bff; /* Blue */
+            --secondary-color: #6c757d; /* Gray */
+            --light-bg: #f8f9fa; /* Light Gray/White */
+            --card-bg: #ffffff; /* White */
+            --border-color: #dee2e6; /* Light Border */
+            --correct-answer-bg: #e6ffe6; /* Light Green */
+            --text-color: #343a40; /* Dark Gray */
+            --heading-color: #0056b3; /* Darker Blue */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        header p {
+            font-size: 1.1em;
+            color: var(--secondary-color);
+        }
+
+        .quiz-section {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question h3 {
+            color: var(--heading-color);
+            font-size: 1.25em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+        }
+
+        .option-item label {
+            display: block;
+            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            position: relative;
+            background-color: #fdfdfd;
+        }
+
+        .option-item label:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary-color);
+        }
+
+        .option-item input[type="radio"] {
+            /* Hide the default radio button */
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Styling for correct answers revealed by JS */
+        .option-item label.correct {
+            background-color: var(--correct-answer-bg);
+            border-color: #28a745; /* Green border */
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+        }
+
+        .option-item label.correct:hover {
+             background-color: var(--correct-answer-bg); /* Keep green on hover after reveal */
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        #showAnswersBtn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        #showAnswersBtn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        #showAnswersBtn:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* MathJax specific styling adjustments */
+        .MathJax_Display {
+            margin: 1em 0 !important;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-left: 3px solid var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .question h3 .MathJax {
+            display: inline;
+        }
+
+        .option-item label .MathJax {
+            display: inline;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Quiz: First Order DEs</h1>
+            <p>Clairaut's Equation, General and Singular Solutions</p>
+        </header>
+
+        <form id="quizForm">
+            <div class="quiz-section">
+                <!-- Question 1 -->
+                <div class="question">
+                    <h3>1. Which of the following equations is in the general form of Clairaut's equation?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q1a" name="q1" value="a">
+                            <label for="q1a">A) \( y = f(x, y', y'') \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q1b" name="q1" value="b" data-correct="true">
+                            <label for="q1b">B) \( y = xp + f(p) \), where \( p = dy/dx \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q1c" name="q1" value="c">
+                            <label for="q1c">C) \( y = f(x)g(y) \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q1d" name="q1" value="d">
+                            <label for="q1d">D) \( M(x, y)dx + N(x, y)dy = 0 \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question">
+                    <h3>2. What is the general solution of Clairaut's equation \( y = xp + f(p) \)?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q2a" name="q2" value="a">
+                            <label for="q2a">A) \( f(x, y, c) = 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q2b" name="q2" value="b">
+                            <label for="q2b">B) \( y = x + f(p) \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q2c" name="q2" value="c" data-correct="true">
+                            <label for="q2c">C) \( y = cx + f(c) \), where \( c \) is an arbitrary constant</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q2d" name="q2" value="d">
+                            <label for="q2d">D) \( y = f'(p) \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question">
+                    <h3>3. For the Clairaut's equation \( y = xp + p^2 \), what is its general solution?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q3a" name="q3" value="a">
+                            <label for="q3a">A) \( y = x^2 + c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q3b" name="q3" value="b">
+                            <label for="q3b">B) \( y = cx - c^2 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q3c" name="q3" value="c" data-correct="true">
+                            <label for="q3c">C) \( y = cx + c^2 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q3d" name="q3" value="d">
+                            <label for="q3d">D) \( y = c/x + c^2 \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question">
+                    <h3>4. Find the singular solution for the differential equation \( y = xp + p^2 \).</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q4a" name="q4" value="a">
+                            <label for="q4a">A) \( y = -x^2/2 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q4b" name="q4" value="b">
+                            <label for="q4b">B) \( y = x^2/4 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q4c" name="q4" value="c" data-correct="true">
+                            <label for="q4c">C) \( y = -x^2/4 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q4d" name="q4" value="d">
+                            <label for="q4d">D) \( y = x^2 \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question">
+                    <h3>5. The singular solution of Clairaut's equation \( y = xp + f(p) \) is obtained by eliminating \( p \) from the equation itself and what other equation?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q5a" name="q5" value="a">
+                            <label for="q5a">A) \( f(p) = 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q5b" name="q5" value="b">
+                            <label for="q5b">B) \( p = 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q5c" name="q5" value="c" data-correct="true">
+                            <label for="q5c">C) \( x + f'(p) = 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q5d" name="q5" value="d">
+                            <label for="q5d">D) \( y = f'(p) \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question">
+                    <h3>6. Geometrically, what does the singular solution of a Clairaut's equation represent?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q6a" name="q6" value="a">
+                            <label for="q6a">A) A particular solution passing through the origin.</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q6b" name="q6" value="b">
+                            <label for="q6b">B) A family of parallel lines.</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q6c" name="q6" value="c" data-correct="true">
+                            <label for="q6c">C) The envelope of the family of general solutions.</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q6d" name="q6" value="d">
+                            <label for="q6d">D) A solution that does not satisfy the differential equation.</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question">
+                    <h3>7. For the equation \( y = xp - \ln p \), find its general solution.</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q7a" name="q7" value="a">
+                            <label for="q7a">A) \( y = cx + \ln c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q7b" name="q7" value="b" data-correct="true">
+                            <label for="q7b">B) \( y = cx - \ln c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q7c" name="q7" value="c">
+                            <label for="q7c">C) \( y = x - \ln p \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q7d" name="q7" value="d">
+                            <label for="q7d">D) \( y = c + p \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question">
+                    <h3>8. Determine the singular solution for \( y = xp - \ln p \).</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q8a" name="q8" value="a">
+                            <label for="q8a">A) \( y = x + 1 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q8b" name="q8" value="b">
+                            <label for="q8b">B) \( y = x - 1 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q8c" name="q8" value="c" data-correct="true">
+                            <label for="q8c">C) \( y = 1 + \ln x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q8d" name="q8" value="d">
+                            <label for="q8d">D) \( y = 1 - \ln x \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question">
+                    <h3>9. What is the general solution of the Clairaut's equation \( y = xp + \sin p \)?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q9a" name="q9" value="a">
+                            <label for="q9a">A) \( y = cx - \cos c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q9b" name="q9" value="b">
+                            <label for="q9b">B) \( y = cx + \cos c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q9c" name="q9" value="c" data-correct="true">
+                            <label for="q9c">C) \( y = cx + \sin c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q9d" name="q9" value="d">
+                            <label for="q9d">D) \( y = x \sin p + c \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question">
+                    <h3>10. Find the singular solution for \( y = xp + \sin p \).</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q10a" name="q10" value="a">
+                            <label for="q10a">A) \( y = x \arcsin(x) + \sqrt{1-x^2} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q10b" name="q10" value="b">
+                            <label for="q10b">B) \( y = x \arccos(x) - \sqrt{1-x^2} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q10c" name="q10" value="c" data-correct="true">
+                            <label for="q10c">C) \( y = x \arccos(-x) + \sqrt{1-x^2} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q10d" name="q10" value="d">
+                            <label for="q10d">D) \( y = x \cos p - \sin p \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 11 -->
+                <div class="question">
+                    <h3>11. Which of the following is NOT a Clairaut's equation?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q11a" name="q11" value="a">
+                            <label for="q11a">A) \( y = xp + e^p \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q11b" name="q11" value="b">
+                            <label for="q11b">B) \( y = xp + p^3 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q11c" name="q11" value="c" data-correct="true">
+                            <label for="q11c">C) \( y = x^2 p + f(p) \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q11d" name="q11" value="d">
+                            <label for="q11d">D) \( y = xp + \arctan p \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 12 -->
+                <div class="question">
+                    <h3>12. The general solution of Clairaut's equation is a family of:</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q12a" name="q12" value="a">
+                            <label for="q12a">A) Parabolas</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q12b" name="q12" value="b" data-correct="true">
+                            <label for="q12b">B) Straight lines</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q12c" name="q12" value="c">
+                            <label for="q12c">C) Circles</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q12d" name="q12" value="d">
+                            <label for="q12d">D) Ellipses</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 13 -->
+                <div class="question">
+                    <h3>13. Consider the equation \( y = xp + \sqrt{1+p^2} \). What is its general solution?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q13a" name="q13" value="a">
+                            <label for="q13a">A) \( y = cx + 1+c^2 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q13b" name="q13" value="b" data-correct="true">
+                            <label for="q13b">B) \( y = cx + \sqrt{1+c^2} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q13c" name="q13" value="c">
+                            <label for="q13c">C) \( y = c^2 x + \sqrt{1+c^2} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q13d" name="q13" value="d">
+                            <label for="q13d">D) \( y = c \sqrt{1+x^2} \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 14 -->
+                <div class="question">
+                    <h3>14. Find the singular solution for \( y = xp + \sqrt{1+p^2} \).</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q14a" name="q14" value="a">
+                            <label for="q14a">A) \( y = x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q14b" name="q14" value="b">
+                            <label for="q14b">B) \( y = 1 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q14c" name="q14" value="c">
+                            <label for="q14c">C) \( x^2 - y^2 = 1 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q14d" name="q14" value="d" data-correct="true">
+                            <label for="q14d">D) \( x^2 + y^2 = 1 \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 15 -->
+                <div class="question">
+                    <h3>15. For a Clairaut's equation to possess a singular solution, what condition must \( f''(p) \) satisfy?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q15a" name="q15" value="a">
+                            <label for="q15a">A) \( f''(p) = 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q15b" name="q15" value="b" data-correct="true">
+                            <label for="q15b">B) \( f''(p) \neq 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q15c" name="q15" value="c">
+                            <label for="q15c">C) \( f''(p) > 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q15d" name="q15" value="d">
+                            <label for="q15d">D) \( f''(p) < 0 \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 16 -->
+                <div class="question">
+                    <h3>16. What is the general solution for \( y = xp + \frac{1}{p} \)?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q16a" name="q16" value="a" data-correct="true">
+                            <label for="q16a">A) \( y = cx + \frac{1}{c} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q16b" name="q16" value="b">
+                            <label for="q16b">B) \( y = cx - \frac{1}{c} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q16c" name="q16" value="c">
+                            <label for="q16c">C) \( y = c + \frac{1}{x} \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q16d" name="q16" value="d">
+                            <label for="q16d">D) \( y = x + \frac{1}{p} \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 17 -->
+                <div class="question">
+                    <h3>17. Find the singular solution for \( y = xp + \frac{1}{p} \).</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q17a" name="q17" value="a">
+                            <label for="q17a">A) \( y = 2x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q17b" name="q17" value="b">
+                            <label for="q17b">B) \( y = 0 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q17c" name="q17" value="c" data-correct="true">
+                            <label for="q17c">C) \( y^2 = 4x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q17d" name="q17" value="d">
+                            <label for="q17d">D) \( y = \pm 2\sqrt{x} \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 18 -->
+                <div class="question">
+                    <h3>18. If a differential equation is reducible to Clairaut's form, what substitution is typically used for \( y = f(x, p) \)?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q18a" name="q18" value="a">
+                            <label for="q18a">A) \( x = X \), \( y = Y \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q18b" name="q18" value="b">
+                            <label for="q18b">B) \( x = 1/X \), \( y = 1/Y \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q18c" name="q18" value="c">
+                            <label for="q18c">C) \( x = X^2 \), \( y = Y^2 \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q18d" name="q18" value="d" data-correct="true">
+                            <label for="q18d">D) It depends on the specific form of the equation.</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 19 -->
+                <div class="question">
+                    <h3>19. Consider the equation \( y = xp + e^p \). What is its general solution?</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q19a" name="q19" value="a">
+                            <label for="q19a">A) \( y = cx - e^c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q19b" name="q19" value="b" data-correct="true">
+                            <label for="q19b">B) \( y = cx + e^c \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q19c" name="q19" value="c">
+                            <label for="q19c">C) \( y = x + e^p \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q19d" name="q19" value="d">
+                            <label for="q19d">D) \( y = c e^x \)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 20 -->
+                <div class="question">
+                    <h3>20. Determine the singular solution for \( y = xp + e^p \).</h3>
+                    <ul class="options">
+                        <li class="option-item">
+                            <input type="radio" id="q20a" name="q20" value="a" data-correct="true">
+                            <label for="q20a">A) \( y = x \ln(-x) - x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q20b" name="q20" value="b">
+                            <label for="q20b">B) \( y = -x \ln(-x) - x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q20c" name="q20" value="c">
+                            <label for="q20c">C) \( y = -x \ln(-x) + x \)</label>
+                        </li>
+                        <li class="option-item">
+                            <input type="radio" id="q20d" name="q20" value="d">
+                            <label for="q20d">D) \( y = x e^x \)</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" id="showAnswersBtn">Show Answers</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+            
+            correctLabels.forEach(label => {
+                label.classList.add('correct');
+                // Prepend checkmark emoji, ensure it's not added multiple times
+                if (!label.innerHTML.startsWith('✅')) {
+                    label.innerHTML = '✅ ' + label.innerHTML;
+                }
+            });
+
+            this.textContent = 'Answers Shown';
+            this.disabled = true;
+        });
+    </script>
+</body>
+</html>

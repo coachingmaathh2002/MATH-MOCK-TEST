@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Order DEs: Variable Separable Method Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-gray-bg: #f8f9fa;
+            --white-bg: #ffffff;
+            --dark-text: #343a40;
+            --border-gray: #dee2e6;
+            --correct-green-bg: #d4edda;
+            --correct-green-text: #155724;
+            --hover-blue-light: #e9f5ff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray-bg);
+            margin: 0;
+            padding: 20px;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 2.5em;
+        }
+
+        .question-block {
+            background-color: var(--white-bg);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-block h3 {
+            color: var(--dark-text);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .options label {
+            display: block;
+            background-color: var(--light-gray-bg);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            padding-left: 40px; /* Space for custom radio button */
+        }
+
+        .options label:hover {
+            background-color: var(--hover-blue-light);
+            border-color: var(--primary-blue);
+        }
+
+        .options input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .options label::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%;
+            background-color: var(--white-bg);
+            transition: all 0.2s ease;
+        }
+
+        .options input[type="radio"]:checked + label::before {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .options input[type="radio"]:checked + label::after {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            width: 8px;
+            height: 14px;
+            border: solid var(--white-bg);
+            border-width: 0 3px 3px 0;
+        }
+
+        /* Styling for correct answer highlight */
+        .options label.correct-highlight {
+            background-color: var(--correct-green-bg);
+            border-color: var(--correct-green-text);
+            color: var(--correct-green-text);
+            font-weight: 700;
+        }
+
+        .options label.correct-highlight:hover {
+            background-color: var(--correct-green-bg); /* Keep background same on hover */
+            border-color: var(--correct-green-text);
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: 250px;
+            margin: 30px auto 0;
+            padding: 15px 25px;
+            background-color: var(--primary-blue);
+            color: var(--white-bg);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            background-color: #004085;
+            transform: translateY(0);
+        }
+
+        /* MathJax specific styling to ensure it plays well with the checkmark */
+        .options label .mjx-chtml {
+            vertical-align: middle;
+        }
+        .options label .mjx-container {
+            display: inline-block; /* Ensure MathJax content is inline with text */
+            vertical-align: middle; /* Align MathJax with middle of text */
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz: First Order DEs - Variable Separable Method</h1>
+
+        <form id="quizForm">
+            <div class="question-block">
+                <h3>1. Solve the differential equation \( \frac{dy}{dx} = \frac{x}{y} \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q1" value="a"> A. \( x^2 - y^2 = C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q1" value="b"> B. \( y^2 - x^2 = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="c"> C. \( x^2 + y^2 = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="d"> D. \( \ln|y| = \frac{x^2}{2} + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>2. Find the particular solution to \( \frac{dy}{dx} = y^2 \) with the initial condition \( y(0)=1 \).</h3>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q2" value="a"> A. \( y = \frac{1}{1-x} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="b"> B. \( y = \frac{1}{x+1} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="c"> C. \( y = -\frac{1}{x} + 1 \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="d"> D. \( y = e^x \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>3. Determine the implicit solution for \( \frac{dy}{dx} = \frac{x+1}{y-1} \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q3" value="a"> A. \( (y-1)^2 = (x+1)^2 + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="b"> B. \( y^2 - 2y = x^2 + x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="c"> C. \( (y-1)^2 = 2x^2 + 2x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q3" value="d"> D. \( y^2 - 2y = x^2 + 2x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>4. Solve \( \frac{dy}{dx} = \sin(x)\cos(y) \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q4" value="a"> A. \( \sec(y) = -\cos(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="b"> B. \( \tan(y) = -\cos(x) + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q4" value="c"> C. \( \ln|\sec(y)+\tan(y)| = -\cos(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="d"> D. \( \sin(y) = \cos(x) + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>5. Find the general solution to \( \frac{dy}{dx} = e^{x+y} \).</h3>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q5" value="a"> A. \( e^x + e^{-y} = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="b"> B. \( e^x - e^{-y} = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="c"> C. \( e^{-x} + e^{-y} = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="d"> D. \( e^y = e^x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>6. Solve \( \frac{dy}{dx} = xy \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q6" value="a"> A. \( y = C e^{x^2} \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q6" value="b"> B. \( y = C e^{x^2/2} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="c"> C. \( \ln|y| = x^2 + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="d"> D. \( y = C e^x \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>7. For a constant \( k \), solve \( \frac{dy}{dx} = k y \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q7" value="a"> A. \( y = kx + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="b"> B. \( y = C e^x \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="c"> C. \( y = e^{kx} + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q7" value="d"> D. \( y = C e^{kx} \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>8. Find the general solution for \( \frac{dy}{dx} = y(1-y) \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q8" value="a"> A. \( \ln|y(1-y)| = x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="b"> B. \( \frac{1}{y} - \frac{1}{1-y} = x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q8" value="c"> C. \( \frac{y}{1-y} = C e^x \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="d"> D. \( \frac{1-y}{y} = C e^x \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>9. Solve \( \frac{dy}{dx} = \frac{1+y^2}{1+x^2} \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q9" value="a"> A. \( \tan(y) = \ln(1+x^2) + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q9" value="b"> B. \( \arctan(y) = \arctan(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="c"> C. \( \arctan(y) = \ln|1+x^2| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="d"> D. \( \frac{1}{1+y^2} = \frac{1}{1+x^2} + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>10. What is the solution to \( (1+x^2)dy - x(1+y^2)dx = 0 \)?</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q10" value="a"> A. \( \arctan(y) = \ln|1+x^2| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="b"> B. \( \arctan(y) = 2\ln|1+x^2| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="c"> C. \( \frac{1}{1+y^2} = \frac{1}{1+x^2} + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q10" value="d"> D. \( \arctan(y) = \frac{1}{2}\ln(1+x^2) + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>11. Find the general solution of \( y' = \frac{xy}{1+x^2} \).</h3>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q11" value="a"> A. \( y = C\sqrt{1+x^2} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="b"> B. \( y = C(1+x^2) \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="c"> C. \( \ln|y| = \frac{1}{2}\arctan(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="d"> D. \( \ln|y| = \frac{x^2}{2(1+x^2)} + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>12. Solve the differential equation \( e^x dy + e^y dx = 0 \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q12" value="a"> A. \( e^{x+y} = C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q12" value="b"> B. \( e^{-x} + e^{-y} = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q12" value="c"> C. \( e^x - e^y = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q12" value="d"> D. \( e^x + e^y = C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>13. Find the general solution to \( (x+1)y' = y \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q13" value="a"> A. \( y = C \ln|x+1| \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q13" value="b"> B. \( y = \frac{C}{x+1} \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q13" value="c"> C. \( y = C(x+1) \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q13" value="d"> D. \( y = C e^{x+1} \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>14. Solve \( y' = \frac{\sec^2(x)}{1+y^2} \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q14" value="a"> A. \( \tan(y) = \tan(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="b"> B. \( \ln|1+y^2| = \tan(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="c"> C. \( \arctan(y) = \sec(x)\tan(x) + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q14" value="d"> D. \( y + \frac{y^3}{3} = \tan(x) + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>15. What is the general solution for \( \frac{dy}{dx} = (x^2+1)y \)?</h3>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q15" value="a"> A. \( y = C e^{\frac{x^3}{3} + x} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="b"> B. \( \ln|y| = x^3 + x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="c"> C. \( y = C (x^3/3 + x) \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="d"> D. \( y = C e^{x^2+1} \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>16. Solve the differential equation \( y' = y^2 \sin(x) \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q16" value="a"> A. \( \frac{1}{y} = \cos(x) + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q16" value="b"> B. \( \frac{1}{y} = \cos(x) - C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q16" value="c"> C. \( -\frac{1}{y} = \cos(x) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q16" value="d"> D. \( \ln|y| = -\cos(x) + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>17. Find the general solution for \( (1-y^2)dx + (1-x^2)dy = 0 \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q17" value="a"> A. \( \arctan(x) + \arctan(y) = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q17" value="b"> B. \( \ln|\frac{1+x}{1-x}| + \ln|\frac{1+y}{1-y}| = C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q17" value="c"> C. \( \frac{(1+x)(1+y)}{(1-x)(1-y)} = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q17" value="d"> D. \( \frac{1-x^2}{1-y^2} = C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>18. Solve the differential equation \( \frac{dy}{dx} = (y-1)(y-2) \).</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q18" value="a"> A. \( \ln|y-1| - \ln|y-2| = x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q18" value="b"> B. \( \ln|(y-1)(y-2)| = x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q18" value="c"> C. \( \frac{y-1}{y-2} = C e^x \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q18" value="d"> D. \( \frac{y-2}{y-1} = C e^x \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>19. Determine the solution to \( (x^2+1)y' = x y^2 \).</h3>
+                <div class="options">
+                    <label data-correct="true">
+                        <input type="radio" name="q19" value="a"> A. \( -\frac{1}{y} = \frac{1}{2}\ln(x^2+1) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="b"> B. \( \frac{1}{y} = \frac{1}{2}\ln(x^2+1) + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="c"> C. \( \ln|y| = \frac{x^2}{2(x^2+1)} + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="d"> D. \( -\frac{1}{y^2} = \ln(x^2+1) + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3>20. Solve the differential equation \( \frac{dy}{dx} = (x+y)^2 \). (Hint: Use substitution \( v = x+y \))</h3>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q20" value="a"> A. \( \ln|x+y| = x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q20" value="b"> B. \( \arctan(x+y) = x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q20" value="c"> C. \( \frac{1}{x+y} = -x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q20" value="d"> D. \( (x+y)^3 = 3x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const quizForm = document.getElementById('quizForm');
+            const correctLabels = quizForm.querySelectorAll('label[data-correct="true"]');
+            
+            correctLabels.forEach(label => {
+                label.classList.add('correct-highlight');
+                // Prepend checkmark emoji, ensuring it appears before any MathJax rendering
+                if (!label.innerHTML.includes('✅')) { // Prevent adding multiple checkmarks
+                    label.innerHTML = '✅ ' + label.innerHTML;
+                }
+            });
+
+            this.textContent = 'Answers Shown';
+            this.disabled = true; // Disable the button after showing answers
+        });
+
+        // Optional: If you want to prevent users from changing answers after showing them
+        // document.getElementById('showAnswersBtn').addEventListener('click', function() {
+        //     const radioButtons = document.querySelectorAll('input[type="radio"]');
+        //     radioButtons.forEach(radio => {
+        //         radio.disabled = true;
+        //     });
+        //     // ... rest of your show answers logic
+        // });
+    </script>
+</body>
+</html>

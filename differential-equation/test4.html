@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Order DEs: Variable Separable Method Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e9ecef;
+            --dark-gray: #343a40;
+            --medium-gray: #6c757d;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+            --correct-green: #d4edda;
+            --border-color: #dee2e6;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .question-block {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-size: 1.25em;
+            margin-bottom: 15px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .question-options label {
+            display: block;
+            background-color: var(--light-blue);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            border: 1px solid transparent;
+            font-size: 1.1em;
+            color: var(--medium-gray);
+        }
+
+        .question-options label:hover {
+            background-color: #dae3ec;
+            border-color: #b3cde3;
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+            vertical-align: middle;
+            transform: scale(1.2); /* Slightly larger radio buttons */
+        }
+
+        /* Style for the correct answer highlight */
+        .question-options label.correct-answer {
+            background-color: var(--correct-green);
+            border-color: #28a745; /* Darker green border */
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 30px;
+        }
+
+        .show-answers-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* MathJax specific adjustments for better display */
+        .question-text .MathJax_Display,
+        .question-options .MathJax_Display {
+            margin: 1em 0;
+            text-align: center;
+        }
+        .question-text p, .question-options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .question-options label .mjx-chtml {
+            flex-grow: 1;
+        }
+        .question-options label input[type="radio"] {
+            flex-shrink: 0;
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>First Order DEs: Variable Separable Method Quiz</h1>
+
+        <div class="quiz-questions">
+
+            <div class="question-block">
+                <p class="question-text">1. Solve the differential equation: \( \frac{dy}{dx} = \frac{x^2}{y^3} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q1" value="A"> A) \( y^4 = \frac{4}{3}x^3 + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q1" value="B"> B) \( y^4 = \frac{4}{3}x^3 + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="C"> C) \( y^2 = \frac{2}{3}x^3 + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="D"> D) \( y^4 = x^3 + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">2. Find the general solution of \( \frac{dy}{dx} = e^{x-y} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q2" value="A"> A) \( e^y = e^x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q2" value="B"> B) \( e^y = e^x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="C"> C) \( e^{-y} = e^x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="D"> D) \( e^y = -e^x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">3. Solve the initial value problem: \( \frac{dy}{dx} = 2xy^2 \), with \( y(1) = 1 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q3" value="A"> A) \( y = \frac{1}{2-x^2} \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q3" value="B"> B) \( y = \frac{1}{2-x^2} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="C"> C) \( y = \frac{1}{1-x^2} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="D"> D) \( y = \frac{1}{x^2-2} \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">4. Determine the general solution to \( (1+x^2)dy + (1+y^2)dx = 0 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q4" value="A"> A) \( \arctan(x) - \arctan(y) = C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q4" value="B"> B) \( \arctan(x) + \arctan(y) = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="C"> C) \( \ln(1+x^2) + \ln(1+y^2) = C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="D"> D) \( \ln(\frac{1+x^2}{1+y^2}) = C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">5. Solve \( y' = \frac{\sin x}{\cos y} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q5" value="A"> A) \( \sin y = \cos x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="B"> B) \( \cos y = -\sin x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q5" value="C"> C) \( \sin y = -\cos x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="D"> D) \( \cos y = \sin x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">6. Find the solution to \( \frac{dy}{dx} = \frac{x}{y\sqrt{1-x^2}} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q6" value="A"> A) \( y^2 = 2\sqrt{1-x^2} + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="B"> B) \( y^2 = -2\sqrt{1-x^2} + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q6" value="C"> C) \( y^2 = -2\sqrt{1-x^2} + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="D"> D) \( y^2 = \sqrt{1-x^2} + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">7. Which of the following is a general solution to \( \frac{dy}{dx} = \frac{y \ln y}{x} \)?</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q7" value="A"> A) \( \ln y = C x \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="B"> B) \( y = C x \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q7" value="C"> C) \( \ln(\ln y) = \ln|x| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="D"> D) \( \ln y = C \ln x \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">8. Solve \( (x+1)\frac{dy}{dx} = xy^2 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q8" value="A"> A) \( -\frac{1}{y} = x - \ln|x+1| + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q8" value="B"> B) \( -\frac{1}{y} = x - \ln|x+1| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="C"> C) \( -\frac{1}{y} = \ln|x(x+1)| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="D"> D) \( \frac{1}{y} = x - \ln|x+1| + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">9. Find the solution to \( \frac{dy}{dx} = \frac{\sqrt{y}}{x} \) with \( y(1) = 4 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q9" value="A"> A) \( \sqrt{y} = \ln|x| + 2 \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q9" value="B"> B) \( \sqrt{y} = \frac{1}{2}\ln|x| + 2 \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="C"> C) \( \sqrt{y} = 2\ln|x| + 2 \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="D"> D) \( y = (\ln|x|+2)^2 \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">10. Solve \( \frac{dy}{dx} = \frac{x^2+1}{y^2+1} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q10" value="A"> A) \( y^3+y = x^3+x+C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q10" value="B"> B) \( \frac{1}{3}y^3+y = \frac{1}{3}x^3+x+C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="C"> C) \( \arctan y = \arctan x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="D"> D) \( \ln(y^2+1) = \ln(x^2+1) + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">11. Find the implicit solution for \( \frac{dy}{dx} = \frac{y \sin x}{1+y^2} \).</p>
+                <div class="question-options">
+                    <label data-correct="true">
+                        <input type="radio" name="q11" value="A"> A) \( \ln|y| + \frac{y^2}{2} = -\cos x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="B"> B) \( \ln|y| + y^2 = -\cos x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="C"> C) \( \ln|y| = -\cos x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q11" value="D"> D) \( \ln(1+y^2) = \sin x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">12. Solve \( \frac{dy}{dx} = \frac{x^2+x}{y^2} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q12" value="A"> A) \( y^3 = x^3 + x^2 + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q12" value="B"> B) \( y^3 = x^3 + \frac{3}{2}x^2 + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q12" value="C"> C) \( \frac{1}{3}y^3 = \frac{1}{3}x^3 + \frac{1}{2}x^2 + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q12" value="D"> D) \( y^3 = \frac{1}{3}x^3 + \frac{1}{2}x^2 + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">13. Find the general solution of \( x \frac{dy}{dx} = y^2 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q13" value="A"> A) \( \frac{1}{y} = -\ln|x| + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q13" value="B"> B) \( -\frac{1}{y} = \ln|x| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q13" value="C"> C) \( \frac{1}{y} = \ln|x| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q13" value="D"> D) \( y = C x \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">14. Solve \( \frac{dy}{dx} = xy + x + y + 1 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q14" value="A"> A) \( \ln|y+1| = \frac{1}{2}x^2 + x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q14" value="B"> B) \( \ln|y+1| = \frac{1}{2}x^2 + x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="C"> C) \( \ln|y+1| = x^2 + x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q14" value="D"> D) \( y+1 = C e^{x^2/2+x} \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">15. Find the solution to \( \frac{dy}{dx} = \frac{\sec^2 x}{\tan y} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q15" value="A"> A) \( \ln|\tan y| = \tan x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q15" value="B"> B) \( \ln|\sin y| = \tan x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="C"> C) \( \ln|\cos y| = \tan x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q15" value="D"> D) \( \frac{1}{2}\tan^2 y = \tan x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">16. Solve \( \frac{dy}{dx} = \frac{1+y^2}{1+x^2} \) with \( y(0)=1 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q16" value="A"> A) \( \arctan y = \arctan x + \frac{\pi}{4} \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q16" value="B"> B) \( \arctan y = \arctan x + \frac{\pi}{4} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q16" value="C"> C) \( y = x+1 \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q16" value="D"> D) \( \ln(1+y^2) = \ln(1+x^2) + \ln 2 \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">17. Find the general solution of \( y' = \frac{e^x}{y} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q17" value="A"> A) \( y^2 = 2e^x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q17" value="B"> B) \( y^2 = 2e^x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q17" value="C"> C) \( y = e^x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q17" value="D"> D) \( \frac{y^2}{2} = e^x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">18. Solve \( \frac{dy}{dx} = \frac{\cos x}{\sin y} \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q18" value="A"> A) \( -\cos y = \sin x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q18" value="B"> B) \( \cos y = \sin x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q18" value="C"> C) \( -\cos y = \sin x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q18" value="D"> D) \( \sin y = \cos x + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">19. Which of the following is an implicit solution to \( \frac{dy}{dx} = \frac{xy+y}{x-xy} \)?</p>
+                <div class="question-options">
+                    <label data-correct="true">
+                        <input type="radio" name="q19" value="A"> A) \( \ln|x| + \ln|1-x| = \ln|y| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="B"> B) \( \ln|x| - \ln|1-x| = \ln|y| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="C"> C) \( \ln|x(1-x)| = \ln|y| + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q19" value="D"> D) \( \ln|\frac{x}{1-x}| = \ln|y| + C \)
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">20. Solve \( (x^2+1)\frac{dy}{dx} + y = 0 \).</p>
+                <div class="question-options">
+                    <label>
+                        <input type="radio" name="q20" value="A"> A) \( \ln|y| = \arctan x + C \)
+                    </label>
+                    <label data-correct="true">
+                        <input type="radio" name="q20" value="B"> B) \( \ln|y| = -\arctan x + C \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q20" value="C"> C) \( y = C e^{\arctan x} \)
+                    </label>
+                    <label>
+                        <input type="radio" name="q20" value="D"> D) \( y = C e^{-\frac{1}{x}} \)
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <button id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const questionBlocks = document.querySelectorAll('.question-block');
+            
+            questionBlocks.forEach(block => {
+                const correctLabel = block.querySelector('label[data-correct="true"]');
+                if (correctLabel) {
+                    correctLabel.classList.add('correct-answer');
+                    // Prepend checkmark emoji, ensuring it's added only once
+                    if (!correctLabel.textContent.startsWith('✅')) {
+                        correctLabel.innerHTML = '✅ ' + correctLabel.innerHTML;
+                    }
+                }
+            });
+
+            this.textContent = 'Answers Shown';
+            this.disabled = true; // Disable the button after showing answers
+        });
+    </script>
+</body>
+</html>

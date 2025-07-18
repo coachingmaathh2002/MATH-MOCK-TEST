@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: First Order Linear DEs: Euler's and Bernoulli's Equations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2c3e50; /* Dark blue for headings/footer */
+            --secondary-blue: #3498db; /* Lighter blue for accents */
+            --light-gray: #ecf0f1; /* Light background */
+            --medium-gray: #bdc3c7; /* Borders/separators */
+            --dark-gray-text: #34495e; /* Main text */
+            --white: #ffffff;
+            --correct-green: #d4edda; /* Light green for correct answers */
+            --border-radius: 8px;
+            --padding-base: 20px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray-text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: var(--padding-base) 30px;
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--medium-gray);
+        }
+
+        .question-section {
+            margin-bottom: 25px;
+            padding: 15px 0;
+            border-bottom: 1px dashed var(--medium-gray);
+        }
+
+        .question-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-gray);
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .option-item:hover {
+            background-color: #e0e7e9;
+            transform: translateY(-2px);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: var(--secondary-blue); /* Custom color for radio button */
+        }
+
+        .option-item label {
+            flex-grow: 1;
+            cursor: pointer;
+            font-size: 1em;
+            color: var(--dark-gray-text);
+        }
+
+        .correct-answer {
+            background-color: var(--correct-green) !important;
+            border-color: #28a745 !important; /* Darker green border */
+            font-weight: 700;
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: 250px;
+            margin: 30px auto 0;
+            padding: 15px 25px;
+            background-color: var(--secondary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* MathJax specific styling */
+        .MathJax_Display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            text-align: center !important; /* Ensure block equations are centered */
+        }
+        .mjx-chtml {
+            font-family: 'Roboto', sans-serif !important; /* Match body font */
+        }
+
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz: First Order Linear DEs: Euler's and Bernoulli's Equations</h1>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-section">
+                <p class="question-text">1. Which of the following is a homogeneous Euler-Cauchy equation?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a">A) \(x^2y'' + xy' + y = \sin x\)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q1b" name="q1" value="B">
+                        <label for="q1b">B) \(y'' + 2xy' + y = 0\)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q1c" name="q1" value="C" data-correct="true">
+                        <label for="q1c">C) \(x^2y'' + 3xy' + 2y = 0\)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d">D) \(x^3y''' + x^2y'' + xy' = 0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-section">
+                <p class="question-text">2. The substitution typically used to transform a Bernoulli equation \( \frac{dy}{dx} + P(x)y = Q(x)y^n \) into a linear differential equation is:</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q2a" name="q2" value="A" data-correct="true">
+                        <label for="q2a">A) \( v = y^{1-n} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b">B) \( v = y^n \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q2c" name="q2" value="C">
+                        <label for="q2c">C) \( v = y^{n-1} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D) \( v = xy \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-section">
+                <p class="question-text">3. For the Euler-Cauchy equation \( x^2y'' + axy' + by = 0 \), if the characteristic equation has roots \( r_1 = r_2 \), what is the form of the general solution?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A) \( y = c_1 x^{r_1} + c_2 x^{r_2} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q3b" name="q3" value="B" data-correct="true">
+                        <label for="q3b">B) \( y = c_1 x^{r_1} + c_2 x^{r_1} \ln|x| \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c">C) \( y = c_1 e^{r_1 x} + c_2 e^{r_2 x} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D) \( y = c_1 \cos(r_1 \ln|x|) + c_2 \sin(r_2 \ln|x|) \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-section">
+                <p class="question-text">4. Consider the Bernoulli equation \( \frac{dy}{dx} + \frac{1}{x}y = x^2y^2 \). After the appropriate substitution \( v = y^{1-n} \), what is the resulting linear differential equation?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q4a" name="q4" value="A" data-correct="true">
+                        <label for="q4a">A) \( \frac{dv}{dx} - \frac{1}{x}v = -x^2 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q4b" name="q4" value="B">
+                        <label for="q4b">B) \( \frac{dv}{dx} + \frac{1}{x}v = x^2 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c">C) \( \frac{dv}{dx} - \frac{1}{x}v = x^2 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D) \( \frac{dv}{dx} + \frac{2}{x}v = -x^2 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-section">
+                <p class="question-text">5. What is the characteristic equation for the Euler-Cauchy equation \( x^2y'' - 5xy' + 9y = 0 \)?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a">A) \( r^2 - 5r + 9 = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q5b" name="q5" value="B">
+                        <label for="q5b">B) \( r(r-1) - 5r + 9 = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q5c" name="q5" value="C" data-correct="true">
+                        <label for="q5c">C) \( r^2 - 6r + 9 = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d">D) \( r^2 + 4r + 9 = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-section">
+                <p class="question-text">6. The general solution of the Euler-Cauchy equation \( x^2y'' + xy' - y = 0 \) is:</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a">A) \( y = c_1 e^x + c_2 e^{-x} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q6b" name="q6" value="B">
+                        <label for="q6b">B) \( y = c_1 x^2 + c_2 x^{-1} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q6c" name="q6" value="C" data-correct="true">
+                        <label for="q6c">C) \( y = c_1 x + c_2 x^{-1} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d">D) \( y = c_1 x^{-1} + c_2 x^{-2} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-section">
+                <p class="question-text">7. Which of the following is a Bernoulli equation?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a">A) \( \frac{dy}{dx} + \frac{y}{x} = x \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q7b" name="q7" value="B" data-correct="true">
+                        <label for="q7b">B) \( \frac{dy}{dx} + xy = x^2y^3 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q7c" name="q7" value="C">
+                        <label for="q7c">C) \( \frac{dy}{dx} = \sin(xy) \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D) \( \frac{dy}{dx} + y = e^x \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-section">
+                <p class="question-text">8. What is the value of \(n\) for the Bernoulli equation \( \frac{dy}{dx} + \frac{2}{x}y = x^2y^4 \)?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a">A) \( n = 1 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q8b" name="q8" value="B">
+                        <label for="q8b">B) \( n = 2 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q8c" name="q8" value="C" data-correct="true">
+                        <label for="q8c">C) \( n = 4 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d">D) \( n = -4 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-section">
+                <p class="question-text">9. If the characteristic equation for an Euler-Cauchy equation has complex conjugate roots \( r = \alpha \pm i\beta \), the general solution is:</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a">A) \( y = c_1 e^{\alpha x} \cos(\beta x) + c_2 e^{\alpha x} \sin(\beta x) \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q9b" name="q9" value="B" data-correct="true">
+                        <label for="q9b">B) \( y = x^\alpha (c_1 \cos(\beta \ln|x|) + c_2 \sin(\beta \ln|x|)) \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q9c" name="q9" value="C">
+                        <label for="q9c">C) \( y = c_1 x^{\alpha+i\beta} + c_2 x^{\alpha-i\beta} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D) \( y = x^\alpha \cos(\beta x) + x^\alpha \sin(\beta x) \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-section">
+                <p class="question-text">10. To solve \( \frac{dy}{dx} - y = xy^2 \), what substitution should be made?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A) \( v = y \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B) \( v = y^2 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q10c" name="q10" value="C" data-correct="true">
+                        <label for="q10c">C) \( v = y^{-1} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D) \( v = xy \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-section">
+                <p class="question-text">11. Find the general solution for the Euler-Cauchy equation \( x^2y'' + 7xy' + 9y = 0 \).</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a">A) \( y = c_1 x^{-3} + c_2 x^{3} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q11b" name="q11" value="B" data-correct="true">
+                        <label for="q11b">B) \( y = c_1 x^{-3} + c_2 x^{-3} \ln|x| \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C) \( y = c_1 e^{-3x} + c_2 x e^{-3x} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D) \( y = c_1 x^{-3} \cos(3\ln|x|) + c_2 x^{-3} \sin(3\ln|x|) \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-section">
+                <p class="question-text">12. What is the integrating factor for the linear equation resulting from the Bernoulli equation \( \frac{dy}{dx} + \frac{1}{x}y = y^2 \)?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a">A) \( e^{\int \frac{1}{x} dx} = x \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q12b" name="q12" value="B" data-correct="true">
+                        <label for="q12b">B) \( e^{\int -\frac{1}{x} dx} = \frac{1}{x} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c">C) \( e^{\int -1 dx} = e^{-x} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D) \( e^{\int \frac{2}{x} dx} = x^2 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-section">
+                <p class="question-text">13. The general form of a non-homogeneous Euler-Cauchy equation is:</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A) \( y'' + P(x)y' + Q(x)y = R(x) \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q13b" name="q13" value="B" data-correct="true">
+                        <label for="q13b">B) \( a_n x^n y^{(n)} + a_{n-1} x^{n-1} y^{(n-1)} + \dots + a_1 xy' + a_0 y = g(x) \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c">C) \( \frac{dy}{dx} + P(x)y = Q(x)y^n \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d">D) \( M(x,y)dx + N(x,y)dy = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-section">
+                <p class="question-text">14. What is the substitution used to transform an Euler-Cauchy equation into a linear differential equation with constant coefficients?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a">A) \( y = e^{rx} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B) \( y = x^r \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q14c" name="q14" value="C" data-correct="true">
+                        <label for="q14c">C) \( x = e^t \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D) \( v = y^{1-n} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-section">
+                <p class="question-text">15. Solve the initial value problem \( x^2y'' - xy' + y = 0 \) with \( y(1)=2, y'(1)=1 \).</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A) \( y = 2x - x \ln|x| \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q15b" name="q15" value="B" data-correct="true">
+                        <label for="q15b">B) \( y = 2x + x \ln|x| \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q15c" name="q15" value="C">
+                        <label for="q15c">C) \( y = x^2 + x \ln|x| \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D) \( y = x^2 - x \ln|x| \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-section">
+                <p class="question-text">16. The Bernoulli equation \( \frac{dy}{dx} + P(x)y = Q(x)y^n \) becomes linear if:</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a">A) \( n = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q16b" name="q16" value="B">
+                        <label for="q16b">B) \( n = 1 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q16c" name="q16" value="C" data-correct="true">
+                        <label for="q16c">C) Either \( n=0 \) or \( n=1 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D) \( n \neq 0, 1 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-section">
+                <p class="question-text">17. Which of the following equations is NOT an Euler-Cauchy equation?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a">A) \( x^2y'' + 2xy' - 6y = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q17b" name="q17" value="B">
+                        <label for="q17b">B) \( xy''' + 3y'' - 2y' = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q17c" name="q17" value="C" data-correct="true">
+                        <label for="q17c">C) \( y'' + xy' + y = 0 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D) \( x^4y'''' + 5x^3y''' + 2x^2y'' + xy' + y = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-section">
+                <p class="question-text">18. The general solution of \( xy' + y = x^2y^2 \) is:</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q18a" name="q18" value="A" data-correct="true">
+                        <label for="q18a">A) \( y = \frac{1}{Cx + x^3/3} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q18b" name="q18" value="B">
+                        <label for="q18b">B) \( y = Cx + x^3/3 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c">C) \( y = \frac{1}{Cx - x^3/3} \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d">D) \( y = Cx - x^3/3 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-section">
+                <p class="question-text">19. For the Euler-Cauchy equation \( x^2y'' + 3xy' + y = 0 \), what are the roots of the characteristic equation?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a">A) \( r = -1, -2 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q19b" name="q19" value="B" data-correct="true">
+                        <label for="q19b">B) \( r = -1, -1 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q19c" name="q19" value="C">
+                        <label for="q19c">C) \( r = 1, 1 \)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d">D) \( r = \frac{-3 \pm \sqrt{5}}{2} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-section">
+                <p class="question-text">20. Which statement is true regarding Bernoulli equations?</p>
+                <div class="options">
+                    <div class="option-item">
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a">A) They are always linear.</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B) They are solved by finding an integrating factor for the original equation.</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q20c" name="q20" value="C" data-correct="true">
+                        <label for="q20c">C) They can be transformed into a linear first-order differential equation.</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d">D) They are a special case of exact differential equations.</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const quizForm = document.getElementById('quizForm');
+
+            showAnswersBtn.addEventListener('click', () => {
+                const correctOptions = quizForm.querySelectorAll('[data-correct="true"]');
+
+                correctOptions.forEach(correctInput => {
+                    // Find the associated label for the correct input
+                    const label = document.querySelector(`label[for="${correctInput.id}"]`);
+                    if (label) {
+                        // Find the parent div.option-item
+                        const optionItem = label.closest('.option-item');
+                        if (optionItem) {
+                            optionItem.classList.add('correct-answer');
+                            // Prepend checkmark emoji, ensuring MathJax doesn't re-process it
+                            // by modifying innerHTML (emoji is outside MathJax's internal spans)
+                            const currentLabelHtml = label.innerHTML;
+                            if (!currentLabelHtml.includes('✅')) { // Prevent adding multiple checkmarks
+                                label.innerHTML = '✅ ' + currentLabelHtml;
+                            }
+                        }
+                    }
+                });
+
+                showAnswersBtn.textContent = 'Answers Shown';
+                showAnswersBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

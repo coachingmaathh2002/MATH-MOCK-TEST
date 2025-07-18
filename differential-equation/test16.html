@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Second Order DEs - Euler's Homogeneous Equations</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e50; /* Dark blue for headings/accents */
+            --secondary-blue: #34495e; /* Slightly lighter for question text */
+            --text-color: #333; /* Dark gray for general text */
+            --light-gray: #f4f4f4; /* Body background */
+            --medium-gray: #ecf0f1; /* Question block background */
+            --border-color: #ccc; /* Border for elements */
+            --correct-green: #d4edda; /* Light green for correct answers */
+            --button-bg: #3498db; /* Blue for button */
+            --button-hover-bg: #2980b9; /* Darker blue on hover */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .question-block {
+            background-color: var(--medium-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-block p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: var(--secondary-blue);
+            font-weight: bold;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            background-color: #fff;
+        }
+
+        .option:hover {
+            background-color: #e9ecef;
+            border-color: var(--secondary-blue);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            /* Hide default radio button */
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .option input[type="radio"]:checked {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .option input[type="radio"]:checked::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+
+        .option label {
+            flex-grow: 1;
+            cursor: pointer;
+            font-size: 1em;
+            display: block; /* Ensures label takes up full width for click */
+            padding-top: 2px; /* Small adjustment for alignment with custom radio */
+        }
+
+        /* Style for correct answers */
+        .option.correct {
+            background-color: var(--correct-green);
+            border-color: #28a745; /* Darker green border */
+            font-weight: bold;
+        }
+
+        .show-answers-button {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-answers-button:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-2px);
+        }
+
+        .show-answers-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* MathJax specific styling to ensure it fits well */
+        .option label .MathJax {
+            display: inline; /* Ensure MathJax doesn't break line */
+            white-space: normal; /* Allow MathJax content to wrap */
+        }
+        .MathJax_Display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            text-align: center;
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz: Second Order DEs - Euler's Homogeneous Equations</h1>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p>1. Which of the following is the general form of a second-order Euler-Cauchy homogeneous differential equation?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">\(ay'' + by' + cy = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="b" data-correct="true">
+                        <label for="q1b">\(ax^2y'' + bxy' + cy = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="c">
+                        <label for="q1c">\(y'' + P(x)y' + Q(x)y = R(x)\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">\(ax^2y'' + bxy' + cy = f(x)\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p>2. To solve an Euler-Cauchy equation, we assume a solution of the form \(y = x^r\). Substituting this into the equation \(ax^2y'' + bxy' + cy = 0\) leads to which characteristic (or auxiliary) equation?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">\(ar^2 + br + c = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">\(ar(r-1) + br + c = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="c" data-correct="true">
+                        <label for="q2c">\(ar^2 + (b-a)r + c = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">\(r^2 + (b/a)r + (c/a) = 0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p>3. What is the characteristic equation for the Euler-Cauchy differential equation \(x^2y'' - 4xy' + 6y = 0\)?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">\(r^2 - 4r + 6 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="b" data-correct="true">
+                        <label for="q3b">\(r^2 - 5r + 6 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">\(r^2 - 3r + 6 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">\(r^2 + 5r + 6 = 0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p>4. If the characteristic equation of an Euler-Cauchy equation has two distinct real roots, \(r_1\) and \(r_2\), what is the general solution?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">\(y = c_1 e^{r_1 x} + c_2 e^{r_2 x}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="b" data-correct="true">
+                        <label for="q4b">\(y = c_1 x^{r_1} + c_2 x^{r_2}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">\(y = (c_1 + c_2 x)e^{r_1 x}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="d">
+                        <label for="q4d">\(y = x^r(c_1 \cos(\beta \ln x) + c_2 \sin(\beta \ln x))\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p>5. The characteristic equation for an Euler-Cauchy equation is \(r^2 - 6r + 9 = 0\). What is the general solution to the corresponding differential equation?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">\(y = c_1 x^3 + c_2 x^3 \ln x\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="b" data-correct="true">
+                        <label for="q5b">\(y = c_1 x^3 + c_2 x^3 \ln|x|\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">\(y = (c_1 + c_2 \ln x)e^{3x}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">\(y = c_1 x^3 + c_2 x^{-3}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p>6. What is the general solution to \(x^2y'' + xy' - y = 0\)?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q6a" name="q6" value="a">
+                        <label for="q6a">\(y = c_1 e^x + c_2 e^{-x}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6b" name="q6" value="b" data-correct="true">
+                        <label for="q6b">\(y = c_1 x + c_2 x^{-1}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6c" name="q6" value="c">
+                        <label for="q6c">\(y = c_1 x + c_2 x \ln|x|\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6d" name="q6" value="d">
+                        <label for="q6d">\(y = c_1 x^2 + c_2 x^{-1}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p>7. For a characteristic equation with complex conjugate roots \(r = \alpha \pm i\beta\), the general solution for an Euler-Cauchy equation is:</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q7a" name="q7" value="a">
+                        <label for="q7a">\(y = e^{\alpha x}(c_1 \cos(\beta x) + c_2 \sin(\beta x))\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7b" name="q7" value="b" data-correct="true">
+                        <label for="q7b">\(y = x^\alpha(c_1 \cos(\beta \ln|x|) + c_2 \sin(\beta \ln|x|))\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7c" name="q7" value="c">
+                        <label for="q7c">\(y = c_1 x^{\alpha+i\beta} + c_2 x^{\alpha-i\beta}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7d" name="q7" value="d">
+                        <label for="q7d">\(y = c_1 e^{\alpha \ln x} \cos(\beta \ln x) + c_2 e^{\alpha \ln x} \sin(\beta \ln x)\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p>8. Find the general solution to \(x^2y'' + 5xy' + 13y = 0\).</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q8a" name="q8" value="a">
+                        <label for="q8a">\(y = x^{-2}(c_1 \cos(3x) + c_2 \sin(3x))\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8b" name="q8" value="b" data-correct="true">
+                        <label for="q8b">\(y = x^{-2}(c_1 \cos(3 \ln|x|) + c_2 \sin(3 \ln|x|))\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8c" name="q8" value="c">
+                        <label for="q8c">\(y = x^{-2}(c_1 \cos(2 \ln|x|) + c_2 \sin(2 \ln|x|))\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8d" name="q8" value="d">
+                        <label for="q8d">\(y = c_1 x^{-2+3i} + c_2 x^{-2-3i}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p>9. Which of the following is NOT a valid root case for the characteristic equation of an Euler-Cauchy differential equation?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q9a" name="q9" value="a">
+                        <label for="q9a">Two distinct real roots</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9b" name="q9" value="b">
+                        <label for="q9b">One repeated real root</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9c" name="q9" value="c">
+                        <label for="q9c">Complex conjugate roots</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9d" name="q9" value="d" data-correct="true">
+                        <label for="q9d">One real root and one complex root</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p>10. Consider the equation \(x^2y'' + 3xy' + y = 0\). What is its general solution?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q10a" name="q10" value="a">
+                        <label for="q10a">\(y = c_1 x^{-1} + c_2 x^{-2}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10b" name="q10" value="b" data-correct="true">
+                        <label for="q10b">\(y = c_1 x^{-1} + c_2 x^{-1} \ln|x|\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10c" name="q10" value="c">
+                        <label for="q10c">\(y = c_1 e^{-x} + c_2 x e^{-x}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10d" name="q10" value="d">
+                        <label for="q10d">\(y = x^{-1}(c_1 \cos(\ln|x|) + c_2 \sin(\ln|x|))\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p>11. The Euler-Cauchy equation \(x^2y'' - xy' + y = 0\) has a repeated root. What is this root and the corresponding general solution?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q11a" name="q11" value="a">
+                        <label for="q11a">\(r=1\), \(y = c_1 x + c_2 x^2\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11b" name="q11" value="b">
+                        <label for="q11b">\(r=1\), \(y = c_1 x + c_2 x \ln x\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11c" name="q11" value="c" data-correct="true">
+                        <label for="q11c">\(r=1\), \(y = c_1 x + c_2 x \ln|x|\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11d" name="q11" value="d">
+                        <label for="q11d">\(r=0\), \(y = c_1 + c_2 \ln|x|\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p>12. What is the characteristic equation for the DE \(x^2y'' + 2xy' + 5y = 0\)?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q12a" name="q12" value="a">
+                        <label for="q12a">\(r^2 + 2r + 5 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12b" name="q12" value="b" data-correct="true">
+                        <label for="q12b">\(r^2 + r + 5 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12c" name="q12" value="c">
+                        <label for="q12c">\(r^2 - r + 5 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12d" name="q12" value="d">
+                        <label for="q12d">\(r^2 + 5 = 0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p>13. Given the characteristic equation \(r^2 - 2r + 1 = 0\), what is the original Euler-Cauchy differential equation?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q13a" name="q13" value="a">
+                        <label for="q13a">\(x^2y'' - 2xy' + y = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13b" name="q13" value="b" data-correct="true">
+                        <label for="q13b">\(x^2y'' - xy' + y = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13c" name="q13" value="c">
+                        <label for="q13c">\(x^2y'' + xy' + y = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13d" name="q13" value="d">
+                        <label for="q13d">\(x^2y'' + 2xy' + y = 0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p>14. For \(x>0\), what is the general solution to \(x^2y'' - 3xy' + 4y = 0\)?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q14a" name="q14" value="a">
+                        <label for="q14a">\(y = c_1 x^2 \cos(\ln x) + c_2 x^2 \sin(\ln x)\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14b" name="q14" value="b" data-correct="true">
+                        <label for="q14b">\(y = c_1 x^2 + c_2 x^2 \ln x\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14c" name="q14" value="c">
+                        <label for="q14c">\(y = c_1 x + c_2 x^2\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14d" name="q14" value="d">
+                        <label for="q14d">\(y = c_1 e^{2x} + c_2 x e^{2x}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p>15. Consider the transformation \(x = e^t\) (or \(t = \ln x\)). If we apply this to an Euler-Cauchy equation \(ax^2y'' + bxy' + cy = 0\), what type of differential equation in terms of \(t\) do we obtain?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q15a" name="q15" value="a">
+                        <label for="q15a">A first-order linear ODE</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15b" name="q15" value="b" data-correct="true">
+                        <label for="q15b">A second-order linear ODE with constant coefficients</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15c" name="q15" value="c">
+                        <label for="q15c">A second-order linear ODE with variable coefficients</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15d" name="q15" value="d">
+                        <label for="q15d">A non-linear ODE</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p>16. What is the characteristic equation for \(x^2y'' + 4y = 0\)?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q16a" name="q16" value="a">
+                        <label for="q16a">\(r^2 + 4 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16b" name="q16" value="b" data-correct="true">
+                        <label for="q16b">\(r^2 - r + 4 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16c" name="q16" value="c">
+                        <label for="q16c">\(r^2 + r + 4 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16d" name="q16" value="d">
+                        <label for="q16d">\(r^2 + 4r = 0\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p>17. Find the particular solution to \(x^2y'' + 3xy' - 3y = 0\) with initial conditions \(y(1)=1\) and \(y'(1)=-3\).</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q17a" name="q17" value="a">
+                        <label for="q17a">\(y = x\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17b" name="q17" value="b">
+                        <label for="q17b">\(y = x^3\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17c" name="q17" value="c" data-correct="true">
+                        <label for="q17c">\(y = x^{-3}\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17d" name="q17" value="d">
+                        <label for="q17d">\(y = x + x^{-3}\)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p>18. Which statement is true regarding the domain of solutions for Euler-Cauchy equations?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q18a" name="q18" value="a">
+                        <label for="q18a">Solutions are valid for all real numbers \(x\).</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18b" name="q18" value="b">
+                        <label for="q18b">Solutions are valid only for \(x > 0\).</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18c" name="q18" value="c" data-correct="true">
+                        <label for="q18c">Solutions are typically valid for \(x \ne 0\), often considering \(x > 0\) or \(x < 0\) separately.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18d" name="q18" value="d">
+                        <label for="q18d">Solutions are only valid for integer values of \(x\).</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p>19. If \(y_1 = x^r\) is a solution to an Euler-Cauchy equation, and \(r\) is a repeated root, the second linearly independent solution \(y_2\) is found by which method?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q19a" name="q19" value="a">
+                        <label for="q19a">Variation of Parameters</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19b" name="q19" value="b">
+                        <label for="q19b">Undetermined Coefficients</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19c" name="q19" value="c" data-correct="true">
+                        <label for="q19c">Reduction of Order</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19d" name="q19" value="d">
+                        <label for="q19d">Laplace Transform</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p>20. What is the characteristic equation for \(x^2y'' + xy' + y = 0\)?</p>
+                <div class="option-group">
+                    <div class="option">
+                        <input type="radio" id="q20a" name="q20" value="a">
+                        <label for="q20a">\(r^2 + r + 1 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20b" name="q20" value="b" data-correct="true">
+                        <label for="q20b">\(r^2 + 1 = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20c" name="q20" value="c">
+                        <label for="q20c">\(r^2 + r = 0\)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20d" name="q20" value="d">
+                        <label for="q20d">\(r^2 - r + 1 = 0\)</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <button class="show-answers-button" onclick="showAnswers()">Show Answers</button>
+    </div>
+
+    <script>
+        function showAnswers() {
+            const quizForm = document.getElementById('quizForm');
+            const questions = quizForm.querySelectorAll('.question-block');
+            const showAnswersBtn = document.querySelector('.show-answers-button');
+
+            questions.forEach(questionBlock => {
+                const options = questionBlock.querySelectorAll('.option');
+                options.forEach(option => {
+                    const input = option.querySelector('input[type="radio"]');
+                    const label = option.querySelector('label');
+
+                    if (input && input.dataset.correct === 'true') {
+                        option.classList.add('correct');
+                        // Prepend checkmark only if not already there
+                        if (!label.textContent.includes('✅')) {
+                            label.innerHTML = '✅ ' + label.innerHTML;
+                        }
+                    }
+                    // Disable all inputs after showing answers
+                    if (input) {
+                        input.disabled = true;
+                    }
+                });
+            });
+
+            showAnswersBtn.textContent = 'Answers Shown';
+            showAnswersBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>

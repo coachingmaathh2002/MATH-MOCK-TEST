@@ -1,0 +1,392 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Order DEs: Clairaut's Equation Quiz</title>
+    <!-- MathJax CDN for rendering LaTeX equations -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Define a professional color palette using CSS variables */
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e7f3ff;
+            --dark-blue: #0056b3;
+            --gray-text: #333;
+            --light-gray-bg: #f8f9fa;
+            --white-bg: #ffffff;
+            --border-color: #dee2e6;
+            --success-green: #d4edda;
+            --success-border: #28a745;
+            --hover-bg: #f0f0f0;
+        }
+
+        /* Basic body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray-bg);
+            color: var(--gray-text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Quiz container styling */
+        .quiz-container {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--white-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        /* Header styling */
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: var(--dark-blue);
+        }
+
+        /* Individual question styling */
+        .question {
+            background-color: var(--light-blue);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--gray-text);
+        }
+
+        /* Options styling */
+        .options label {
+            display: block;
+            background-color: var(--white-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            display: flex; /* For aligning checkmark */
+            align-items: center;
+        }
+
+        .options label:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--primary-blue);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2); /* Make radio buttons slightly larger */
+            accent-color: var(--primary-blue); /* Style the radio button itself */
+        }
+
+        /* Styling for correct answers when shown */
+        .correct-answer {
+            background-color: var(--success-green) !important;
+            border-color: var(--success-border) !important;
+            font-weight: bold;
+        }
+
+        /* "Show Answers" button styling */
+        .show-answers-btn {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0 auto;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: var(--primary-blue);
+            color: var(--white-bg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-answers-btn:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* MathJax specific styling to ensure it fits well within the layout */
+        .MathJax_Display {
+            margin: 1em 0 !important;
+            text-align: center !important;
+            font-size: 1.1em;
+        }
+        .mjx-chtml {
+            font-family: inherit !important; /* Ensure MathJax uses the same font or a similar sans-serif */
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>First Order Differential Equations Quiz</h1>
+        <h2>Clairaut's Equation: General and Singular Solutions</h2>
+
+        <div class="question">
+            <p>1. Which of the following equations represents a Clairaut's equation?</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> A. \( y' + xy = \sin x \)</label>
+                <label><input type="radio" name="q1" value="B" data-correct="true"> B. \( y = xp + f(p) \), where \( p = \frac{dy}{dx} \)</label>
+                <label><input type="radio" name="q1" value="C"> C. \( M(x,y)dx + N(x,y)dy = 0 \)</label>
+                <label><input type="radio" name="q1" value="D"> D. \( y'' + P(x)y' + Q(x)y = R(x) \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. What is the standard procedure to solve a Clairaut's equation \( y = xp + f(p) \)?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A"> A. Integrate both sides with respect to \( x \).</label>
+                <label><input type="radio" name="q2" value="B"> B. Differentiate the equation with respect to \( p \), then factorize.</label>
+                <label><input type="radio" name="q2" value="C" data-correct="true"> C. Differentiate the equation with respect to \( x \), then factorize to obtain two possibilities.</label>
+                <label><input type="radio" name="q2" value="D"> D. Apply a suitable integrating factor.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. For the Clairaut's equation \( y = xp + f(p) \), differentiating with respect to \( x \) yields \( p = p + x\frac{dp}{dx} + f'(p)\frac{dp}{dx} \). What is the next step to find the solutions?</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A"> A. Integrate \( f'(p) \).</label>
+                <label><input type="radio" name="q3" value="B"> B. Substitute \( p = c \) directly.</label>
+                <label><input type="radio" name="q3" value="C" data-correct="true"> C. Factor out \( \frac{dp}{dx} \) to get \( (x + f'(p))\frac{dp}{dx} = 0 \).</label>
+                <label><input type="radio" name="q3" value="D"> D. Solve for \( x \) in terms of \( p \).</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>4. How is the general solution of a Clairaut's equation \( y = xp + f(p) \) obtained from \( (x + f'(p))\frac{dp}{dx} = 0 \)?</p>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A"> A. By solving \( x + f'(p) = 0 \).</label>
+                <label><input type="radio" name="q4" value="B" data-correct="true"> B. By setting \( \frac{dp}{dx} = 0 \), which implies \( p = c \) (a constant), then substituting \( p=c \) into the original equation.</label>
+                <label><input type="radio" name="q4" value="C"> C. By integrating \( x + f'(p) = 0 \).</label>
+                <label><input type="radio" name="q4" value="D"> D. By finding the envelope of the family of curves.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>5. How is the singular solution of a Clairaut's equation \( y = xp + f(p) \) obtained?</p>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A"> A. By setting \( p = c \) in the general solution.</label>
+                <label><input type="radio" name="q5" value="B"> B. By solving \( \frac{dp}{dx} = 0 \).</label>
+                <label><input type="radio" name="q5" value="C" data-correct="true"> C. By eliminating \( p \) from the original equation \( y = xp + f(p) \) and the equation \( x + f'(p) = 0 \).</label>
+                <label><input type="radio" name="q5" value="D"> D. By integrating \( y = xp + f(p) \) directly.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>6. Geometrically, what does the singular solution of a Clairaut's equation represent?</p>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A"> A. A particular solution passing through the origin.</label>
+                <label><input type="radio" name="q6" value="B" data-correct="true"> B. The envelope of the family of straight lines given by the general solution.</label>
+                <label><input type="radio" name="q6" value="C"> C. A set of orthogonal trajectories.</label>
+                <label><input type="radio" name="q6" value="D"> D. The boundary condition for the problem.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>7. Find the general solution to the Clairaut's equation \( y = xp + p^2 \).</p>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A"> A. \( y = cx + c \)</label>
+                <label><input type="radio" name="q7" value="B"> B. \( y = cx - c^2 \)</label>
+                <label><input type="radio" name="q7" value="C" data-correct="true"> C. \( y = cx + c^2 \)</label>
+                <label><input type="radio" name="q7" value="D"> D. \( y = x^2 + c \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>8. What is the singular solution for \( y = xp + p^2 \)?</p>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A"> A. \( y = x^2/4 \)</label>
+                <label><input type="radio" name="q8" value="B"> B. \( y = -x^2/2 \)</label>
+                <label><input type="radio" name="q8" value="C" data-correct="true"> C. \( y = -x^2/4 \)</label>
+                <label><input type="radio" name="q8" value="D"> D. \( y = x^2 \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>9. Determine the general solution of \( y = xp + \ln p \).</p>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A"> A. \( y = cx + e^c \)</label>
+                <label><input type="radio" name="q9" value="B"> B. \( y = cx - \ln c \)</label>
+                <label><input type="radio" name="q9" value="C" data-correct="true"> C. \( y = cx + \ln c \)</label>
+                <label><input type="radio" name="q9" value="D"> D. \( y = x + \ln x \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>10. Find the singular solution for \( y = xp + \ln p \).</p>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A"> A. \( y = x + \ln x \)</label>
+                <label><input type="radio" name="q10" value="B"> B. \( y = 1 - \ln x \)</label>
+                <label><input type="radio" name="q10" value="C" data-correct="true"> C. \( y = 1 + \ln(-x) \) (for \( x < 0 \))</label>
+                <label><input type="radio" name="q10" value="D"> D. No singular solution exists as \( \ln p \) is undefined for \( p \le 0 \).</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>11. For the equation \( y = xp + \sqrt{1+p^2} \), what is its general solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q11" value="A"> A. \( y = cx - \sqrt{1+c^2} \)</label>
+                <label><input type="radio" name="q11" value="B"> B. \( y = cx + (1+c^2) \)</label>
+                <label><input type="radio" name="q11" value="C" data-correct="true"> C. \( y = cx + \sqrt{1+c^2} \)</label>
+                <label><input type="radio" name="q11" value="D"> D. \( y = x\sqrt{1+c^2} \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>12. What is the singular solution for \( y = xp + \sqrt{1+p^2} \)?</p>
+            <div class="options">
+                <label><input type="radio" name="q12" value="A"> A. \( x^2 - y^2 = 1 \)</label>
+                <label><input type="radio" name="q12" value="B"> B. \( y^2 - x^2 = 1 \)</label>
+                <label><input type="radio" name="q12" value="C"> C. \( y = x \)</label>
+                <label><input type="radio" name="q12" value="D" data-correct="true"> D. \( x^2 + y^2 = 1 \) (a circle)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>13. The equation \( y = xp - p^3 \) has a general solution \( y = cx - c^3 \). What is its singular solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q13" value="A"> A. \( y = \frac{2}{3}\sqrt{\frac{x^3}{3}} \)</label>
+                <label><input type="radio" name="q13" value="B" data-correct="true"> B. \( y^2 = \frac{4}{27}x^3 \)</label>
+                <label><input type="radio" name="q13" value="C"> C. \( y = x^3/27 \)</label>
+                <label><input type="radio" name="q13" value="D"> D. No singular solution.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>14. For a Clairaut's equation \( y = xp + f(p) \), a singular solution exists if and only if \( f''(p) \ne 0 \) (and can be expressed implicitly). Which of the following \( f(p) \) would NOT yield a singular solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q14" value="A"> A. \( f(p) = p^2 \)</label>
+                <label><input type="radio" name="q14" value="B" data-correct="true"> B. \( f(p) = Ap + B \) (A, B are constants)</label>
+                <label><input type="radio" name="q14" value="C"> C. \( f(p) = \sin p \)</label>
+                <label><input type="radio" name="q14" value="D"> D. \( f(p) = e^p \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>15. If the general solution of a Clairaut's equation is a family of straight lines, what kind of curve is the singular solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q15" value="A"> A. A straight line parallel to the x-axis.</label>
+                <label><input type="radio" name="q15" value="B"> B. A straight line perpendicular to the y-axis.</label>
+                <label><input type="radio" name="q15" value="C" data-correct="true"> C. A curve that is tangent to each member of the family of straight lines.</label>
+                <label><input type="radio" name="q15" value="D"> D. A family of concentric circles.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>16. Consider the Clairaut's equation \( y = xp + p \). What is its general solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q16" value="A"> A. \( y = cx \)</label>
+                <label><input type="radio" name="q16" value="B" data-correct="true"> B. \( y = cx + c \)</label>
+                <label><input type="radio" name="q16" value="C"> C. \( y = x + c \)</label>
+                <label><input type="radio" name="q16" value="D"> D. \( y = x^2 + x \)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>17. Does the equation \( y = xp + p \) have a singular solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q17" value="A"> A. Yes, \( y = x \)</label>
+                <label><input type="radio" name="q17" value="B"> B. Yes, \( y = -x \)</label>
+                <label><input type="radio" name="q17" value="C" data-correct="true"> C. No, because \( f''(p) = 0 \).</label>
+                <label><input type="radio" name="q17" value="D"> D. Only if \( x=0 \).</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>18. Which of the following is NOT a characteristic of a singular solution of a differential equation?</p>
+            <div class="options">
+                <label><input type="radio" name="q18" value="A"> A. It cannot be obtained from the general solution by assigning a specific value to the arbitrary constant.</label>
+                <label><input type="radio" name="q18" value="B"> B. It is typically the envelope of the family of curves represented by the general solution.</label>
+                <label><input type="radio" name="q18" value="C"> C. It satisfies the differential equation.</label>
+                <label><input type="radio" name="q18" value="D" data-correct="true"> D. It is always a straight line.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>19. Consider the differential equation \( y = xp + \frac{1}{p} \). What is its singular solution?</p>
+            <div class="options">
+                <label><input type="radio" name="q19" value="A"> A. \( y = 2x \)</label>
+                <label><input type="radio" name="q19" value="B"> B. \( y^2 = 2x \)</label>
+                <label><input type="radio" name="q19" value="C" data-correct="true"> C. \( y^2 = 4x \) (a parabola)</label>
+                <label><input type="radio" name="q19" value="D"> D. No singular solution.</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>20. If \( y = xp + \sin p \), what is the equation used to find the singular solution, along with the original equation?</p>
+            <div class="options">
+                <label><input type="radio" name="q20" value="A"> A. \( p = \cos p \)</label>
+                <label><input type="radio" name="q20" value="B" data-correct="true"> B. \( x + \cos p = 0 \)</label>
+                <label><input type="radio" name="q20" value="C"> C. \( x - \cos p = 0 \)</label>
+                <label><input type="radio" name="q20" value="D"> D. \( p = -\sin p \)</label>
+            </div>
+        </div>
+
+        <button class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+
+            showAnswersBtn.addEventListener('click', function() {
+                // Select all label elements that have the data-correct="true" attribute
+                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+
+                correctLabels.forEach(label => {
+                    // Add the 'correct-answer' class to highlight the correct option
+                    label.classList.add('correct-answer');
+                    // Prepend a checkmark emoji to the label's text content
+                    // Check if it's already there to prevent multiple additions
+                    if (!label.textContent.includes('✅')) {
+                        // Using innerHTML to preserve the input radio button and its attributes
+                        label.innerHTML = '✅ ' + label.innerHTML;
+                    }
+                });
+
+                // Change the button text and disable it after showing answers
+                this.textContent = 'Answers Shown';
+                this.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
+```

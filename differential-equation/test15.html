@@ -1,0 +1,726 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Order Linear ODEs Quiz</title>
+    <!-- Google Fonts for a professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define a professional color palette using CSS variables */
+        :root {
+            --primary-blue: #0056b3; /* A strong, professional blue */
+            --light-blue: #e0f2f7;   /* Very light blue for backgrounds */
+            --dark-gray: #333;       /* Dark text color for readability */
+            --medium-gray: #666;     /* Slightly lighter gray for secondary text */
+            --light-gray: #f8f8f8;   /* Light background for the body */
+            --border-gray: #ddd;     /* Light gray for borders */
+            --correct-green: #e6ffe6; /* Light green for correct answers */
+            --hover-blue: #004085;   /* Darker blue for hover states */
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+        }
+
+        /* Basic body styling for a clean slate */
+        body {
+            font-family: 'Roboto', sans-serif; /* Modern, readable font */
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--light-gray); /* Light background */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center; /* Center the quiz container */
+            align-items: flex-start;
+            min-height: 100vh; /* Full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Quiz container styling */
+        .quiz-container {
+            background-color: #ffffff; /* White background for the quiz content */
+            padding: 30px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: var(--shadow); /* Subtle shadow for depth */
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Full width up to max-width */
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        /* Quiz title styling */
+        h1 {
+            font-family: 'Montserrat', sans-serif; /* Distinct font for headings */
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            border-bottom: 2px solid var(--light-blue); /* Underline effect */
+            padding-bottom: 15px;
+        }
+
+        /* Individual question block styling */
+        .question {
+            background-color: var(--light-blue); /* Light blue background for questions */
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Lighter shadow for questions */
+        }
+
+        /* Question text styling */
+        .question h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            line-height: 1.5;
+        }
+
+        /* Options list styling */
+        .options {
+            list-style: none; /* Remove default list bullets */
+            padding: 0;
+            margin: 0;
+        }
+
+        .options li {
+            margin-bottom: 12px;
+        }
+
+        /* Styling for each option label */
+        .options label {
+            display: block;
+            background-color: #f0f8ff; /* Lighter blue for options */
+            border: 1px solid var(--light-blue);
+            border-radius: 6px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease; /* Smooth transitions */
+            position: relative;
+            padding-left: 40px; /* Space for custom radio button */
+        }
+
+        .options label:hover {
+            background-color: #e6f7ff; /* Even lighter blue on hover */
+            border-color: var(--primary-blue);
+        }
+
+        /* Hide default radio button */
+        .options input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none; /* Make it non-interactive */
+        }
+
+        /* Custom radio button styling (the circle) */
+        .options label::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%; /* Makes it a circle */
+            background-color: #fff;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        /* Custom radio button fill when checked */
+        .options input[type="radio"]:checked + label::before {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        /* Custom radio button inner checkmark when checked */
+        .options input[type="radio"]:checked + label::after {
+            content: '';
+            position: absolute;
+            left: 20px; /* Adjust to center the checkmark */
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(45deg); /* Rotate for checkmark shape */
+            width: 6px;
+            height: 12px;
+            border: solid #fff; /* White border for the checkmark */
+            border-width: 0 3px 3px 0; /* Only right and bottom borders */
+            opacity: 1;
+            transition: all 0.2s ease;
+        }
+
+        /* Style for correct answers when shown */
+        .correct-answer-highlight {
+            background-color: var(--correct-green) !important; /* Override other backgrounds */
+            border-color: #4CAF50 !important; /* Green border */
+            animation: pulseCorrect 0.5s ease-in-out; /* Subtle animation */
+        }
+
+        /* Animation for correct answers */
+        @keyframes pulseCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        /* Show Answers button styling */
+        .show-answers-btn {
+            display: block;
+            width: fit-content; /* Button fits its content */
+            margin: 30px auto 0; /* Center horizontally */
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: var(--primary-blue);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .show-answers-btn:hover {
+            background-color: var(--hover-blue);
+            transform: translateY(-2px); /* Lift effect on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0); /* Press effect */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* MathJax specific adjustments for better display */
+        .MathJax_Display {
+            text-align: center !important;
+            margin: 1em 0 !important;
+        }
+        .mjx-chtml {
+            font-size: 1.1em !important; /* Slightly larger math for readability */
+        }
+        /* Ensure checkmark emoji doesn't interfere with MathJax layout */
+        .checkmark-emoji {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+    <!-- MathJax script for rendering LaTeX equations -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Second Order Linear Differential Equations Quiz</h1>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question">
+                <h2>1. What is the characteristic equation for the differential equation \(y'' - 5y' + 6y = 0\)?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a" data-correct="true">A) \(r^2 - 5r + 6 = 0\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q1b" name="q1" value="B">
+                        <label for="q1b">B) \(r^2 + 5r + 6 = 0\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c">C) \(r - 5r + 6 = 0\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q1d" name="q1" value="D">
+                        <label for="q1d">D) \(r^2 - 5r - 6 = 0\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <h2>2. Find the general solution to the differential equation \(y'' - 4y' + 3y = 0\).</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a">A) \(y(x) = C_1 e^{-x} + C_2 e^{-3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b" data-correct="true">B) \(y(x) = C_1 e^{x} + C_2 e^{3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q2c" name="q2" value="C">
+                        <label for="q2c">C) \(y(x) = C_1 e^{2x} + C_2 e^{x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D) \(y(x) = C_1 \cos(x) + C_2 \sin(3x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <h2>3. What is the general solution for a second-order homogeneous linear ODE with a repeated root \(r = -2\)?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A) \(y(x) = C_1 e^{-2x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q3b" name="q3" value="B">
+                        <label for="q3b">B) \(y(x) = C_1 e^{-2x} + C_2 e^{2x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q3c" name="q3" value="C">
+                        <label for="q3c" data-correct="true">C) \(y(x) = C_1 e^{-2x} + C_2 x e^{-2x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D) \(y(x) = (C_1 + C_2 x^2) e^{-2x}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <h2>4. Find the general solution of \(y'' + 9y = 0\).</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a">A) \(y(x) = C_1 e^{3x} + C_2 e^{-3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q4b" name="q4" value="B">
+                        <label for="q4b">B) \(y(x) = C_1 \cos(9x) + C_2 \sin(9x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c" data-correct="true">C) \(y(x) = C_1 \cos(3x) + C_2 \sin(3x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D) \(y(x) = C_1 x \cos(3x) + C_2 x \sin(3x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <h2>5. Given the differential equation \(y'' + 2y' + 5y = 0\), what are the roots of its characteristic equation?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a">A) \(r = -1, -5\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q5b" name="q5" value="B">
+                        <label for="q5b">B) \(r = 1 \pm 2i\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q5c" name="q5" value="C">
+                        <label for="q5c" data-correct="true">C) \(r = -1 \pm 2i\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d">D) \(r = -2 \pm i\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <h2>6. Find the particular solution to \(y'' - y = 0\) with initial conditions \(y(0) = 2\) and \(y'(0) = 0\).</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a">A) \(y(x) = e^x\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q6b" name="q6" value="B">
+                        <label for="q6b">B) \(y(x) = e^{-x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c" data-correct="true">C) \(y(x) = 2 \cosh(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d">D) \(y(x) = 2 \sinh(x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <h2>7. For the non-homogeneous equation \(y'' - 3y' + 2y = 4e^{3x}\), what is the form of the particular solution \(Y_p(x)\) using the method of undetermined coefficients?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a" data-correct="true">A) \(A e^{3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q7b" name="q7" value="B">
+                        <label for="q7b">B) \(A x e^{3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q7c" name="q7" value="C">
+                        <label for="q7c">C) \(A x^2 e^{3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D) \(A \sin(3x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <h2>8. If the characteristic equation has roots \(r_1 = 0\) and \(r_2 = -1\), what is the general solution of the homogeneous ODE?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q8a" name="q8" value="A">
+                        <label for="q8a">A) \(y(x) = C_1 + C_2 e^{x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q8b" name="q8" value="B">
+                        <label for="q8b" data-correct="true">B) \(y(x) = C_1 + C_2 e^{-x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c">C) \(y(x) = C_1 e^{0x} + C_2 e^{-x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d">D) \(y(x) = C_1 x + C_2 e^{-x}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <h2>9. What is the Wronskian of the functions \(y_1(x) = e^x\) and \(y_2(x) = e^{2x}\)?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a" data-correct="true">A) \(e^{3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b">B) \(e^{x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q9c" name="q9" value="C">
+                        <label for="q9c">C) \(x e^{3x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D) \(2e^{3x}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <h2>10. For the equation \(y'' + 4y' + 4y = 2e^{-2x}\), what is the correct form for the particular solution \(Y_p(x)\) using undetermined coefficients?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A) \(A e^{-2x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B) \(A x e^{-2x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q10c" name="q10" value="C">
+                        <label for="q10c" data-correct="true">C) \(A x^2 e^{-2x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D) \(A x^3 e^{-2x}\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question">
+                <h2>11. Which of the following is a homogeneous second-order linear differential equation?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a">A) \(y'' + 3y' + 2y = \sin(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q11b" name="q11" value="B">
+                        <label for="q11b" data-correct="true">B) \(y'' - 4y' + 5y = 0\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C) \(y'' + y y' = x\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D) \(y'' + 2y' + y^2 = 0\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question">
+                <h2>12. If the roots of the characteristic equation are \(r = \pm i\), what is the general solution?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a">A) \(y(x) = C_1 e^x + C_2 e^{-x}\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q12b" name="q12" value="B">
+                        <label for="q12b">B) \(y(x) = C_1 \cosh(x) + C_2 \sinh(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c" data-correct="true">C) \(y(x) = C_1 \cos(x) + C_2 \sin(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D) \(y(x) = C_1 x \cos(x) + C_2 x \sin(x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question">
+                <h2>13. Consider a spring-mass system with equation \(m x'' + c x' + k x = 0\). If \(c^2 - 4mk < 0\), the system is:</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A) Overdamped</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q13b" name="q13" value="B">
+                        <label for="q13b">B) Critically damped</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c" data-correct="true">C) Underdamped</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d">D) Undamped</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question">
+                <h2>14. The general solution of a non-homogeneous equation \(y'' + p(x)y' + q(x)y = g(x)\) is given by:</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a">A) \(y(x) = Y_p(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B) \(y(x) = Y_h(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q14c" name="q14" value="C">
+                        <label for="q14c" data-correct="true">C) \(y(x) = Y_h(x) + Y_p(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D) \(y(x) = Y_h(x) \cdot Y_p(x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question">
+                <h2>15. For the equation \(y'' + y = \cos(x)\), what is the form of the particular solution \(Y_p(x)\)?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A) \(A \cos(x) + B \sin(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q15b" name="q15" value="B">
+                        <label for="q15b" data-correct="true">B) \(x(A \cos(x) + B \sin(x))\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q15c" name="q15" value="C">
+                        <label for="q15c">C) \(A x \cos(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D) \(A \cos(2x) + B \sin(2x)\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question">
+                <h2>16. What is the Wronskian of \(y_1(x) = \cos(x)\) and \(y_2(x) = \sin(x)\)?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a">A) \(\cos^2(x) - \sin^2(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q16b" name="q16" value="B">
+                        <label for="q16b">B) \(-\cos^2(x) - \sin^2(x)\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q16c" name="q16" value="C">
+                        <label for="q16c" data-correct="true">C) \(1\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D) \(-1\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question">
+                <h2>17. The principle of superposition applies to:</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a">A) Non-linear differential equations only</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q17b" name="q17" value="B">
+                        <label for="q17b">B) All differential equations</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q17c" name="q17" value="C">
+                        <label for="q17c" data-correct="true">C) Homogeneous linear differential equations</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D) Non-homogeneous linear differential equations only</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question">
+                <h2>18. Find the particular solution \(Y_p(x)\) for \(y'' - y = x^2\).</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q18a" name="q18" value="A">
+                        <label for="q18a">A) \(A x^2\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q18b" name="q18" value="B">
+                        <label for="q18b">B) \(A x^2 + B x\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c" data-correct="true">C) \(-x^2 - 2\)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d">D) \(A x^2 + B x + C\)</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question">
+                <h2>19. What type of damping occurs in a spring-mass system when the characteristic equation has two distinct real roots?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a">A) Underdamped</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b" data-correct="true">B) Overdamped</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q19c" name="q19" value="C">
+                        <label for="q19c">C) Critically damped</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d">D) Undamped</label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question">
+                <h2>20. Which of the following is NOT a property of linear differential equations?</h2>
+                <ul class="options">
+                    <li>
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a">A) The dependent variable and its derivatives appear to the first power.</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B) No products of the dependent variable and its derivatives.</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q20c" name="q20" value="C">
+                        <label for="q20c" data-correct="true">C) Coefficients must be constant.</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d">D) The principle of superposition applies to homogeneous cases.</label>
+                    </li>
+                </ul>
+            </div>
+        </form>
+
+        <button class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const quizForm = document.getElementById('quizForm');
+
+            showAnswersBtn.addEventListener('click', () => {
+                const questions = quizForm.querySelectorAll('.question');
+
+                questions.forEach(questionDiv => {
+                    // Find the label element that is marked as correct
+                    const correctLabel = questionDiv.querySelector('label[data-correct="true"]');
+                    if (correctLabel) {
+                        // Add a class to highlight the correct answer visually
+                        correctLabel.classList.add('correct-answer-highlight');
+                        
+                        // Add a checkmark emoji if it's not already there
+                        if (!correctLabel.querySelector('.checkmark-emoji')) {
+                            const checkmarkSpan = document.createElement('span');
+                            checkmarkSpan.classList.add('checkmark-emoji');
+                            checkmarkSpan.textContent = ' ✅ ';
+                            // Prepend the checkmark to the label's text content
+                            correctLabel.prepend(checkmarkSpan);
+                        }
+                        
+                        // Disable all radio buttons within this question to prevent further changes
+                        const radioButtons = questionDiv.querySelectorAll('input[type="radio"]');
+                        radioButtons.forEach(radio => radio.disabled = true);
+                    }
+                });
+
+                // Change the button text and disable it after answers are shown
+                showAnswersBtn.textContent = 'Answers Shown';
+                showAnswersBtn.disabled = true;
+                showAnswersBtn.style.backgroundColor = '#6c757d'; // Change color to indicate disabled state
+                showAnswersBtn.style.cursor = 'not-allowed'; // Change cursor
+                showAnswersBtn.style.boxShadow = 'none'; // Remove shadow when disabled
+            });
+        });
+    </script>
+</body>
+</html>
+```

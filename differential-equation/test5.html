@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Order DEs Quiz: Homogeneous & Reducible Forms</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&display=swap');
+
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e7f2ff;
+            --dark-gray: #343a40;
+            --medium-gray: #6c757d;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+            --success-green: #d4edda;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            padding: 30px 40px;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 15px;
+        }
+
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--white);
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .question-block:hover {
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .question-block p {
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--dark-gray);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .option:hover {
+            background-color: var(--light-gray);
+            border-color: var(--primary-blue);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: var(--primary-blue); /* Customizes radio button color */
+            cursor: pointer;
+        }
+
+        .option label {
+            flex-grow: 1;
+            cursor: pointer;
+            font-size: 1em;
+            color: var(--medium-gray);
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: 250px;
+            padding: 15px 25px;
+            margin: 30px auto;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Styles for MathJax rendering */
+        .question-block p .MathJax_Display,
+        .option label .MathJax_Display {
+            display: inline-block !important; /* Forces inline display for block equations if accidentally used */
+            margin: 0 5px; /* Adjust spacing around math */
+            vertical-align: middle;
+        }
+
+        .mjx-chtml {
+            font-family: 'Open Sans', sans-serif !important; /* Ensure consistent font */
+        }
+
+        /* Specific styling for correct answers after button click */
+        .correct-answer {
+            background-color: var(--success-green) !important;
+            border-color: #28a745 !important;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>First Order DEs Quiz: Homogeneous Equations and Reducible Forms</h1>
+
+        <div class="quiz-questions">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <p>1. Which of the following differential equations is homogeneous?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="A">
+                        <label for="q1a">A. \( (x^2 + y)dx - x dy = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="B">
+                        <label for="q1b">B. \( (x^2 + y^2)dx - xy dy = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="C">
+                        <label for="q1c">C. \( (x+y+1)dx - (x-y)dy = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="D" data-correct="true">
+                        <label for="q1d" data-correct="true">D. \( x^2 dy = (xy + y^2) dx \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <p>2. To solve a homogeneous differential equation \( M(x,y)dx + N(x,y)dy = 0 \), what is the standard substitution?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="A">
+                        <label for="q2a">A. \( y = ux + v \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="B">
+                        <label for="q2b">B. \( y = vx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="C" data-correct="true">
+                        <label for="q2c" data-correct="true">C. \( y = vx \) or \( x = vy \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="D">
+                        <label for="q2d">D. \( x = yz \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <p>3. If a function \( f(x,y) \) is homogeneous of degree \( n \), then for any non-zero constant \( t \), which of the following is true?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="A">
+                        <label for="q3a">A. \( f(tx, ty) = t f(x,y) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="B">
+                        <label for="q3b">B. \( f(tx, ty) = t^n f(x,y) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="C" data-correct="true">
+                        <label for="q3c" data-correct="true">C. \( f(tx, ty) = t^n f(x,y) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="D">
+                        <label for="q3d">D. \( f(tx, ty) = f(x,y) \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <p>4. The general solution of the homogeneous differential equation \( \frac{dy}{dx} = \frac{x+y}{x} \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="A">
+                        <label for="q4a">A. \( y = x \ln|cx| \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="B" data-correct="true">
+                        <label for="q4b" data-correct="true">B. \( y = x \ln|cx| \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="C">
+                        <label for="q4c">C. \( y = x + c \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="D">
+                        <label for="q4d">D. \( y = c x^2 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <p>5. Which of the following substitutions should be used to solve \( (x^2 + y^2)dx - 2xy dy = 0 \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="A">
+                        <label for="q5a">A. \( y = x \sin u \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="B" data-correct="true">
+                        <label for="q5b" data-correct="true">B. \( y = vx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="C">
+                        <label for="q5c">C. \( x = e^u \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="D">
+                        <label for="q5d">D. \( y = A x + B \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <p>6. The differential equation \( \frac{dy}{dx} = \frac{ax+by+c}{Ax+By+C} \) can be reduced to a homogeneous form if:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q6a" name="q6" value="A">
+                        <label for="q6a">A. \( aB - bA = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6b" name="q6" value="B" data-correct="true">
+                        <label for="q6b" data-correct="true">B. The lines \( ax+by+c=0 \) and \( Ax+By+C=0 \) intersect.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6c" name="q6" value="C">
+                        <label for="q6c">C. \( c = C = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6d" name="q6" value="D">
+                        <label for="q6d">D. \( a = A \) and \( b = B \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <p>7. For the equation \( \frac{dy}{dx} = \frac{x-y+2}{x+y-1} \), the correct substitution to make it homogeneous is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q7a" name="q7" value="A">
+                        <label for="q7a">A. \( x = X, y = Y \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7b" name="q7" value="B">
+                        <label for="q7b">B. \( x = X+1, y = Y+1 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7c" name="q7" value="C" data-correct="true">
+                        <label for="q7c" data-correct="true">C. \( x = X-1/2, y = Y+3/2 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7d" name="q7" value="D">
+                        <label for="q7d">D. \( x = X+h, y = Y+k \) where \( h, k \) are roots of \( x-y+2=0 \) and \( x+y-1=0 \).</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <p>8. If the lines \( ax+by+c=0 \) and \( Ax+By+C=0 \) are parallel, what substitution should be used for \( \frac{dy}{dx} = f\left(\frac{ax+by+c}{Ax+By+C}\right) \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q8a" name="q8" value="A" data-correct="true">
+                        <label for="q8a" data-correct="true">A. \( z = ax+by \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8b" name="q8" value="B">
+                        <label for="q8b">B. \( y = vx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8c" name="q8" value="C">
+                        <label for="q8c">C. \( x = X+h, y = Y+k \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8d" name="q8" value="D">
+                        <label for="q8d">D. \( z = x+y \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <p>9. The equation \( (2x+3y)dx + (3x+2y)dy = 0 \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q9a" name="q9" value="A">
+                        <label for="q9a">A. Linear</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9b" name="q9" value="B">
+                        <label for="q9b">B. Exact but not homogeneous</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9c" name="q9" value="C" data-correct="true">
+                        <label for="q9c" data-correct="true">C. Homogeneous and Exact</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9d" name="q9" value="D">
+                        <label for="q9d">D. Reducible to homogeneous form</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <p>10. What is the degree of homogeneity of the function \( f(x,y) = x^3 + 2xy^2 - 5y^3 \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q10a" name="q10" value="A">
+                        <label for="q10a">A. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10b" name="q10" value="B">
+                        <label for="q10b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10c" name="q10" value="C" data-correct="true">
+                        <label for="q10c" data-correct="true">C. 3</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10d" name="q10" value="D">
+                        <label for="q10d">D. Not homogeneous</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <p>11. The general solution of \( (x^2+y^2)dx - 2xy dy = 0 \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q11a" name="q11" value="A">
+                        <label for="q11a">A. \( x^2 - y^2 = Cx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11b" name="q11" value="B" data-correct="true">
+                        <label for="q11b" data-correct="true">B. \( x^2 - y^2 = Cx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11c" name="q11" value="C">
+                        <label for="q11c">C. \( y^2 = x^2 + Cx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11d" name="q11" value="D">
+                        <label for="q11d">D. \( y^2 = x^2 + C \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <p>12. For the differential equation \( \frac{dy}{dx} = \frac{x+y-1}{x+y+1} \), what is the appropriate substitution?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q12a" name="q12" value="A">
+                        <label for="q12a">A. \( y = vx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12b" name="q12" value="B" data-correct="true">
+                        <label for="q12b" data-correct="true">B. \( z = x+y \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12c" name="q12" value="C">
+                        <label for="q12c">C. \( x = X+h, y = Y+k \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12d" name="q12" value="D">
+                        <label for="q12d">D. \( z = x-y \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <p>13. If \( y=vx \), then \( \frac{dy}{dx} \) is equal to:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q13a" name="q13" value="A">
+                        <label for="q13a">A. \( v + x \frac{dv}{dx} \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13b" name="q13" value="B" data-correct="true">
+                        <label for="q13b" data-correct="true">B. \( v + x \frac{dv}{dx} \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13c" name="q13" value="C">
+                        <label for="q13c">C. \( x + v \frac{dv}{dx} \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13d" name="q13" value="D">
+                        <label for="q13d">D. \( \frac{dv}{dx} \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <p>14. The solution to the IVP \( \frac{dy}{dx} = \frac{x^2+y^2}{2xy} \) with \( y(1)=2 \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q14a" name="q14" value="A">
+                        <label for="q14a">A. \( y^2 = x^2 + 3x \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14b" name="q14" value="B">
+                        <label for="q14b">B. \( y^2 = x^2 + 3x \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14c" name="q14" value="C" data-correct="true">
+                        <label for="q14c" data-correct="true">C. \( y^2 = x^2 + 3x \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14d" name="q14" value="D">
+                        <label for="q14d">D. \( y^2 = x^2 + 3x \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <p>15. Which of the following is NOT a homogeneous differential equation?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q15a" name="q15" value="A">
+                        <label for="q15a">A. \( (x^2+y^2)dx - xy dy = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15b" name="q15" value="B">
+                        <label for="q15b">B. \( x dy = (y + \sqrt{x^2+y^2}) dx \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15c" name="q15" value="C" data-correct="true">
+                        <label for="q15c" data-correct="true">C. \( (x+y+1)dx - (x+y+2)dy = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15d" name="q15" value="D">
+                        <label for="q15d">D. \( (x^2-y^2)dx + 2xy dy = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <p>16. The general solution of \( \frac{dy}{dx} = \frac{y-x}{y+x} \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q16a" name="q16" value="A">
+                        <label for="q16a">A. \( \ln|x^2+y^2| + 2 \arctan(y/x) = C \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16b" name="q16" value="B" data-correct="true">
+                        <label for="q16b" data-correct="true">B. \( \ln(x^2+y^2) + 2 \arctan(y/x) = C \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16c" name="q16" value="C">
+                        <label for="q16c">C. \( \ln|x^2+y^2| - 2 \arctan(y/x) = C \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16d" name="q16" value="D">
+                        <label for="q16d">D. \( \ln(x^2+y^2) = C x \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <p>17. For the equation \( \frac{dy}{dx} = \frac{2x-y+1}{x-2y-1} \), the point of intersection \( (h,k) \) of the lines \( 2x-y+1=0 \) and \( x-2y-1=0 \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q17a" name="q17" value="A">
+                        <label for="q17a">A. \( (1, 3) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17b" name="q17" value="B">
+                        <label for="q17b">B. \( (-1, -1) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17c" name="q17" value="C" data-correct="true">
+                        <label for="q17c" data-correct="true">C. \( (-1, -1) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17d" name="q17" value="D">
+                        <label for="q17d">D. \( (0, 1) \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <p>18. A differential equation \( M(x,y)dx + N(x,y)dy = 0 \) is homogeneous if \( M(x,y) \) and \( N(x,y) \) are homogeneous functions of the same degree.</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q18a" name="q18" value="A" data-correct="true">
+                        <label for="q18a" data-correct="true">A. True</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18b" name="q18" value="B">
+                        <label for="q18b">B. False</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18c" name="q18" value="C">
+                        <label for="q18c">C. Only if \( M \) is linear</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18d" name="q18" value="D">
+                        <label for="q18d">D. Only if \( N \) is constant</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <p>19. The differential equation \( (x+y)dx - (x+y+1)dy = 0 \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q19a" name="q19" value="A">
+                        <label for="q19a">A. Homogeneous</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19b" name="q19" value="B">
+                        <label for="q19b">B. Exact</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19c" name="q19" value="C" data-correct="true">
+                        <label for="q19c" data-correct="true">C. Reducible to variable separable form</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19d" name="q19" value="D">
+                        <label for="q19d">D. Linear</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <p>20. What is the primary benefit of transforming a non-homogeneous DE into a homogeneous one?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q20a" name="q20" value="A">
+                        <label for="q20a">A. It always results in a linear equation.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20b" name="q20" value="B">
+                        <label for="q20b">B. The resulting homogeneous equation can then be solved by direct integration.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20c" name="q20" value="C" data-correct="true">
+                        <label for="q20c" data-correct="true">C. The resulting homogeneous equation is always separable, which simplifies solving.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20d" name="q20" value="D">
+                        <label for="q20d">D. It eliminates the need for any further substitutions.</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const questions = document.querySelectorAll('.question-block');
+
+            showAnswersBtn.addEventListener('click', function() {
+                questions.forEach(questionBlock => {
+                    const correctLabel = questionBlock.querySelector('label[data-correct="true"]');
+                    if (correctLabel) {
+                        const parentOptionDiv = correctLabel.closest('.option');
+                        if (parentOptionDiv) {
+                            parentOptionDiv.classList.add('correct-answer');
+                            // Prepend checkmark emoji if not already there
+                            if (!correctLabel.textContent.includes('✅')) {
+                                correctLabel.textContent = '✅ ' + correctLabel.textContent;
+                            }
+                        }
+                    }
+                });
+
+                this.textContent = 'Answers Shown';
+                this.disabled = true; // Disable the button after showing answers
+            });
+        });
+    </script>
+</body>
+</html>

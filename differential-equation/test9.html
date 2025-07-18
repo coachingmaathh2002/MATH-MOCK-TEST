@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Second Order DEs - Euler's Homogeneous Equations</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6; /* Light gray-blue */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #2c3e50; /* Dark blue */
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #34495e; /* Slightly lighter dark blue */
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .question-text {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Spacing between options */
+        }
+
+        .option-label {
+            display: block;
+            background-color: #f8f8f8;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            font-size: 1.05em;
+        }
+
+        .option-label:hover {
+            background-color: #eef7fc; /* Light blue on hover */
+            border-color: #a7d9f7;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2); /* Slightly larger radio buttons */
+        }
+
+        /* Styling for correct answers */
+        .option-label.correct-answer {
+            background-color: #e0ffe0; /* Light green */
+            border-color: #8cc68c;
+            font-weight: bold;
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: fit-content;
+            margin: 40px auto 20px auto;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #3498db; /* Blue */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9; /* Darker blue */
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* MathJax specific styling */
+        .MathJax_Display {
+            margin-top: 1em !important;
+            margin-bottom: 1em !important;
+        }
+        p .MathJax {
+            vertical-align: middle;
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz: Second Order DEs - Euler's Homogeneous Equations</h1>
+
+        <form id="quizForm">
+
+            <!-- Question 1 -->
+            <div class="question-block">
+                <h2>Question 1</h2>
+                <p class="question-text">Which of the following is the general form of a second-order homogeneous Euler-Cauchy equation?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="A"> A) \(ay'' + by' + cy = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="B"> B) \(x^2y'' + xy' + y = f(x)\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q1" value="C"> C) \(ax^2y'' + bxy' + cy = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="D"> D) \(y'' + p(x)y' + q(x)y = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <h2>Question 2</h2>
+                <p class="question-text">The characteristic equation for the Euler-Cauchy equation \(ax^2y'' + bxy' + cy = 0\) is derived by assuming a solution of the form \(y = x^r\). What is this characteristic equation?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="A"> A) \(ar^2 + br + c = 0\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q2" value="B"> B) \(ar(r-1) + br + c = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="C"> C) \(a(r+1)r + br + c = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="D"> D) \(ar^2 + (b+a)r + c = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <h2>Question 3</h2>
+                <p class="question-text">For the Euler-Cauchy equation \(x^2y'' - 4xy' + 6y = 0\), what is its characteristic equation?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="A"> A) \(r^2 - 4r + 6 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="B"> B) \(r^2 - 3r + 6 = 0\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q3" value="C"> C) \(r^2 - 5r + 6 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="D"> D) \(r^2 - 4r + 5 = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-block">
+                <h2>Question 4</h2>
+                <p class="question-text">If the characteristic equation for an Euler-Cauchy DE has distinct real roots \(r_1\) and \(r_2\), what is the general solution?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="A"> A) \(y = c_1e^{r_1x} + c_2e^{r_2x}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q4" value="B"> B) \(y = c_1x^{r_1} + c_2x^{r_2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="C"> C) \(y = c_1\cos(r_1 \ln x) + c_2\sin(r_2 \ln x)\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="D"> D) \(y = (c_1 + c_2 \ln x)x^{r_1}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-block">
+                <h2>Question 5</h2>
+                <p class="question-text">Find the general solution to \(x^2y'' - 2y = 0\).</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="A"> A) \(y = c_1e^{2x} + c_2e^{-x}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="B"> B) \(y = c_1x^2 + c_2x^{1}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q5" value="C"> C) \(y = c_1x^2 + c_2x^{-1}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="D"> D) \(y = c_1x^{\frac{1+\sqrt{17}}{2}} + c_2x^{\frac{1-\sqrt{17}}{2}}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-block">
+                <h2>Question 6</h2>
+                <p class="question-text">What are the roots of the characteristic equation for \(x^2y'' + 3xy' - 3y = 0\)?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="A"> A) \(r = 1, 3\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q6" value="B"> B) \(r = 1, -3\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="C"> C) \(r = -1, 3\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="D"> D) \(r = -1 \pm i\sqrt{2}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-block">
+                <h2>Question 7</h2>
+                <p class="question-text">The characteristic equation \(r^2 - 4r + 3 = 0\) corresponds to which Euler-Cauchy differential equation?</p>
+                <div class="options-container">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q7" value="A"> A) \(x^2y'' - 3xy' + 3y = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="B"> B) \(x^2y'' - 4xy' + 3y = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="C"> C) \(x^2y'' + 5xy' + 3y = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="D"> D) \(y'' - 4y' + 3y = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-block">
+                <h2>Question 8</h2>
+                <p class="question-text">If the characteristic equation for an Euler-Cauchy DE has a repeated real root \(r\), what is the general solution?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q8" value="A"> A) \(y = (c_1 + c_2x)e^{rx}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q8" value="B"> B) \(y = (c_1 + c_2 \ln x)x^r\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q8" value="C"> C) \(y = c_1x^r + c_2x^{r \ln x}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q8" value="D"> D) \(y = c_1e^{rx} + c_2e^{rx \ln x}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-block">
+                <h2>Question 9</h2>
+                <p class="question-text">Find the general solution to \(x^2y'' + 5xy' + 4y = 0\).</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q9" value="A"> A) \(y = c_1x^{-1} + c_2x^{-4}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q9" value="B"> B) \(y = (c_1 + c_2x)e^{-2x}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q9" value="C"> C) \(y = (c_1 + c_2 \ln x)x^{-2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q9" value="D"> D) \(y = c_1x^{-2} + c_2(\ln x)x^{-2}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-block">
+                <h2>Question 10</h2>
+                <p class="question-text">For the equation \(x^2y'' - xy' + y = 0\), what are the roots of its characteristic equation?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q10" value="A"> A) \(r = 1, -1\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q10" value="B"> B) \(r = 1, 1\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q10" value="C"> C) \(r = \pm 1\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q10" value="D"> D) \(r = 0, 1\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-block">
+                <h2>Question 11</h2>
+                <p class="question-text">Which of the following is the characteristic equation for an Euler-Cauchy DE with a repeated root \(r = -3\)?</p>
+                <div class="options-container">
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q11" value="A"> A) \(r^2 + 6r + 9 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q11" value="B"> B) \(r^2 + 7r + 9 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q11" value="C"> C) \(r^2 - 6r + 9 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q11" value="D"> D) \(r^2 + 5r + 9 = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-block">
+                <h2>Question 12</h2>
+                <p class="question-text">If the characteristic equation for an Euler-Cauchy DE has complex conjugate roots \(r = \alpha \pm i\beta\), what is the general solution?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q12" value="A"> A) \(y = e^{\alpha x}(c_1\cos(\beta x) + c_2\sin(\beta x))\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q12" value="B"> B) \(y = x^{\alpha}(c_1\cos(\beta \ln x) + c_2\sin(\beta \ln x))\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q12" value="C"> C) \(y = c_1x^{\alpha+i\beta} + c_2x^{\alpha-i\beta}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q12" value="D"> D) \(y = x^{\alpha}(\cos(\beta x) + \sin(\beta x))\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-block">
+                <h2>Question 13</h2>
+                <p class="question-text">Find the general solution to \(x^2y'' + xy' + y = 0\).</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q13" value="A"> A) \(y = c_1e^{x} + c_2e^{-x}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q13" value="B"> B) \(y = c_1\cos(\ln x) + c_2\sin(\ln x)\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q13" value="C"> C) \(y = x(c_1\cos(x) + c_2\sin(x))\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q13" value="D"> D) \(y = c_1x + c_2x\ln x\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-block">
+                <h2>Question 14</h2>
+                <p class="question-text">What are the roots of the characteristic equation for \(x^2y'' - 3xy' + 13y = 0\)?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q14" value="A"> A) \(r = 3 \pm 2i\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q14" value="B"> B) \(r = 2 \pm 3i\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q14" value="C"> C) \(r = 2 \pm \sqrt{13}i\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q14" value="D"> D) \(r = -2 \pm 3i\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-block">
+                <h2>Question 15</h2>
+                <p class="question-text">If the characteristic roots of an Euler-Cauchy equation are \(r = 0 \pm i\), what is the general solution?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q15" value="A"> A) \(y = c_1\cos(x) + c_2\sin(x)\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q15" value="B"> B) \(y = c_1\cos(\ln x) + c_2\sin(\ln x)\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q15" value="C"> C) \(y = c_1 + c_2\ln x\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q15" value="D"> D) \(y = x(c_1\cos(1) + c_2\sin(1))\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-block">
+                <h2>Question 16</h2>
+                <p class="question-text">To transform an Euler-Cauchy equation \(ax^2y'' + bxy' + cy = 0\) into a linear differential equation with constant coefficients, what substitution is commonly used?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q16" value="A"> A) \(y = e^{rx}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q16" value="B"> B) \(x = e^t\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q16" value="C"> C) \(y = vx\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q16" value="D"> D) \(x = t^2\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-block">
+                <h2>Question 17</h2>
+                <p class="question-text">Consider the equation \(x^2y'' + 2xy' - 6y = 0\). What type of roots does its characteristic equation have?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q17" value="A"> A) Repeated real roots
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q17" value="B"> B) Complex conjugate roots
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q17" value="C"> C) Distinct real roots
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q17" value="D"> D) No real roots
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-block">
+                <h2>Question 18</h2>
+                <p class="question-text">Which of the following is NOT a possible form for the general solution of a homogeneous second-order Euler-Cauchy equation?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q18" value="A"> A) \(c_1x^{r_1} + c_2x^{r_2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q18" value="B"> B) \(x^r(c_1 + c_2 \ln x)\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q18" value="C"> C) \(x^{\alpha}(c_1\cos(\beta \ln x) + c_2\sin(\beta \ln x))\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q18" value="D"> D) \(c_1e^{r_1x} + c_2xe^{r_2x}\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-block">
+                <h2>Question 19</h2>
+                <p class="question-text">If the general solution of an Euler-Cauchy equation is \(y = c_1x^3 + c_2x^{-1}\), what was its characteristic equation?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q19" value="A"> A) \(r^2 + 2r - 3 = 0\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q19" value="B"> B) \(r^2 - 2r - 3 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q19" value="C"> C) \(r^2 + 2r - 3 = 0\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q19" value="D"> D) \(r^2 - 4r + 3 = 0\)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-block">
+                <h2>Question 20</h2>
+                <p class="question-text">For the equation \(x^2y'' + xy' - 4y = 0\), what is the general solution?</p>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="q20" value="A"> A) \(y = c_1x^2 + c_2x^{-1}\)
+                    </label>
+                    <label class="option-label" data-correct="true">
+                        <input type="radio" name="q20" value="B"> B) \(y = c_1x^2 + c_2x^{-2}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q20" value="C"> C) \(y = c_1x^4 + c_2x^{-1}\)
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q20" value="D"> D) \(y = (c_1 + c_2 \ln x)x^2\)
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+
+            showAnswersBtn.addEventListener('click', function() {
+                // Get all labels that are marked as correct
+                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
+
+                correctLabels.forEach(label => {
+                    // Add the class for styling
+                    label.classList.add('correct-answer');
+
+                    // Prepend checkmark emoji if not already there
+                    // This uses textContent and prepends to the label's child nodes
+                    if (!label.innerHTML.includes('✅')) {
+                         label.insertAdjacentHTML('afterbegin', '✅ ');
+                    }
+                });
+
+                // Change button text and disable it
+                this.textContent = 'Answers Shown';
+                this.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

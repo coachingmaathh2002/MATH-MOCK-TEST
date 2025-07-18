@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODE Quiz: Order, Degree, and Formulation</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e50; /* Dark blue for headings/accents */
+            --secondary-blue: #3498db; /* Brighter blue for buttons */
+            --light-gray: #ecf0f1; /* Light background */
+            --medium-gray: #bdc3c7; /* Border/separator */
+            --dark-gray-text: #34495e; /* Dark text */
+            --correct-green: #d4edda; /* Light green for correct answers */
+            --border-radius: 8px;
+            --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray-text);
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            max-width: 900px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid var(--medium-gray);
+            padding-bottom: 15px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            background-color: #fdfdfd;
+        }
+
+        .question p {
+            font-size: 1.15em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: var(--primary-blue);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start; /* Align radio button and text at the top */
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #f0f8ff; /* Lightest blue on hover */
+            border-color: var(--secondary-blue);
+        }
+
+        .option input[type="radio"] {
+            margin-top: 4px; /* Adjust alignment with text */
+            margin-right: 12px;
+            min-width: 20px; /* Ensure consistent size */
+            min-height: 20px;
+            accent-color: var(--secondary-blue);
+            cursor: pointer;
+        }
+
+        .option label {
+            flex-grow: 1;
+            cursor: pointer;
+            font-size: 1.05em;
+            line-height: 1.4; /* Improve readability for multi-line options */
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: fit-content;
+            padding: 15px 30px;
+            background-color: var(--secondary-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 20px auto 0; /* Center the button */
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+        }
+
+        .show-answers-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Styling for correct answers */
+        .correct-answer {
+            background-color: var(--correct-green) !important;
+            border-color: #28a745 !important; /* Darker green border */
+        }
+
+        /* MathJax specific styling */
+        .MathJax_Display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            text-align: center;
+            font-size: 1.1em; /* Slightly larger for display math */
+            overflow-x: auto; /* Allow horizontal scrolling for wide equations */
+            padding-bottom: 5px; /* Space for scrollbar */
+        }
+        .mjx-chtml {
+            font-size: 1.05em; /* Slightly larger for inline math */
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Ordinary Differential Equations Quiz: Order, Degree, and Formulation</h1>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question">
+                <p>1. What is the order of the differential equation \( \left(\frac{d^3y}{dx^3}\right)^2 + x \left(\frac{dy}{dx}\right)^4 - y = 0 \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">A. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="c" data-correct="true">
+                        <label for="q1c">C. 3</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">D. 4</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <p>2. Determine the degree of the differential equation \( \frac{d^2y}{dx^2} + \sqrt{\frac{dy}{dx}} + y = 0 \).</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">A. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="c" data-correct="true">
+                        <label for="q2c">C. Not defined</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">D. 0</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <p>3. Consider the differential equation \( \frac{d^2y}{dx^2} + \sin\left(\frac{dy}{dx}\right) = x^2 \). What is its order and degree?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">A. Order 1, Degree 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="b" data-correct="true">
+                        <label for="q3b">B. Order 2, Degree Not defined</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">C. Order 2, Degree 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">D. Order 1, Degree Not defined</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <p>4. Which of the following differential equations is linear?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">A. \( \frac{dy}{dx} + y^2 = x \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">B. \( y \frac{dy}{dx} + x = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">C. \( \frac{d^2y}{dx^2} + \cos(y) = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="d" data-correct="true">
+                        <label for="q4d">D. \( (1+x^2)\frac{d^2y}{dx^2} + x\frac{dy}{dx} - y = e^x \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <p>5. A population grows at a rate proportional to its current size. If \( P(t) \) is the population at time \( t \), which differential equation models this scenario?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">A. \( \frac{dP}{dt} = k \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="b" data-correct="true">
+                        <label for="q5b">B. \( \frac{dP}{dt} = kP \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">C. \( \frac{d^2P}{dt^2} = kP \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">D. \( \frac{dP}{dt} = kP^2 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <p>6. What is the order of the partial differential equation \( \frac{\partial^2u}{\partial x^2} + \frac{\partial^2u}{\partial y^2} = 0 \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q6a" name="q6" value="a">
+                        <label for="q6a">A. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6b" name="q6" value="b" data-correct="true">
+                        <label for="q6b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6c" name="q6" value="c">
+                        <label for="q6c">C. 4</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6d" name="q6" value="d">
+                        <label for="q6d">D. Not defined for PDEs</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <p>7. The degree of the differential equation \( \left[1 + \left(\frac{dy}{dx}\right)^2\right]^{3/2} = k \frac{d^2y}{dx^2} \) is:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q7a" name="q7" value="a">
+                        <label for="q7a">A. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7b" name="q7" value="b" data-correct="true">
+                        <label for="q7b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7c" name="q7" value="c">
+                        <label for="q7c">C. 3</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7d" name="q7" value="d">
+                        <label for="q7d">D. Not defined</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <p>8. Which of the following statements is true for the ODE \( y'' + 4y' + 4y = \sin(x) \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q8a" name="q8" value="a">
+                        <label for="q8a">A. It is a first-order, non-linear ODE.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8b" name="q8" value="b" data-correct="true">
+                        <label for="q8b">B. It is a second-order, linear, non-homogeneous ODE.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8c" name="q8" value="c">
+                        <label for="q8c">C. It is a second-order, linear, homogeneous ODE.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8d" name="q8" value="d">
+                        <label for="q8d">D. Its degree is not defined.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <p>9. Formulate a differential equation for a family of circles passing through the origin \( (0,0) \) and having their centers on the x-axis.</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q9a" name="q9" value="a">
+                        <label for="q9a">A. \( x^2 + y^2 = 2ax \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9b" name="q9" value="b" data-correct="true">
+                        <label for="q9b">B. \( 2xy \frac{dy}{dx} + y^2 - x^2 = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9c" name="q9" value="c">
+                        <label for="q9c">C. \( y \frac{dy}{dx} = x \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9d" name="q9" value="d">
+                        <label for="q9d">D. \( \frac{d^2y}{dx^2} + y = 0 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <p>10. What is the order of the system of differential equations:
+                    \[ \frac{dx}{dt} = 2x - y \]
+                    \[ \frac{dy}{dt} = x + 3y \]
+                </p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q10a" name="q10" value="a" data-correct="true">
+                        <label for="q10a">A. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10b" name="q10" value="b">
+                        <label for="q10b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10c" name="q10" value="c">
+                        <label for="q10c">C. Not applicable to systems</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10d" name="q10" value="d">
+                        <label for="q10d">D. Depends on the number of equations</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question">
+                <p>11. An object is falling through the air with air resistance proportional to its velocity. If \( v(t) \) is its velocity and \( m \) is its mass, which ODE best describes its motion?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q11a" name="q11" value="a">
+                        <label for="q11a">A. \( m \frac{dv}{dt} = mg \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11b" name="q11" value="b">
+                        <label for="q11b">B. \( m \frac{dv}{dt} = -kv \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11c" name="q11" value="c" data-correct="true">
+                        <label for="q11c">C. \( m \frac{dv}{dt} = mg - kv \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11d" name="q11" value="d">
+                        <label for="q11d">D. \( m \frac{dv}{dt} = kv^2 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question">
+                <p>12. What is the degree of the differential equation \( \frac{d^4y}{dx^4} + \left(\frac{d^2y}{dx^2}\right)^3 + y = x \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q12a" name="q12" value="a">
+                        <label for="q12a">A. 3</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12b" name="q12" value="b">
+                        <label for="q12b">B. 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12c" name="q12" value="c" data-correct="true">
+                        <label for="q12c">C. 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12d" name="q12" value="d">
+                        <label for="q12d">D. 4</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question">
+                <p>13. Identify the independent and dependent variables in the differential equation \( \frac{d^2T}{dt^2} + k \frac{dT}{dt} = C \cos(\omega t) \).</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q13a" name="q13" value="a">
+                        <label for="q13a">A. Independent: \( T \), Dependent: \( t \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13b" name="q13" value="b" data-correct="true">
+                        <label for="q13b">B. Independent: \( t \), Dependent: \( T \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13c" name="q13" value="c">
+                        <label for="q13c">C. Independent: \( k \), Dependent: \( C \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13d" name="q13" value="d">
+                        <label for="q13d">D. There are no independent or dependent variables.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question">
+                <p>14. An ODE is said to be homogeneous if:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q14a" name="q14" value="a">
+                        <label for="q14a">A. All its coefficients are constants.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14b" name="q14" value="b">
+                        <label for="q14b">B. It contains only even-order derivatives.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14c" name="q14" value="c" data-correct="true">
+                        <label for="q14c">C. The right-hand side (forcing term) is zero, and it is linear.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14d" name="q14" value="d">
+                        <label for="q14d">D. It is always a first-order equation.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question">
+                <p>15. Formulate the differential equation for the family of all straight lines \( y = mx + c \).</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q15a" name="q15" value="a">
+                        <label for="q15a">A. \( \frac{dy}{dx} = m \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15b" name="q15" value="b">
+                        <label for="q15b">B. \( y' = c \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15c" name="q15" value="c" data-correct="true">
+                        <label for="q15c">C. \( \frac{d^2y}{dx^2} = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15d" name="q15" value="d">
+                        <label for="q15d">D. \( y'' = 1 \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question">
+                <p>16. What is the order and degree of the differential equation \( \frac{d^2y}{dx^2} + e^y = 0 \)?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q16a" name="q16" value="a" data-correct="true">
+                        <label for="q16a">A. Order 2, Degree 1</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16b" name="q16" value="b">
+                        <label for="q16b">B. Order 1, Degree 2</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16c" name="q16" value="c">
+                        <label for="q16c">C. Order 2, Degree Not defined</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16d" name="q16" value="d">
+                        <label for="q16d">D. Order 1, Degree 1</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question">
+                <p>17. The rate of change of temperature \( T \) of a body is proportional to the difference between its temperature and the ambient temperature \( T_a \). This is described by:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q17a" name="q17" value="a">
+                        <label for="q17a">A. \( \frac{dT}{dt} = k T \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17b" name="q17" value="b" data-correct="true">
+                        <label for="q17b">B. \( \frac{dT}{dt} = k(T - T_a) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17c" name="q17" value="c">
+                        <label for="q17c">C. \( \frac{dT}{dt} = k T_a \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17d" name="q17" value="d">
+                        <label for="q17d">D. \( \frac{d^2T}{dt^2} = k(T - T_a) \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question">
+                <p>18. A differential equation is classified as an Ordinary Differential Equation (ODE) if:</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q18a" name="q18" value="a">
+                        <label for="q18a">A. It involves derivatives with respect to more than one independent variable.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18b" name="q18" value="b" data-correct="true">
+                        <label for="q18b">B. It involves derivatives with respect to only one independent variable.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18c" name="q18" value="c">
+                        <label for="q18c">C. All its derivatives are of the first order.</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18d" name="q18" value="d">
+                        <label for="q18d">D. It can be solved by integration.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question">
+                <p>19. Which of the following is a non-linear differential equation?</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q19a" name="q19" value="a">
+                        <label for="q19a">A. \( \frac{dy}{dx} + xy = \sin(x) \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19b" name="q19" value="b">
+                        <label for="q19b">B. \( \frac{d^2y}{dx^2} + 3\frac{dy}{dx} + 2y = 0 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19c" name="q19" value="c" data-correct="true">
+                        <label for="q19c">C. \( \frac{dy}{dx} = y^2 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19d" name="q19" value="d">
+                        <label for="q19d">D. \( (1+x)\frac{dy}{dx} + y = e^x \)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question">
+                <p>20. Formulate the differential equation for the family of parabolas \( y^2 = 4ax \).</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q20a" name="q20" value="a">
+                        <label for="q20a">A. \( y' = 2a \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20b" name="q20" value="b">
+                        <label for="q20b">B. \( yy'' = (y')^2 \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20c" name="q20" value="c" data-correct="true">
+                        <label for="q20c">C. \( 2x y' = y \)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20d" name="q20" value="d">
+                        <label for="q20d">D. \( y = x y' \)</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <button id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const quizForm = document.getElementById('quizForm');
+
+            showAnswersBtn.addEventListener('click', function() {
+                const questions = quizForm.querySelectorAll('.question');
+
+                questions.forEach(question => {
+                    // Find the input with data-correct="true"
+                    const correctInput = question.querySelector('.option input[data-correct="true"]');
+                    if (correctInput) {
+                        // Get the parent div.option
+                        const parentOptionDiv = correctInput.closest('.option');
+                        if (parentOptionDiv) {
+                            // Add the class to highlight
+                            parentOptionDiv.classList.add('correct-answer');
+                            // Find the label within this option div
+                            const label = parentOptionDiv.querySelector('label');
+                            if (label) {
+                                // Prepend checkmark emoji to the label text
+                                label.innerHTML = '✅ ' + label.innerHTML;
+                            }
+                        }
+                    }
+                });
+
+                // Change button text and disable it
+                this.textContent = 'Answers Shown';
+                this.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

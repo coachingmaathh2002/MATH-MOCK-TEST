@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: First Order Linear DEs: Euler's and Bernoulli's Equations</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6; /* Light gray-blue */
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            padding: 30px 40px;
+            margin: 20px auto;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Merriweather', serif;
+            color: #2c3e50; /* Dark blue */
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        .question {
+            background-color: #fdfefe;
+            border: 1px solid #e0e6eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .question p {
+            font-size: 1.15em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .options label {
+            display: block;
+            background-color: #ecf0f1; /* Light silver */
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            font-size: 1em;
+            color: #34495e; /* Darker gray-blue */
+            display: flex; /* Use flexbox for alignment of radio button and text */
+            align-items: center;
+        }
+
+        .options label:hover {
+            background-color: #dde1e5; /* Slightly darker silver */
+            transform: translateY(-2px);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2); /* Slightly larger radio buttons */
+            vertical-align: middle;
+            flex-shrink: 0; /* Prevent radio button from shrinking */
+        }
+
+        .options .correct-answer {
+            background-color: #d4edda; /* Light green */
+            border: 1px solid #28a745; /* Green border */
+            font-weight: bold;
+        }
+
+        .show-answers-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #3498db; /* Primary blue */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .show-answers-btn:hover {
+            background-color: #2980b9; /* Darker blue */
+            transform: translateY(-2px);
+        }
+
+        .show-answers-btn:active {
+            transform: translateY(0);
+        }
+
+        /* MathJax styling - ensure it doesn't break layout */
+        .question p .MathJax_CHTML, .options label .MathJax_CHTML {
+            display: inline-block; /* Helps with alignment */
+            vertical-align: middle;
+        }
+
+        /* Adjust for block equations */
+        .question .MathJax_CHTML.MJXc-display {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            text-align: center;
+        }
+        .checkmark-emoji {
+            margin-left: auto; /* Push checkmark to the right */
+            font-size: 1.2em;
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz: First Order Linear DEs: Euler's and Bernoulli's Equations</h1>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question">
+                <p>1. Which of the following is a Bernoulli differential equation?</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="a"> A. \(y' + P(x)y = Q(x)\)</label>
+                    <label data-correct="true"><input type="radio" name="q1" value="b"> B. \(y' + P(x)y = Q(x)y^n\), where \(n \neq 0, 1\)</label>
+                    <label><input type="radio" name="q1" value="c"> C. \(y'' + P(x)y' + Q(x)y = R(x)\)</label>
+                    <label><input type="radio" name="q1" value="d"> D. \(M(x,y)dx + N(x,y)dy = 0\)</label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <p>2. To transform a Bernoulli equation \(y' + P(x)y = Q(x)y^n\) into a linear differential equation, what substitution is typically used?</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="a"> A. \(v = y^n\)</label>
+                    <label><input type="radio" name="q2" value="b"> B. \(v = y^{n-1}\)</label>
+                    <label data-correct="true"><input type="radio" name="q2" value="c"> C. \(v = y^{1-n}\)</label>
+                    <label><input type="radio" name="q2" value="d"> D. \(v = 1/y\)</label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <p>3. After applying the substitution \(v = y^{1-n}\) to a Bernoulli equation \(y' + P(x)y = Q(x)y^n\), the resulting linear equation for \(v\) takes which form?</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="a"> A. \(v' + P(x)v = Q(x)\)</label>
+                    <label><input type="radio" name="q3" value="b"> B. \(v' + (1-n)P(x)v = Q(x)\)</label>
+                    <label data-correct="true"><input type="radio" name="q3" value="c"> C. \(v' + (1-n)P(x)v = (1-n)Q(x)\)</label>
+                    <label><input type="radio" name="q3" value="d"> D. \(v' + P(x)v = (1-n)Q(x)\)</label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <p>4. Consider the differential equation \(y' + y = xy^3\). What is the value of \(n\) for this Bernoulli equation?</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="a"> A. \(n = 1\)</label>
+                    <label><input type="radio" name="q4" value="b"> B. \(n = 2\)</label>
+                    <label data-correct="true"><input type="radio" name="q4" value="c"> C. \(n = 3\)</label>
+                    <label><input type="radio" name="q4" value="d"> D. \(n = -3\)</label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <p>5. For the equation \(y' + y = xy^3\), what substitution should be made to transform it into a linear equation?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q5" value="a"> A. \(v = y^{-2}\)</label>
+                    <label><input type="radio" name="q5" value="b"> B. \(v = y^{2}\)</label>
+                    <label><input type="radio" name="q5" value="c"> C. \(v = y^{-3}\)</label>
+                    <label><input type="radio" name="q5" value="d"> D. \(v = y^{1/3}\)</label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <p>6. What is the integrating factor for the linear equation obtained from \(y' + y = xy^3\) after the appropriate substitution?</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="a"> A. \(e^x\)</label>
+                    <label><input type="radio" name="q6" value="b"> B. \(e^{-x}\)</label>
+                    <label data-correct="true"><input type="radio" name="q6" value="c"> C. \(e^{-2x}\)</label>
+                    <label><input type="radio" name="q6" value="d"> D. \(e^{2x}\)</label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <p>7. Consider the equation \(xy' + y = y^2 \ln x\). This is a Bernoulli equation. Which of the following statements is true?</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="a"> A. \(P(x) = 1, Q(x) = \ln x, n=2\)</label>
+                    <label><input type="radio" name="q7" value="b"> B. \(P(x) = 1/x, Q(x) = \ln x, n=2\)</label>
+                    <label data-correct="true"><input type="radio" name="q7" value="c"> C. \(P(x) = 1/x, Q(x) = (\ln x)/x, n=2\)</label>
+                    <label><input type="radio" name="q7" value="d"> D. \(P(x) = x, Q(x) = x \ln x, n=2\)</label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <p>8. What is the general solution to the first-order linear differential equation \(y' + \frac{2}{x}y = x\)?</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="a"> A. \(y = \frac{x^2}{4} + C\)</label>
+                    <label data-correct="true"><input type="radio" name="q8" value="b"> B. \(y = \frac{x^2}{4} + \frac{C}{x^2}\)</label>
+                    <label><input type="radio" name="q8" value="c"> C. \(y = \frac{x^3}{3} + C x^2\)</label>
+                    <label><input type="radio" name="q8" value="d"> D. \(y = x^2 + C x^{-2}\)</label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <p>9. The equation \(x y' - y = x^2 \sin x\) is a first-order linear differential equation. What is its integrating factor?</p>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="a"> A. \(e^x\)</label>
+                    <label><input type="radio" name="q9" value="b"> B. \(x\)</label>
+                    <label data-correct="true"><input type="radio" name="q9" value="c"> C. \(1/x\)</label>
+                    <label><input type="radio" name="q9" value="d"> D. \(x^2\)</label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <p>10. What is the general solution to the differential equation \(y' + y/x = y^2/x\)?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q10" value="a"> A. \(y = \frac{1}{1+Cx}\)</label>
+                    <label><input type="radio" name="q10" value="b"> B. \(y = \frac{x}{1+C/x}\)</label>
+                    <label><input type="radio" name="q10" value="c"> C. \(y = 1 + Cx\)</label>
+                    <label><input type="radio" name="q10" value="d"> D. \(y = x(1+Cx)\)</label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question">
+                <p>11. The general form of a first-order linear differential equation is:</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="a"> A. \(M(x,y)dx + N(x,y)dy = 0\)</label>
+                    <label><input type="radio" name="q11" value="b"> B. \(y' = f(x,y)\)</label>
+                    <label data-correct="true"><input type="radio" name="q11" value="c"> C. \(y' + P(x)y = Q(x)\)</label>
+                    <label><input type="radio" name="q11" value="d"> D. \(A(x)y'' + B(x)y' + C(x)y = D(x)\)</label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question">
+                <p>12. For the differential equation \(y' - y = e^x y^2\), which substitution simplifies it?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q12" value="a"> A. \(v = y^{-1}\)</label>
+                    <label><input type="radio" name="q12" value="b"> B. \(v = y^2\)</label>
+                    <label><input type="radio" name="q12" value="c"> C. \(v = e^x y\)</label>
+                    <label><input type="radio" name="q12" value="d"> D. \(v = y^{1/2}\)</label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question">
+                <p>13. Consider the equation \(y' + \frac{1}{x}y = \frac{1}{x}y^{-1}\). What is the integrating factor for the corresponding linear equation in \(v\)?</p>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="a"> A. \(x\)</label>
+                    <label data-correct="true"><input type="radio" name="q13" value="b"> B. \(x^2\)</label>
+                    <label><input type="radio" name="q13" value="c"> C. \(e^x\)</label>
+                    <label><input type="radio" name="q13" value="d"> D. \(1/x\)</label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question">
+                <p>14. Which of these is an example of an Euler-type first-order linear differential equation (i.e., of the form \(xy' + ay = f(x)\))?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q14" value="a"> A. \(xy' + 2y = x^3\)</label>
+                    <label><input type="radio" name="q14" value="b"> B. \(y' + 2y = x^3\)</label>
+                    <label><input type="radio" name="q14" value="c"> C. \(x^2y'' + 2xy' + y = 0\)</label>
+                    <label><input type="radio" name="q14" value="d"> D. \(y' + y = y^2\)</label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question">
+                <p>15. What is the general solution to the Euler-type first-order linear DE \(xy' + y = \cos x\)?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q15" value="a"> A. \(y = \frac{\sin x + C}{x}\)</label>
+                    <label><input type="radio" name="q15" value="b"> B. \(y = \sin x + C\)</label>
+                    <label><input type="radio" name="q15" value="c"> C. \(y = \frac{\cos x}{x} + C\)</label>
+                    <label><input type="radio" name="q15" value="d"> D. \(y = x \sin x + C x\)</label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question">
+                <p>16. For the equation \(y' + \frac{1}{x}y = \frac{1}{x^2}y^4\), what is the correct form of the transformed linear equation in \(v = y^{1-4} = y^{-3}\)?</p>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="a"> A. \(v' - \frac{3}{x}v = -\frac{3}{x^2}\)</label>
+                    <label data-correct="true"><input type="radio" name="q16" value="b"> B. \(v' - \frac{3}{x}v = \frac{-3}{x^2}\)</label>
+                    <label><input type="radio" name="q16" value="c"> C. \(v' + \frac{3}{x}v = \frac{3}{x^2}\)</label>
+                    <label><input type="radio" name="q16" value="d"> D. \(v' + \frac{1}{x}v = \frac{1}{x^2}\)</label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question">
+                <p>17. Solve the initial value problem: \(y' + y = y^2\), \(y(0) = 2\).</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q17" value="a"> A. \(y = \frac{1}{1 - e^x/2}\)</label>
+                    <label><input type="radio" name="q17" value="b"> B. \(y = \frac{1}{1 - e^{-x}/2}\)</label>
+                    <label><input type="radio" name="q17" value="c"> C. \(y = \frac{1}{2e^{-x} - 1}\)</label>
+                    <label><input type="radio" name="q17" value="d"> D. \(y = \frac{e^x}{2 - e^x}\)</label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question">
+                <p>18. Which of the following is equivalent to the Bernoulli equation \(y' = \frac{y}{x} - y^2\)?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q18" value="a"> A. \(y' - \frac{1}{x}y = -y^2\)</label>
+                    <label><input type="radio" name="q18" value="b"> B. \(y' + \frac{1}{x}y = -y^2\)</label>
+                    <label><input type="radio" name="q18" value="c"> C. \(y' + \frac{1}{x}y = y^2\)</label>
+                    <label><input type="radio" name="q18" value="d"> D. \(y' + \frac{y}{x} = y^2\)</label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question">
+                <p>19. If a Bernoulli equation is given by \(y' + P(x)y = Q(x)y^n\), what happens if \(n=0\)?</p>
+                <div class="options">
+                    <label data-correct="true"><input type="radio" name="q19" value="a"> A. It becomes a first-order linear equation.</label>
+                    <label><input type="radio" name="q19" value="b"> B. It becomes a separable equation.</label>
+                    <label><input type="radio" name="q19" value="c"> C. It becomes an exact equation.</label>
+                    <label><input type="radio" name="q19" value="d"> D. It becomes a homogeneous equation.</label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question">
+                <p>20. What is the integrating factor for the first-order linear differential equation \(y' + (\tan x)y = \sec x\)?</p>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="a"> A. \(\cos x\)</label>
+                    <label data-correct="true"><input type="radio" name="q20" value="b"> B. \(\sec x\)</label>
+                    <label><input type="radio" name="q20" value="c"> C. \(\sin x\)</label>
+                    <label><input type="radio" name="q20" value="d"> D. \(\csc x\)</label>
+                </div>
+            </div>
+
+            <button type="button" class="show-answers-btn" id="showAnswersBtn">Show Answers</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('showAnswersBtn').addEventListener('click', function() {
+            const quizForm = document.getElementById('quizForm');
+            const questions = quizForm.querySelectorAll('.question');
+            let button = this;
+
+            questions.forEach(questionDiv => {
+                const correctOptionLabel = questionDiv.querySelector('label[data-correct="true"]');
+                if (correctOptionLabel) {
+                    correctOptionLabel.classList.add('correct-answer');
+                    // Add checkmark if not already present
+                    if (!correctOptionLabel.querySelector('.checkmark-emoji')) {
+                        const checkmark = document.createElement('span');
+                        checkmark.className = 'checkmark-emoji';
+                        checkmark.textContent = ' ✅'; // Space before emoji
+                        correctOptionLabel.appendChild(checkmark);
+                    }
+                }
+            });
+
+            button.textContent = 'Answers Shown';
+            button.disabled = true; // Disable button after showing answers
+        });
+    </script>
+</body>
+</html>
