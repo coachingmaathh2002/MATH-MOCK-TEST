@@ -3,426 +3,305 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Math Mock Test Portal</title>
+    <title>Advanced Math Mock Test Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background: linear-gradient(to top, #f3f4f6, #ffffff); /* Default background for test list view */
+            transition: background 0.5s ease;
         }
-        .test-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        #main-content {
-            display: none;
+        /* Style for the dashboard background, inspired by the user's image */
+        body.dashboard-bg {
+            background: #4c1d95; /* Deep Indigo/Purple color */
         }
         #login-modal {
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+        .view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .view.active {
+            display: block;
+            opacity: 1;
+        }
+        /* Default card style for light background */
+        .category-card {
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+        /* Card style when on the purple dashboard background */
+        body.dashboard-bg .category-card {
+            background-color: rgba(255, 255, 255, 0.07); /* Glassmorphism effect */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        body.dashboard-bg .category-card:hover {
+             background-color: rgba(255, 255, 255, 0.15);
+             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .test-link-item {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dark .test-link-item {
+            border-bottom-color: #4a5568;
+        }
+        .test-link-item:last-child {
+            border-bottom: none;
+        }
+        /* Testimonials specific styling */
+        #testimonials-section {
+            background-color: #f8fafc; /* Light background for testimonials */
+            padding: 4rem 0;
+        }
+        body.dashboard-bg #testimonials-section {
+             background-color: #31216d; /* Darker background for testimonials in dashboard view */
+             color: white;
+        }
+        .testimonial-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        body.dashboard-bg .testimonial-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        .testimonial-quote {
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.75rem; /* leading-relaxed */
+            color: #4b5563; /* text-gray-700 */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        body.dashboard-bg .testimonial-quote {
+            color: #e2e8f0; /* text-slate-200 */
+        }
+        .testimonial-author {
+            font-weight: 600; /* font-semibold */
+            color: #1a202c; /* text-gray-900 */
+        }
+        body.dashboard-bg .testimonial-author {
+            color: white;
+        }
+        .testimonial-title {
+            font-size: 0.875rem; /* text-sm */
+            color: #6b7280; /* text-gray-500 */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+        body.dashboard-bg .testimonial-title {
+            color: #cbd5e1; /* text-slate-300 */
         }
     </style>
-    <link rel="preconnect" href="https://rsms.me/">
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 </head>
-<body class="bg-slate-100 dark:bg-slate-900">
+<body>
 
+    <!-- Login Modal -->
     <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 w-full max-w-sm text-center">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Student Login</h2>
-            <p class="text-slate-700 dark:text-slate-400 mb-6">Please enter the password to access the tests.</p>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Student Portal</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-8">Enter password to begin.</p>
             <form id="login-form">
-                <input type="password" id="password-input" placeholder="Enter Password" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:outline-none" required>
-                <button type="submit" class="w-full mt-4 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
-                    Login
+                <input type="password" id="password-input" placeholder="Password" class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:outline-none" required>
+                <button type="submit" class="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg shadow-teal-500/30">
+                    Access Portal
                 </button>
             </form>
-            <p id="error-message" class="text-red-500 mt-4 h-4"></p>
+            <p id="error-message" class="text-red-500 mt-4 h-5"></p>
         </div>
     </div>
 
-    <div id="main-content" class="container mx-auto px-4 py-8 max-w-5xl">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
-                <span role="img" aria-label="abacus">🧮</span> Welcome to Pijus Sir's Math Mock Test Portal
-            </h1>
-            <p class="mt-4 text-lg text-slate-700 dark:text-slate-400">Practice. Perform. Perfect.</p>
-        </header>
+    <!-- Main Container -->
+    <div id="app-container" class="min-h-screen hidden">
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view active">
+            <header id="dashboard-header" class="text-center py-12 px-4">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white">
+                    <span role="img" aria-label="brain">🧠</span> Math Mock Test Dashboard
+                </h1>
+                <p class="mt-4 text-lg text-slate-300">Choose a category to start practicing.</p>
+            </header>
+            <main id="category-grid" class="container mx-auto px-4 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Category cards will be injected here by JavaScript -->
+            </main>
 
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">📜 Classical Algebra</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    
-                    <li><a href="classical-algebra/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="classical-algebra/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="classical-algebra/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="classical-algebra/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="classical-algebra/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="classical-algebra/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="classical-algebra/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="classical-algebra/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="classical-algebra/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="classical-algebra/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="classical-algebra/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="classical-algebra/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="classical-algebra/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="classical-algebra/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="classical-algebra/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="classical-algebra/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="classical-algebra/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="classical-algebra/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="classical-algebra/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="classical-algebra/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
+            <!-- Testimonials Section -->
+            <section id="testimonials-section" class="py-16">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-4xl font-extrabold text-center mb-12 text-slate-900 dark:text-white">What Our Students Say</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Testimonial 1 -->
+                        <div class="testimonial-card">
+                            <p class="testimonial-quote">"This portal has been an absolute game-changer for my math practice. The variety of tests and clear organization made studying so much easier!"</p>
+                            <p class="testimonial-author">Anjali Sharma</p>
+                            <p class="testimonial-title">University Student</p>
+                        </div>
+                        <!-- Testimonial 2 -->
+                        <div class="testimonial-card">
+                            <p class="testimonial-quote">"The mock tests are incredibly realistic and helped me identify my weak areas. I've seen a significant improvement in my scores since using this platform."</p>
+                            <p class="testimonial-author">Rahul Singh</p>
+                            <p class="testimonial-title">Aspiring Engineer</p>
+                        </div>
+                        <!-- Testimonial 3 -->
+                        <div class="testimonial-card">
+                            <p class="testimonial-quote">"I highly recommend this portal to anyone serious about mastering advanced math. The detailed categories and numerous practice tests are invaluable."</p>
+                            <p class="testimonial-author">Priya Das</p>
+                            <p class="testimonial-title">Math Enthusiast</p>
+                        </div>
+                        <!-- Testimonial 4 -->
+                        <div class="testimonial-card">
+                            <p class="testimonial-quote">"The clean interface and easy navigation make learning enjoyable. It's the best resource I've found for comprehensive math preparation."</p>
+                            <p class="testimonial-author">Sameer Khan</p>
+                            <p class="testimonial-title">High School Senior</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
 
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">🧩 Modern Algebra</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="modern-algebra/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="modern-algebra/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="modern-algebra/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="modern-algebra/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="modern-algebra/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="modern-algebra/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="modern-algebra/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="modern-algebra/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="modern-algebra/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="modern-algebra/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="modern-algebra/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="modern-algebra/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="modern-algebra/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="modern-algebra/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="modern-algebra/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="modern-algebra/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="modern-algebra/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="modern-algebra/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="modern-algebra/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="modern-algebra/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">📐 Geometry</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="geometry/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="geometry/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="geometry/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="geometry/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="geometry/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="geometry/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="geometry/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="geometry/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="geometry/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="geometry/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="geometry/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="geometry/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="geometry/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="geometry/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="geometry/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="geometry/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="geometry/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="geometry/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="geometry/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="geometry/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">📈 Differential Calculus</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="differential-calculus/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="differential-calculus/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="differential-calculus/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="differential-calculus/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="differential-calculus/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="differential-calculus/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="differential-calculus/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="differential-calculus/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="differential-calculus/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="differential-calculus/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="differential-calculus/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="differential-calculus/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="differential-calculus/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="differential-calculus/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="differential-calculus/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="differential-calculus/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="differential-calculus/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="differential-calculus/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="differential-calculus/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="differential-calculus/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">📉 Integral Calculus</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="integral-calculus/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="integral-calculus/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="integral-calculus/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="integral-calculus/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="integral-calculus/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="integral-calculus/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="integral-calculus/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="integral-calculus/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="integral-calculus/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="integral-calculus/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="integral-calculus/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="integral-calculus/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="integral-calculus/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="integral-calculus/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="integral-calculus/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="integral-calculus/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="integral-calculus/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="integral-calculus/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="integral-calculus/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="integral-calculus/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">🌀 Differential Equations</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="differential-equation/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="differential-equation/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="differential-equation/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="differential-equation/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="differential-equation/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="differential-equation/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="differential-equation/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="differential-equation/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="differential-equation/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="differential-equation/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="differential-equation/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="differential-equation/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="differential-equation/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="differential-equation/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="differential-equation/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="differential-equation/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="differential-equation/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="differential-equation/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="differential-equation/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="differential-equation/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-            
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">➡️ Vector Algebra</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="vector-algebra/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="vector-algebra/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="vector-algebra/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="vector-algebra/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="vector-algebra/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="vector-algebra/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="vector-algebra/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="vector-algebra/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="vector-algebra/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="vector-algebra/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="vector-algebra/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="vector-algebra/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="vector-algebra/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="vector-algebra/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="vector-algebra/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="vector-algebra/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="vector-algebra/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="vector-algebra/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="vector-algebra/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="vector-algebra/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">⚙️ Analytical Dynamics</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="analytical-dynamics/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="analytical-dynamics/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="analytical-dynamics/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="analytical-dynamics/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="analytical-dynamics/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="analytical-dynamics/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="analytical-dynamics/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="analytical-dynamics/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="analytical-dynamics/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="analytical-dynamics/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="analytical-dynamics/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="analytical-dynamics/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="analytical-dynamics/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="analytical-dynamics/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="analytical-dynamics/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="analytical-dynamics/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="analytical-dynamics/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="analytical-dynamics/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="analytical-dynamics/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="analytical-dynamics/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">📊 Linear Programming</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="linear-programming/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="linear-programming/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="linear-programming/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="linear-programming/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="linear-programming/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="linear-programming/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="linear-programming/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="linear-programming/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="linear-programming/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="linear-programming/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="linear-programming/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="linear-programming/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="linear-programming/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="linear-programming/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="linear-programming/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="linear-programming/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="linear-programming/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="linear-programming/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="linear-programming/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="linear-programming/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-            
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">🔢 Numerical Methods</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="numerical-methods/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="numerical-methods/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="numerical-methods/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="numerical-methods/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="numerical-methods/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="numerical-methods/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="numerical-methods/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="numerical-methods/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="numerical-methods/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="numerical-methods/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="numerical-methods/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="numerical-methods/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="numerical-methods/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="numerical-methods/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="numerical-methods/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="numerical-methods/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="numerical-methods/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="numerical-methods/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="numerical-methods/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="numerical-methods/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">🎲 Probability & Statistics</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="probability-statistics/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="probability-statistics/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="probability-statistics/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="probability-statistics/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="probability-statistics/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="probability-statistics/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="probability-statistics/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="probability-statistics/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="probability-statistics/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="probability-statistics/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="probability-statistics/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="probability-statistics/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="probability-statistics/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="probability-statistics/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="probability-statistics/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="probability-statistics/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="probability-statistics/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="probability-statistics/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="probability-statistics/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="probability-statistics/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">🏆 Full Mock Test</h2>
-                <ul class="space-y-2 test-list flex-grow">
-                    <li><a href="full-mock-tests/test1.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 1</a></li>
-                    <li><a href="full-mock-tests/test2.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 2</a></li>
-                    <li><a href="full-mock-tests/test3.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 3</a></li>
-                    <li><a href="full-mock-tests/test4.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 4</a></li>
-                    <li><a href="full-mock-tests/test5.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 5</a></li>
-                    <li><a href="full-mock-tests/test6.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 6</a></li>
-                    <li><a href="full-mock-tests/test7.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 7</a></li>
-                    <li><a href="full-mock-tests/test8.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 8</a></li>
-                    <li><a href="full-mock-tests/test9.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 9</a></li>
-                    <li><a href="full-mock-tests/test10.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 10</a></li>
-                    <li><a href="full-mock-tests/test11.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 11</a></li>
-                    <li><a href="full-mock-tests/test12.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 12</a></li>
-                    <li><a href="full-mock-tests/test13.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 13</a></li>
-                    <li><a href="full-mock-tests/test14.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 14</a></li>
-                    <li><a href="full-mock-tests/test15.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 15</a></li>
-                    <li><a href="full-mock-tests/test16.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 16</a></li>
-                    <li><a href="full-mock-tests/test17.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 17</a></li>
-                    <li><a href="full-mock-tests/test18.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 18</a></li>
-                    <li><a href="full-mock-tests/test19.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 19</a></li>
-                    <li><a href="full-mock-tests/test20.html" class="text-teal-600 dark:text-teal-400 hover:underline">Mock Test 20</a></li>
-                </ul>
-            </div>
-        </main>
-
-        <footer class="text-center text-slate-500 dark:text-slate-400 mt-12 py-6">
-            <p>&copy; 2025 Pijus Sir's Academy | Designed for student success</p>
-        </footer>
+        <!-- Test List View -->
+        <div id="test-list-view" class="view">
+            <header class="py-8 px-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-md sticky top-0 z-10">
+                <div class="container mx-auto flex items-center justify-between">
+                    <h1 id="test-list-title" class="text-3xl font-bold text-slate-900 dark:text-white"></h1>
+                    <button id="back-to-dashboard" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">
+                        &larr; Back
+                    </button>
+                </div>
+            </header>
+            <main class="container mx-auto px-4 py-8">
+                <div id="test-list-container" class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                    <!-- Test links will be injected here -->
+                </div>
+            </main>
+        </div>
     </div>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const CORRECT_PASSWORD = 'pijus_sir_math'; // You can change this password
+        // --- DATA ---
+        const testData = [
+            { title: "Classical Algebra", icon: "📜", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `classical-algebra/test${i + 1}.html` })) },
+            { title: "Modern Algebra", icon: "🧩", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `modern-algebra/test${i + 1}.html` })) },
+            { title: "Geometry", icon: "📐", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `geometry/test${i + 1}.html` })) },
+            { title: "Differential Calculus", icon: "📈", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `differential-calculus/test${i + 1}.html` })) },
+            { title: "Integral Calculus", icon: "📉", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `integral-calculus/test${i + 1}.html` })) },
+            { title: "Differential Equations", icon: "🌀", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `differential-equation/test${i + 1}.html` })) },
+            { title: "Vector Algebra", icon: "➡️", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `vector-algebra/test${i + 1}.html` })) },
+            { title: "Analytical Dynamics", icon: "⚙️", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `analytical-dynamics/test${i + 1}.html` })) },
+            { title: "Probability & Statistics", icon: "🎲", tests: Array.from({ length: 15 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `probability-statistics/test${i + 1}.html` })) },
+            { title: "Linear Programming", icon: "📊", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `linear-programming/test${i + 1}.html` })) },
+            { title: "Numerical Methods", icon: "🔢", tests: Array.from({ length: 7 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `numerical-methods/test${i + 1}.html` })) },
+            { title: "Full Mock Tests", icon: "🏆", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Full Syllabus Test ${i + 1}`, link: `full-mock-test/test${i + 1}.html` })) }
+        ];
 
-            const loginModal = document.getElementById('login-modal');
-            const mainContent = document.getElementById('main-content');
-            const loginForm = document.getElementById('login-form');
-            const passwordInput = document.getElementById('password-input');
-            const errorMessage = document.getElementById('error-message');
+        // --- DOM Element References ---
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('password-input');
+        const errorMessage = document.getElementById('error-message');
+        const loginModal = document.getElementById('login-modal');
+        const appContainer = document.getElementById('app-container');
+        const dashboardView = document.getElementById('dashboard-view');
+        const dashboardHeader = document.getElementById('dashboard-header');
+        const testListView = document.getElementById('test-list-view');
+        const categoryGrid = document.getElementById('category-grid');
+        const testListTitle = document.getElementById('test-list-title');
+        const testListContainer = document.getElementById('test-list-container');
+        const backToDashboardBtn = document.getElementById('back-to-dashboard');
+        const testimonialsSection = document.getElementById('testimonials-section'); // New reference
 
-            const showContent = () => {
-                loginModal.style.display = 'none';
-                mainContent.style.display = 'block';
-            };
+        const CORRECT_PASSWORD = 'pijus_sir_math';
 
-            // Check if user is already logged in via sessionStorage
-            if (sessionStorage.getItem('isLoggedIn') === 'true') {
-                showContent();
-            }
-
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const enteredPassword = passwordInput.value;
-
-                if (enteredPassword === CORRECT_PASSWORD) {
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    showContent();
-                } else {
-                    errorMessage.textContent = 'Incorrect password. Please try again.';
-                    passwordInput.value = '';
-                    passwordInput.focus();
-                    // Add a shake animation for effect
-                    loginModal.querySelector('div').classList.add('animate-shake');
-                    setTimeout(() => {
-                        loginModal.querySelector('div').classList.remove('animate-shake');
-                    }, 500);
-                }
+        function renderDashboard() {
+            categoryGrid.innerHTML = '';
+            testData.forEach((category, index) => {
+                const card = document.createElement('div');
+                card.className = 'category-card rounded-2xl p-6 flex flex-col items-center text-center cursor-pointer';
+                card.dataset.index = index;
+                card.innerHTML = `
+                    <div class="text-6xl mb-4">${category.icon}</div>
+                    <h2 class="text-xl font-bold text-white">${category.title}</h2>
+                    <p class="text-slate-300 mt-2">${category.tests.length} tests</p>
+                `;
+                card.addEventListener('click', () => showTestList(index));
+                categoryGrid.appendChild(card);
             });
+        }
 
-            // Add keyframe animation for the shake effect
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @keyframes shake {
-                    10%, 90% { transform: translate3d(-1px, 0, 0); }
-                    20%, 80% { transform: translate3d(2px, 0, 0); }
-                    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-                    40%, 60% { transform: translate3d(4px, 0, 0); }
-                }
-                .animate-shake {
-                    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-                }
-            `;
-            document.head.appendChild(style);
+        function showTestList(categoryIndex) {
+            const category = testData[categoryIndex];
+            testListTitle.textContent = category.title;
+            
+            const testLinksHTML = category.tests.map(test => `
+                <a href="${test.link}" class="test-link-item block p-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition duration-200">
+                    <span class="text-teal-600 dark:text-teal-400 font-semibold">${test.name}</span>
+                </a>
+            `).join('');
+            testListContainer.innerHTML = testLinksHTML;
+            switchView('test-list');
+        }
+
+        function switchView(viewName) {
+            if (viewName === 'dashboard') {
+                document.body.classList.add('dashboard-bg');
+                dashboardHeader.classList.remove('text-slate-900', 'dark:text-white'); // Ensure header text color is white on dashboard
+                dashboardHeader.classList.add('text-white');
+                dashboardView.classList.add('active');
+                testListView.classList.remove('active');
+            } else {
+                document.body.classList.remove('dashboard-bg');
+                dashboardView.classList.remove('active');
+                testListView.classList.add('active');
+            }
+        }
+        
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (passwordInput.value.trim() === CORRECT_PASSWORD) {
+                loginModal.style.opacity = 0;
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    appContainer.classList.remove('hidden');
+                    renderDashboard();
+                    switchView('dashboard'); // Set initial view to dashboard
+                }, 500);
+            } else {
+                errorMessage.textContent = 'Incorrect password. Please try again.';
+                passwordInput.value = '';
+                loginModal.querySelector('.bg-white').classList.add('animate-shake');
+                setTimeout(() => {
+                    loginModal.querySelector('.bg-white').classList.remove('animate-shake');
+                }, 500);
+            }
         });
+
+        backToDashboardBtn.addEventListener('click', () => switchView('dashboard'));
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+                20%, 40%, 60%, 80% { transform: translateX(10px); }
+            }
+            .animate-shake { animation: shake 0.5s ease-in-out; }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
