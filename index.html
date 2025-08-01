@@ -21,6 +21,7 @@
         #login-modal {
             background-color: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
+            z-index: 50; /* Ensure modal is on top */
         }
         .view {
             display: none;
@@ -62,11 +63,11 @@
         }
         /* Testimonials specific styling */
         #testimonials-section {
-            background-color: #f8fafc; /* Light background for testimonials */
+            background-color: #f1f5f9; /* Light gray background */
             padding: 4rem 0;
         }
         body.dashboard-bg #testimonials-section {
-             background-color: #31216d; /* Darker background for testimonials in dashboard view */
+             background-color: #0f172a; /* Dark slate background */
              color: white;
         }
         .testimonial-card {
@@ -77,7 +78,7 @@
             transition: transform 0.3s ease;
         }
         body.dashboard-bg .testimonial-card {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: #1e293b; /* Dark slate background */
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
@@ -87,49 +88,49 @@
         .testimonial-quote {
             font-size: 1.125rem; /* text-lg */
             line-height: 1.75rem; /* leading-relaxed */
-            color: #4b5563; /* text-gray-700 */
+            color: #334155; /* text-slate-700 */
             margin-bottom: 1.5rem; /* mb-6 */
         }
         body.dashboard-bg .testimonial-quote {
-            color: #e2e8f0; /* text-slate-200 */
+            color: #cbd5e1; /* text-slate-300 */
         }
         .testimonial-author {
             font-weight: 600; /* font-semibold */
-            color: #1a202c; /* text-gray-900 */
+            color: #0d9488; /* text-teal-600 */
         }
         body.dashboard-bg .testimonial-author {
-            color: white;
+            color: #2dd4bf; /* text-teal-400 */
         }
         .testimonial-title {
             font-size: 0.875rem; /* text-sm */
-            color: #6b7280; /* text-gray-500 */
+            color: #64748b; /* text-slate-500 */
             margin-top: 0.25rem; /* mt-1 */
         }
         body.dashboard-bg .testimonial-title {
-            color: #cbd5e1; /* text-slate-300 */
+            color: #94a3b8; /* text-slate-400 */
         }
     </style>
 </head>
-<body>
+<body class="dashboard-bg">
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Login Modal - Hidden by default -->
+    <div id="login-modal" class="fixed inset-0 hidden items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center">
             <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Student Portal</h2>
-            <p class="text-slate-600 dark:text-slate-400 mb-8">Enter password to begin.</p>
+            <p class="text-slate-600 dark:text-slate-400 mb-8">Enter password to access this content.</p>
             <form id="login-form">
                 <input type="password" id="password-input" placeholder="Password" class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:outline-none" required>
                 <button type="submit" class="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg shadow-teal-500/30">
-                    Access Portal
+                    Access Content
                 </button>
             </form>
             <p id="error-message" class="text-red-500 mt-4 h-5"></p>
         </div>
     </div>
 
-    <!-- Main Container -->
-    <div id="app-container" class="min-h-screen hidden">
-        <!-- Dashboard View -->
+    <!-- Main Container - Visible by default -->
+    <div id="app-container" class="min-h-screen">
+        <!-- Dashboard View (Main Categories) -->
         <div id="dashboard-view" class="view active">
             <header id="dashboard-header" class="text-center py-12 px-4">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-white">
@@ -140,6 +141,21 @@
             <main id="category-grid" class="container mx-auto px-4 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 <!-- Category cards will be injected here by JavaScript -->
             </main>
+
+            <!-- About Section -->
+            <section id="about-section" class="py-16 bg-slate-50 dark:bg-slate-800">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-4xl font-extrabold text-center mb-8 text-slate-900 dark:text-white">About Our Portal</h2>
+                    <div class="max-w-4xl mx-auto text-lg text-center text-slate-700 dark:text-slate-300">
+                        <p class="mb-4">
+                            Welcome to the Advanced Math Mock Test Portal, your one-stop solution for comprehensive exam preparation. Our platform is designed to help students master various mathematical concepts through a wide range of mock tests tailored for specific competitive exams.
+                        </p>
+                        <p>
+                            We provide a structured learning experience with carefully curated practice tests, helping you to identify your strengths and weaknesses. Dive into our extensive library of questions and prepare yourself to ace your exams with confidence!
+                        </p>
+                    </div>
+                </div>
+            </section>
 
             <!-- Testimonials Section -->
             <section id="testimonials-section" class="py-16">
@@ -173,14 +189,55 @@
                     </div>
                 </div>
             </section>
+            
+            <!-- Contact Details Section -->
+            <section id="contact-section" class="py-16 bg-slate-100 dark:bg-slate-900 text-center">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-8">Contact Us</h2>
+                    <div class="max-w-4xl mx-auto text-lg text-slate-700 dark:text-slate-300">
+                        <p class="mb-4">
+                            Have questions or need assistance? Feel free to reach out to us!
+                        </p>
+                        <div class="flex flex-col md:flex-row justify-center items-center md:items-start space-y-4 md:space-y-0 md:space-x-8 mt-8">
+                            <div class="flex items-center">
+                                <span class="text-2xl text-teal-600 dark:text-teal-400 mr-2">📧</span>
+                                <a href="mailto:support@mathportal.com" class="text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors duration-200">support@mathportal.com</a>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-2xl text-teal-600 dark:text-teal-400 mr-2">📞</span>
+                                <a href="tel:+911234567890" class="text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors duration-200">+91 1234567890</a>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-2xl text-teal-600 dark:text-teal-400 mr-2">📍</span>
+                                <span class="text-slate-700 dark:text-slate-300">123 Math Street, Education City, IN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <!-- Test List View -->
+        <!-- WBSLST Subjects View -->
+        <div id="wbslst-view" class="view">
+            <header class="py-8 px-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-md sticky top-0 z-10">
+                <div class="container mx-auto flex items-center justify-between">
+                    <h1 class="text-3xl font-bold text-slate-900 dark:text-white">WBSLST Subjects</h1>
+                    <button id="back-from-wbslst" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">
+                        &larr; Back
+                    </button>
+                </div>
+            </header>
+            <main class="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Subject cards will be injected here -->
+            </main>
+        </div>
+
+        <!-- Test List View (for all categories) -->
         <div id="test-list-view" class="view">
             <header class="py-8 px-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-md sticky top-0 z-10">
                 <div class="container mx-auto flex items-center justify-between">
                     <h1 id="test-list-title" class="text-3xl font-bold text-slate-900 dark:text-white"></h1>
-                    <button id="back-to-dashboard" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">
+                    <button id="back-from-test-list" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">
                         &larr; Back
                     </button>
                 </div>
@@ -195,7 +252,7 @@
 
     <script>
         // --- DATA ---
-        const testData = [
+        const wbslstSubjects = [
             { title: "Classical Algebra", icon: "📜", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `classical-algebra/test${i + 1}.html` })) },
             { title: "Modern Algebra", icon: "🧩", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `modern-algebra/test${i + 1}.html` })) },
             { title: "Geometry", icon: "📐", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Mock Test ${i + 1}`, link: `geometry/test${i + 1}.html` })) },
@@ -210,22 +267,35 @@
             { title: "Full Mock Tests", icon: "🏆", tests: Array.from({ length: 20 }, (_, i) => ({ name: `Full Syllabus Test ${i + 1}`, link: `full-mock-test/test${i + 1}.html` })) }
         ];
 
+        const testData = [
+            { title: "IIT JAM", icon: "🇮🇳", tests: Array.from({ length: 10 }, (_, i) => ({ name: `IIT JAM Mock Test ${i + 1}`, link: `iit-jam/test${i + 1}.html` })) },
+            { title: "WBJEE", icon: "🌐", tests: Array.from({ length: 10 }, (_, i) => ({ name: `WBJEE Mock Test ${i + 1}`, link: `wbjee/test${i + 1}.html` })) },
+            { title: "CSIR NET", icon: "🔬", tests: Array.from({ length: 10 }, (_, i) => ({ name: `CSIR NET Mock Test ${i + 1}`, link: `csir-net/test${i + 1}.html` })) },
+            { title: "CUET PG", icon: "🎓", tests: Array.from({ length: 10 }, (_, i) => ({ name: `CUET PG Mock Test ${i + 1}`, link: `cuet-pg/test${i + 1}.html` })) },
+            { title: "UP LT Grade", icon: "📝", tests: Array.from({ length: 10 }, (_, i) => ({ name: `UP LT Grade Mock Test ${i + 1}`, link: `up-lt-grade/test${i + 1}.html` })) },
+            { title: "BPSC", icon: "🏛️", tests: Array.from({ length: 10 }, (_, i) => ({ name: `BPSC Mock Test ${i + 1}`, link: `bpsc/test${i + 1}.html` })) },
+            { title: "WBSLST", icon: "📚", tests: wbslstSubjects }
+        ];
+
         // --- DOM Element References ---
+        const loginModal = document.getElementById('login-modal');
         const loginForm = document.getElementById('login-form');
         const passwordInput = document.getElementById('password-input');
         const errorMessage = document.getElementById('error-message');
-        const loginModal = document.getElementById('login-modal');
-        const appContainer = document.getElementById('app-container');
         const dashboardView = document.getElementById('dashboard-view');
         const dashboardHeader = document.getElementById('dashboard-header');
+        const wbslstView = document.getElementById('wbslst-view');
+        const wbslstGrid = wbslstView.querySelector('main');
         const testListView = document.getElementById('test-list-view');
         const categoryGrid = document.getElementById('category-grid');
         const testListTitle = document.getElementById('test-list-title');
         const testListContainer = document.getElementById('test-list-container');
-        const backToDashboardBtn = document.getElementById('back-to-dashboard');
-        const testimonialsSection = document.getElementById('testimonials-section'); // New reference
+        const backFromWBSLSTBtn = document.getElementById('back-from-wbslst');
+        const backFromTestListBtn = document.getElementById('back-from-test-list');
 
         const CORRECT_PASSWORD = 'pijus_sir_math';
+        let previousView = 'dashboard';
+        let intendedCategory = null;
 
         function renderDashboard() {
             categoryGrid.innerHTML = '';
@@ -238,16 +308,59 @@
                     <h2 class="text-xl font-bold text-white">${category.title}</h2>
                     <p class="text-slate-300 mt-2">${category.tests.length} tests</p>
                 `;
-                card.addEventListener('click', () => showTestList(index));
+                card.addEventListener('click', () => handleCategoryClick(category));
                 categoryGrid.appendChild(card);
             });
         }
+        
+        function handleCategoryClick(category) {
+            const protectedCategories = ["IIT JAM", "WBJEE", "WBSLST"];
+            if (protectedCategories.includes(category.title)) {
+                intendedCategory = category;
+                showLoginModal();
+            } else {
+                showTestList(category.tests, category.title, 'dashboard');
+            }
+        }
 
-        function showTestList(categoryIndex) {
-            const category = testData[categoryIndex];
-            testListTitle.textContent = category.title;
+        function showLoginModal() {
+            // Display the modal with a smooth transition
+            loginModal.style.display = 'flex';
+            setTimeout(() => {
+                loginModal.style.opacity = 1;
+            }, 10); // A small delay to ensure display: flex is applied first
+        }
+
+        function hideLoginModal() {
+            // Hide the modal with a smooth transition
+            loginModal.style.opacity = 0;
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+            }, 500);
+        }
+
+        function showWBSLSTSubjects() {
+            wbslstGrid.innerHTML = '';
+            wbslstSubjects.forEach((subject, index) => {
+                const card = document.createElement('div');
+                card.className = 'category-card rounded-2xl p-6 flex flex-col items-center text-center cursor-pointer';
+                card.dataset.index = index;
+                card.innerHTML = `
+                    <div class="text-6xl mb-4">${subject.icon}</div>
+                    <h2 class="text-xl font-bold text-slate-900">${subject.title}</h2>
+                    <p class="text-slate-500 mt-2">${subject.tests.length} tests</p>
+                `;
+                card.addEventListener('click', () => showTestList(subject.tests, subject.title, 'wbslst'));
+                wbslstGrid.appendChild(card);
+            });
+            switchView('wbslst');
+        }
+
+        function showTestList(tests, title, backDestination) {
+            testListTitle.textContent = title;
+            previousView = backDestination;
             
-            const testLinksHTML = category.tests.map(test => `
+            const testLinksHTML = tests.map(test => `
                 <a href="${test.link}" class="test-link-item block p-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition duration-200">
                     <span class="text-teal-600 dark:text-teal-400 font-semibold">${test.name}</span>
                 </a>
@@ -257,15 +370,20 @@
         }
 
         function switchView(viewName) {
+            dashboardView.classList.remove('active');
+            wbslstView.classList.remove('active');
+            testListView.classList.remove('active');
+
             if (viewName === 'dashboard') {
                 document.body.classList.add('dashboard-bg');
-                dashboardHeader.classList.remove('text-slate-900', 'dark:text-white'); // Ensure header text color is white on dashboard
+                dashboardHeader.classList.remove('text-slate-900', 'dark:text-white');
                 dashboardHeader.classList.add('text-white');
                 dashboardView.classList.add('active');
-                testListView.classList.remove('active');
-            } else {
+            } else if (viewName === 'wbslst') {
                 document.body.classList.remove('dashboard-bg');
-                dashboardView.classList.remove('active');
+                wbslstView.classList.add('active');
+            } else if (viewName === 'test-list') {
+                document.body.classList.remove('dashboard-bg');
                 testListView.classList.add('active');
             }
         }
@@ -273,16 +391,22 @@
         loginForm.addEventListener('submit', (event) => {
             event.preventDefault();
             if (passwordInput.value.trim() === CORRECT_PASSWORD) {
-                loginModal.style.opacity = 0;
-                setTimeout(() => {
-                    loginModal.style.display = 'none';
-                    appContainer.classList.remove('hidden');
-                    renderDashboard();
-                    switchView('dashboard'); // Set initial view to dashboard
-                }, 500);
+                hideLoginModal();
+                errorMessage.textContent = '';
+                
+                if (intendedCategory) {
+                    if (intendedCategory.title === "WBSLST") {
+                        showWBSLSTSubjects();
+                    } else {
+                        showTestList(intendedCategory.tests, intendedCategory.title, 'dashboard');
+                    }
+                    intendedCategory = null; // Clear the intended category
+                }
+
             } else {
                 errorMessage.textContent = 'Incorrect password. Please try again.';
                 passwordInput.value = '';
+                // Optional: Add a shake animation for visual feedback
                 loginModal.querySelector('.bg-white').classList.add('animate-shake');
                 setTimeout(() => {
                     loginModal.querySelector('.bg-white').classList.remove('animate-shake');
@@ -290,7 +414,21 @@
             }
         });
 
-        backToDashboardBtn.addEventListener('click', () => switchView('dashboard'));
+        // Event listeners for back buttons
+        backFromWBSLSTBtn.addEventListener('click', () => switchView('dashboard'));
+        backFromTestListBtn.addEventListener('click', () => {
+            if (previousView === 'dashboard') {
+                switchView('dashboard');
+            } else if (previousView === 'wbslst') {
+                showWBSLSTSubjects();
+            }
+        });
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+            switchView('dashboard'); // Ensure dashboard is the first view
+        });
 
         const style = document.createElement('style');
         style.innerHTML = `
