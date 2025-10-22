@@ -8,119 +8,636 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #0f0f0f;
+            --secondary: #1a1a1a;
+            --accent: #d4af37;
+            --accent-light: #f4e5c2;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(26, 26, 26, 0.8);
+            --border-color: rgba(212, 175, 55, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(to top, #f3f4f6, #ffffff); /* Default background for test list view */
-            transition: background 0.5s ease;
+            background: #0f0f0f;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
         }
-        /* Style for the dashboard background, inspired by the user's image */
-        body.dashboard-bg {
-            background: #4c1d95; /* Deep Indigo/Purple color */
+        
+        /* Premium animated background */
+        .premium-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+            z-index: -2;
         }
+        
+        /* Animated gradient overlay */
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(212, 175, 55, 0.03) 50%, 
+                transparent 70%);
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { transform: translateX(-100%) translateY(-100%); }
+            50% { transform: translateX(100%) translateY(100%); }
+        }
+        
+        /* Premium particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+                transform: translateY(80vh) translateX(20px) scale(1);
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Premium Login Modal */
         #login-modal {
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            z-index: 50; /* Ensure modal is on top */
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 100;
         }
+        
+        .login-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* View transitions */
         .view {
             display: none;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.6s ease-in-out;
         }
+        
         .view.active {
             display: block;
             opacity: 1;
         }
-        /* Default card style for light background */
+        
+        /* Premium header */
+        .premium-header {
+            position: relative;
+            padding: 6rem 1rem 4rem;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .premium-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--accent) 20%, 
+                var(--accent) 80%, 
+                transparent);
+        }
+        
+        .premium-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.02em;
+        }
+        
+        .premium-subtitle {
+            font-size: 1.375rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+        }
+        
+        /* Premium category cards */
         .category-card {
-            background-color: #ffffff;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 26, 26, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
         }
-        /* Card style when on the purple dashboard background */
-        body.dashboard-bg .category-card {
-            background-color: rgba(255, 255, 255, 0.07); /* Glassmorphism effect */
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(212, 175, 55, 0.1) 0%, 
+                transparent 50%, 
+                rgba(212, 175, 55, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
+        
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        
+        .category-card:hover::before {
+            opacity: 1;
+        }
+        
+        .category-card:hover::after {
+            opacity: 1;
+        }
+        
         .category-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 
+                0 30px 60px rgba(212, 175, 55, 0.2),
+                0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+        
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.3));
+            transition: transform 0.4s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+        
+        .category-card:hover .category-title {
+            color: var(--accent);
+        }
+        
+        .category-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        /* Premium buttons */
+        .premium-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, #b8941f 100%);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 10px 25px rgba(212, 175, 55, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .premium-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #b8941f 0%, var(--accent) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        
+        .premium-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .premium-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 35px rgba(212, 175, 55, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Premium sections */
+        .premium-section {
+            padding: 6rem 1rem;
+            position: relative;
+        }
+        
+        .premium-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            display: inline-block;
+            color: var(--text-primary);
+        }
+        
+        .premium-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        
+        /* Premium testimonials */
+        .testimonial-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 26, 26, 0.7) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            height: 100%;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 5rem;
+            color: var(--accent);
+            font-family: 'Playfair Display', serif;
+            opacity: 0.2;
+        }
+        
+        .testimonial-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 
+                0 25px 50px rgba(212, 175, 55, 0.15),
+                0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
         }
-        body.dashboard-bg .category-card:hover {
-             background-color: rgba(255, 255, 255, 0.15);
-             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        
+        .testimonial-quote {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            color: var(--text-secondary);
+            font-style: italic;
         }
+        
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .testimonial-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+        
+        /* Premium contact section */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .contact-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent) 0%, #b8941f 100%);
+            border-radius: 50%;
+            margin-right: 1.5rem;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+            color: var(--primary);
+        }
+        
+        /* Premium test list */
+        .test-list-header {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 26, 26, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .test-list-container {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 26, 26, 0.7) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        
         .test-link-item {
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 1.5rem 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
         }
-        .dark .test-link-item {
-            border-bottom-color: #4a5568;
+        
+        .test-link-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, var(--accent) 0%, #b8941f 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
+        
+        .test-link-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .test-link-item:hover {
+            background: rgba(212, 175, 55, 0.05);
+            padding-left: 2.5rem;
+        }
+        
         .test-link-item:last-child {
             border-bottom: none;
         }
-        /* Testimonials specific styling */
-        #testimonials-section {
-            background-color: #f1f5f9; /* Light gray background */
-            padding: 4rem 0;
+        
+        .test-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, #b8941f 100%);
+            color: var(--primary);
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 1.5rem;
+            font-size: 0.9rem;
         }
-        body.dashboard-bg #testimonials-section {
-             background-color: #0f172a; /* Dark slate background */
-             color: white;
+        
+        /* Premium footer */
+        .premium-footer {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            padding: 4rem 1rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            position: relative;
         }
-        .testimonial-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+        
+        .premium-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--accent) 20%, 
+                var(--accent) 80%, 
+                transparent);
         }
-        body.dashboard-bg .testimonial-card {
-            background-color: #1e293b; /* Dark slate background */
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
         }
-        .testimonial-card:hover {
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            margin: 0 0.75rem;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(135deg, var(--accent) 0%, #b8941f 100%);
             transform: translateY(-5px);
+            color: var(--primary);
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
         }
-        .testimonial-quote {
-            font-size: 1.125rem; /* text-lg */
-            line-height: 1.75rem; /* leading-relaxed */
-            color: #334155; /* text-slate-700 */
-            margin-bottom: 1.5rem; /* mb-6 */
+        
+        /* Premium input styling */
+        .premium-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
         }
-        body.dashboard-bg .testimonial-quote {
-            color: #cbd5e1; /* text-slate-300 */
+        
+        .premium-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
-        .testimonial-author {
-            font-weight: 600; /* font-semibold */
-            color: #0d9488; /* text-teal-600 */
+        
+        .premium-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
         }
-        body.dashboard-bg .testimonial-author {
-            color: #2dd4bf; /* text-teal-400 */
-        }
-        .testimonial-title {
-            font-size: 0.875rem; /* text-sm */
-            color: #64748b; /* text-slate-500 */
-            margin-top: 0.25rem; /* mt-1 */
-        }
-        body.dashboard-bg .testimonial-title {
-            color: #94a3b8; /* text-slate-400 */
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .premium-title {
+                font-size: 3rem;
+            }
+            
+            .premium-section-title {
+                font-size: 2.5rem;
+            }
+            
+            .category-card {
+                padding: 2rem;
+            }
+            
+            .category-icon {
+                font-size: 3rem;
+            }
         }
     </style>
 </head>
-<body class="dashboard-bg">
+<body>
+    <div class="premium-bg"></div>
+    <div class="gradient-overlay"></div>
+    
+    <!-- Animated particles background -->
+    <div class="particles" id="particles"></div>
 
     <!-- Login Modal - Hidden by default -->
     <div id="login-modal" class="fixed inset-0 hidden items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Student Portal</h2>
-            <p class="text-slate-600 dark:text-slate-400 mb-8">Enter password to access this content.</p>
+        <div class="login-card w-full max-w-md">
+            <div class="mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full mb-6 shadow-2xl">
+                    <i class="fas fa-lock text-black text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-3">Student Portal</h2>
+                <p class="text-gray-400">Enter password to access this content.</p>
+            </div>
             <form id="login-form">
-                <input type="password" id="password-input" placeholder="Password" class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:outline-none" required>
-                <button type="submit" class="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg shadow-teal-500/30">
+                <div class="relative mb-6">
+                    <input type="password" id="password-input" placeholder="Enter your password" class="premium-input pr-12" required>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                        <i class="fas fa-key text-yellow-500"></i>
+                    </div>
+                </div>
+                <button type="submit" class="premium-btn w-full">
                     Access Content
                 </button>
             </form>
@@ -132,35 +649,42 @@
     <div id="app-container" class="min-h-screen">
         <!-- Dashboard View (Main Categories) -->
         <div id="dashboard-view" class="view active">
-            <header id="dashboard-header" class="text-center py-12 px-4">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white">
-                    <span role="img" aria-label="brain">🧠</span> Math Mock Test Dashboard
+            <header class="premium-header">
+                <h1 class="premium-title">
+                    <span role="img" aria-label="brain" class="mr-4">🧠</span> Math Mock Test Portal
                 </h1>
-                <p class="mt-4 text-lg text-slate-300">Choose a category to start practicing.</p>
+                <p class="premium-subtitle">Master advanced mathematics with our comprehensive mock test platform</p>
             </header>
-            <main id="category-grid" class="container mx-auto px-4 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Category cards will be injected here by JavaScript -->
+            
+            <main class="container mx-auto px-4 pb-12">
+                <div id="category-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Category cards will be injected here by JavaScript -->
+                </div>
             </main>
 
             <!-- About Section -->
-            <section id="about-section" class="py-16 bg-slate-50 dark:bg-slate-800">
+            <section id="about-section" class="premium-section" style="background: linear-gradient(135deg, rgba(26, 26, 26, 0.5) 0%, rgba(15, 15, 15, 0.5) 100%);">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-4xl font-extrabold text-center mb-8 text-slate-900 dark:text-white">About Our Portal</h2>
-                    <div class="max-w-4xl mx-auto text-lg text-center text-slate-700 dark:text-slate-300">
-                        <p class="mb-4">
-                            Welcome to the Advanced Math Mock Test Portal, your one-stop solution for comprehensive exam preparation. Our platform is designed to help students master various mathematical concepts through a wide range of mock tests tailored for specific competitive exams.
+                    <h2 class="premium-section-title mx-auto">About Our Portal</h2>
+                    <div class="max-w-5xl mx-auto text-lg text-center leading-relaxed">
+                        <p class="mb-6 text-gray-300">
+                            Welcome to the Advanced Math Mock Test Portal, your premier destination for comprehensive exam preparation. 
+                            Our platform is meticulously designed to help students master various mathematical concepts through a wide 
+                            range of mock tests tailored for specific competitive exams.
                         </p>
-                        <p>
-                            We provide a structured learning experience with carefully curated practice tests, helping you to identify your strengths and weaknesses. Dive into our extensive library of questions and prepare yourself to ace your exams with confidence!
+                        <p class="text-gray-300">
+                            We provide a structured learning experience with carefully curated practice tests, helping you to identify 
+                            your strengths and weaknesses. Dive into our extensive library of questions and prepare yourself to ace 
+                            your exams with confidence!
                         </p>
                     </div>
                 </div>
             </section>
 
             <!-- Testimonials Section -->
-            <section id="testimonials-section" class="py-16">
+            <section id="testimonials-section" class="premium-section">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-4xl font-extrabold text-center mb-12 text-slate-900 dark:text-white">What Our Students Say</h2>
+                    <h2 class="premium-section-title mx-auto">What Our Students Say</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Testimonial 1 -->
                         <div class="testimonial-card">
@@ -191,59 +715,98 @@
             </section>
             
             <!-- Contact Details Section -->
-            <section id="contact-section" class="py-16 bg-slate-100 dark:bg-slate-900 text-center">
+            <section id="contact-section" class="premium-section" style="background: linear-gradient(135deg, rgba(26, 26, 26, 0.5) 0%, rgba(15, 15, 15, 0.5) 100%);">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-8">Contact Us</h2>
-                    <div class="max-w-4xl mx-auto text-lg text-slate-700 dark:text-slate-300">
-                        <p class="mb-4">
+                    <h2 class="premium-section-title mx-auto">Contact Us</h2>
+                    <div class="max-w-4xl mx-auto">
+                        <p class="text-center text-lg mb-10 text-gray-300">
                             Have questions or need assistance? Feel free to reach out to us!
                         </p>
-                        <div class="flex flex-col md:flex-row justify-center items-center md:items-start space-y-4 md:space-y-0 md:space-x-8 mt-8">
-                            <div class="flex items-center">
-                                <span class="text-2xl text-teal-600 dark:text-teal-400 mr-2">📧</span>
-                                <a href="mailto:support@mathportal.com" class="text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors duration-200">support@mathportal.com</a>
+                        <div class="flex flex-col md:flex-row justify-center items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <a href="mailto:support@mathportal.com" class="text-white hover:text-yellow-400 transition-colors duration-200 font-medium">support@mathportal.com</a>
+                                </div>
                             </div>
-                            <div class="flex items-center">
-                                <span class="text-2xl text-teal-600 dark:text-teal-400 mr-2">📞</span>
-                                <a href="tel:+911234567890" class="text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors duration-200">+91 1234567890</a>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <a href="tel:+911234567890" class="text-white hover:text-yellow-400 transition-colors duration-200 font-medium">+91 1234567890</a>
+                                </div>
                             </div>
-                            <div class="flex items-center">
-                                <span class="text-2xl text-teal-600 dark:text-teal-400 mr-2">📍</span>
-                                <span class="text-slate-700 dark:text-slate-300">123 Math Street, Education City, IN</span>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="text-white font-medium">123 Math Street, Education City, IN</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+            
+            <!-- Footer -->
+            <footer class="premium-footer">
+                <div class="container mx-auto px-4">
+                    <p class="text-2xl font-bold mb-2" style="color: var(--accent);">Math Mock Test Portal</p>
+                    <p class="text-sm opacity-70 mb-4">© 2023 All rights reserved | Premium Educational Platform</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </footer>
         </div>
 
         <!-- WBSLST Subjects View -->
         <div id="wbslst-view" class="view">
-            <header class="py-8 px-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-md sticky top-0 z-10">
+            <header class="test-list-header py-8 px-4 sticky top-0 z-10">
                 <div class="container mx-auto flex items-center justify-between">
-                    <h1 class="text-3xl font-bold text-slate-900 dark:text-white">WBSLST Subjects</h1>
-                    <button id="back-from-wbslst" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">
-                        &larr; Back
+                    <h1 class="text-3xl font-bold text-white">WBSLST Subjects</h1>
+                    <button id="back-from-wbslst" class="premium-btn">
+                        <i class="fas fa-arrow-left mr-2"></i> Back
                     </button>
                 </div>
             </header>
-            <main class="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Subject cards will be injected here -->
+            <main class="container mx-auto px-4 py-8">
+                <div id="wbslst-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Subject cards will be injected here -->
+                </div>
             </main>
         </div>
 
         <!-- Test List View (for all categories) -->
         <div id="test-list-view" class="view">
-            <header class="py-8 px-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-md sticky top-0 z-10">
+            <header class="test-list-header py-8 px-4 sticky top-0 z-10">
                 <div class="container mx-auto flex items-center justify-between">
-                    <h1 id="test-list-title" class="text-3xl font-bold text-slate-900 dark:text-white"></h1>
-                    <button id="back-from-test-list" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">
-                        &larr; Back
+                    <h1 id="test-list-title" class="text-3xl font-bold text-white"></h1>
+                    <button id="back-from-test-list" class="premium-btn">
+                        <i class="fas fa-arrow-left mr-2"></i> Back
                     </button>
                 </div>
             </header>
             <main class="container mx-auto px-4 py-8">
-                <div id="test-list-container" class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                <div id="test-list-container" class="test-list-container">
                     <!-- Test links will be injected here -->
                 </div>
             </main>
@@ -283,30 +846,54 @@
         const passwordInput = document.getElementById('password-input');
         const errorMessage = document.getElementById('error-message');
         const dashboardView = document.getElementById('dashboard-view');
-        const dashboardHeader = document.getElementById('dashboard-header');
         const wbslstView = document.getElementById('wbslst-view');
-        const wbslstGrid = wbslstView.querySelector('main');
+        const wbslstGrid = document.getElementById('wbslst-grid');
         const testListView = document.getElementById('test-list-view');
         const categoryGrid = document.getElementById('category-grid');
         const testListTitle = document.getElementById('test-list-title');
         const testListContainer = document.getElementById('test-list-container');
         const backFromWBSLSTBtn = document.getElementById('back-from-wbslst');
         const backFromTestListBtn = document.getElementById('back-from-test-list');
+        const particlesContainer = document.getElementById('particles');
 
         const CORRECT_PASSWORD = 'pijus_sir_math';
         let previousView = 'dashboard';
         let intendedCategory = null;
 
+        // Create animated particles
+        function createParticles() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size
+                const size = Math.random() * 8 + 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 25 + 15;
+                const delay = Math.random() * 25;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         function renderDashboard() {
             categoryGrid.innerHTML = '';
             testData.forEach((category, index) => {
                 const card = document.createElement('div');
-                card.className = 'category-card rounded-2xl p-6 flex flex-col items-center text-center cursor-pointer';
+                card.className = 'category-card';
                 card.dataset.index = index;
                 card.innerHTML = `
-                    <div class="text-6xl mb-4">${category.icon}</div>
-                    <h2 class="text-xl font-bold text-white">${category.title}</h2>
-                    <p class="text-slate-300 mt-2">${category.tests.length} tests</p>
+                    <div class="category-icon">${category.icon}</div>
+                    <h2 class="category-title">${category.title}</h2>
+                    <p class="category-count">${category.tests.length} tests available</p>
                 `;
                 card.addEventListener('click', () => handleCategoryClick(category));
                 categoryGrid.appendChild(card);
@@ -324,31 +911,29 @@
         }
 
         function showLoginModal() {
-            // Display the modal with a smooth transition
             loginModal.style.display = 'flex';
             setTimeout(() => {
-                loginModal.style.opacity = 1;
-            }, 10); // A small delay to ensure display: flex is applied first
+                loginModal.classList.add('opacity-100');
+            }, 10);
         }
 
         function hideLoginModal() {
-            // Hide the modal with a smooth transition
-            loginModal.style.opacity = 0;
+            loginModal.classList.remove('opacity-100');
             setTimeout(() => {
                 loginModal.style.display = 'none';
-            }, 500);
+            }, 300);
         }
 
         function showWBSLSTSubjects() {
             wbslstGrid.innerHTML = '';
             wbslstSubjects.forEach((subject, index) => {
                 const card = document.createElement('div');
-                card.className = 'category-card rounded-2xl p-6 flex flex-col items-center text-center cursor-pointer';
+                card.className = 'category-card';
                 card.dataset.index = index;
                 card.innerHTML = `
-                    <div class="text-6xl mb-4">${subject.icon}</div>
-                    <h2 class="text-xl font-bold text-slate-900">${subject.title}</h2>
-                    <p class="text-slate-500 mt-2">${subject.tests.length} tests</p>
+                    <div class="category-icon">${subject.icon}</div>
+                    <h2 class="category-title">${subject.title}</h2>
+                    <p class="category-count">${subject.tests.length} tests available</p>
                 `;
                 card.addEventListener('click', () => showTestList(subject.tests, subject.title, 'wbslst'));
                 wbslstGrid.appendChild(card);
@@ -360,9 +945,10 @@
             testListTitle.textContent = title;
             previousView = backDestination;
             
-            const testLinksHTML = tests.map(test => `
-                <a href="${test.link}" class="test-link-item block p-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition duration-200">
-                    <span class="text-teal-600 dark:text-teal-400 font-semibold">${test.name}</span>
+            const testLinksHTML = tests.map((test, index) => `
+                <a href="${test.link}" class="test-link-item">
+                    <span class="test-number">${index + 1}</span>
+                    <span class="text-white font-semibold text-lg">${test.name}</span>
                 </a>
             `).join('');
             testListContainer.innerHTML = testLinksHTML;
@@ -375,15 +961,10 @@
             testListView.classList.remove('active');
 
             if (viewName === 'dashboard') {
-                document.body.classList.add('dashboard-bg');
-                dashboardHeader.classList.remove('text-slate-900', 'dark:text-white');
-                dashboardHeader.classList.add('text-white');
                 dashboardView.classList.add('active');
             } else if (viewName === 'wbslst') {
-                document.body.classList.remove('dashboard-bg');
                 wbslstView.classList.add('active');
             } else if (viewName === 'test-list') {
-                document.body.classList.remove('dashboard-bg');
                 testListView.classList.add('active');
             }
         }
@@ -400,16 +981,14 @@
                     } else {
                         showTestList(intendedCategory.tests, intendedCategory.title, 'dashboard');
                     }
-                    intendedCategory = null; // Clear the intended category
+                    intendedCategory = null;
                 }
-
             } else {
                 errorMessage.textContent = 'Incorrect password. Please try again.';
                 passwordInput.value = '';
-                // Optional: Add a shake animation for visual feedback
-                loginModal.querySelector('.bg-white').classList.add('animate-shake');
+                loginModal.querySelector('.login-card').classList.add('animate-shake');
                 setTimeout(() => {
-                    loginModal.querySelector('.bg-white').classList.remove('animate-shake');
+                    loginModal.querySelector('.login-card').classList.remove('animate-shake');
                 }, 500);
             }
         });
@@ -426,10 +1005,12 @@
 
         // Initial setup
         document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
             renderDashboard();
-            switchView('dashboard'); // Ensure dashboard is the first view
+            switchView('dashboard');
         });
 
+        // Add shake animation
         const style = document.createElement('style');
         style.innerHTML = `
             @keyframes shake {
