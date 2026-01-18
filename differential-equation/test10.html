@@ -1073,247 +1073,249 @@
             title: "First Order DEs Quiz: Homogeneous & Reducible Forms",
             timeLimit: 30 * 60, // 30 minutes in seconds
             questions: [
-                {
-                    id: 1,
-                    question: "Which of the following differential equations is homogeneous?",
-                    options: [
-                        { key: "A", text: "\\( (x^2 + y)dx + x dy = 0 \\)" },
-                        { key: "B", text: "\\( (x^2 + y^2)dx - 2xy dy = 0 \\)" },
-                        { key: "C", text: "\\( \\frac{dy}{dx} = \\frac{x+y+1}{x-y} \\)" },
-                        { key: "D", text: "\\( x \\frac{dy}{dx} + y = \\sin(x) \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "A homogeneous differential equation has the form where M(x,y) and N(x,y) are homogeneous functions of the same degree. In option B, both \\(x^2 + y^2\\) and \\(2xy\\) are homogeneous functions of degree 2."
-                },
-                {
-                    id: 2,
-                    question: "The substitution \\( y = vx \\) transforms a homogeneous differential equation into which type of equation?",
-                    options: [
-                        { key: "A", text: "Linear" },
-                        { key: "B", text: "Exact" },
-                        { key: "C", text: "Separable" },
-                        { key: "D", text: "Bernoulli" }
-                    ],
-                    correct: "C",
-                    explanation: "When we substitute \\(y = vx\\) (where \\(v\\) is a function of \\(x\\)), the homogeneous equation transforms into a separable equation in variables \\(v\\) and \\(x\\), which can be solved by separation of variables."
-                },
-                {
-                    id: 3,
-                    question: "Solve the homogeneous differential equation: \\( (x+y)dx - x dy = 0 \\)",
-                    options: [
-                        { key: "A", text: "\\( y = C x e^{y/x} \\)" },
-                        { key: "B", text: "\\( y = x \\ln|Cx| \\)" },
-                        { key: "C", text: "\\( x = C y e^{x/y} \\)" },
-                        { key: "D", text: "\\( y = C x^2 \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "Using substitution \\(y = vx\\), we get \\(\\frac{dy}{dx} = v + x\\frac{dv}{dx}\\). The equation becomes \\(x\\frac{dv}{dx} = 1\\), which gives \\(v = \\ln|x| + C'\\), hence \\(y = x\\ln|Cx|\\)."
-                },
-                {
-                    id: 4,
-                    question: "Consider the differential equation \\( (x^2+xy)dx - y^2 dy = 0 \\). What is the degree of homogeneity for the function \\( M(x,y) = x^2+xy \\)?",
-                    options: [
-                        { key: "A", text: "1" },
-                        { key: "B", text: "2" },
-                        { key: "C", text: "0" },
-                        { key: "D", text: "Not homogeneous" }
-                    ],
-                    correct: "B",
-                    explanation: "To check: \\(M(tx, ty) = (tx)^2 + (tx)(ty) = t^2x^2 + t^2xy = t^2(x^2 + xy) = t^2 M(x,y)\\). Since it equals \\(t^n M(x,y)\\) with \\(n=2\\), the degree of homogeneity is 2."
-                },
-                {
-                    id: 5,
-                    question: "The differential equation \\( \\frac{dy}{dx} = \\frac{x+y-2}{x-y+4} \\) is of which type?",
-                    options: [
-                        { key: "A", text: "Homogeneous" },
-                        { key: "B", text: "Reducible to homogeneous form" },
-                        { key: "C", text: "Exact" },
-                        { key: "D", text: "Linear" }
-                    ],
-                    correct: "B",
-                    explanation: "This equation has the form \\(\\frac{dy}{dx} = \\frac{ax+by+c}{Ax+By+C}\\) with constant terms. Since it's not immediately homogeneous (due to -2 and +4), but can be transformed using substitution \\(x = X+h, y = Y+k\\), it's reducible to homogeneous form."
-                },
-                {
-                    id: 6,
-                    question: "To solve \\( \\frac{dy}{dx} = \\frac{x+y}{x-y} \\), one typically uses the substitution:",
-                    options: [
-                        { key: "A", text: "\\( y = u \\)" },
-                        { key: "B", text: "\\( y = uv \\)" },
-                        { key: "C", text: "\\( y = vx \\)" },
-                        { key: "D", text: "\\( x = vy \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "For homogeneous equations of the form \\(\\frac{dy}{dx} = F(y/x)\\), the standard substitution is \\(y = vx\\), where \\(v = y/x\\). This transforms the equation into a separable form."
-                },
-                {
-                    id: 7,
-                    question: "Solve the initial value problem: \\( x \\frac{dy}{dx} = x + y \\) with \\( y(1) = 0 \\).",
-                    options: [
-                        { key: "A", text: "\\( y = x \\ln x \\)" },
-                        { key: "B", text: "\\( y = x \\ln|x| \\)" },
-                        { key: "C", text: "\\( y = x^2 - x \\)" },
-                        { key: "D", text: "\\( y = \\frac{1}{x} - 1 \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "Rewriting: \\(\\frac{dy}{dx} = 1 + \\frac{y}{x}\\). Using \\(y = vx\\): \\(v + x\\frac{dv}{dx} = 1 + v\\), so \\(x\\frac{dv}{dx} = 1\\). Integrating: \\(v = \\ln|x| + C\\). Thus \\(y = x\\ln|x| + Cx\\). Using \\(y(1) = 0\\): \\(C = 0\\), giving \\(y = x\\ln|x|\\)."
-                },
-                {
-                    id: 8,
-                    question: "For the differential equation \\( \\frac{dy}{dx} = \\frac{ax+by+c}{Ax+By+C} \\), if \\( aB - Ab = 0 \\), what is the appropriate substitution?",
-                    options: [
-                        { key: "A", text: "\\( y = vx \\)" },
-                        { key: "B", text: "\\( x = vy \\)" },
-                        { key: "C", text: "\\( z = ax+by \\)" },
-                        { key: "D", text: "\\( z = Ax+By \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "When \\(aB - Ab = 0\\) (lines are parallel), the substitution \\(z = ax + by\\) is used. This is because \\(Ax + By = k(ax + by)\\) for some constant \\(k\\), making the substitution \\(z = ax + by\\) appropriate."
-                },
-                {
-                    id: 9,
-                    question: "Which of the following is the general solution to \\( (x^2+y^2)dx - 2xy dy = 0 \\)?",
-                    options: [
-                        { key: "A", text: "\\( y^2 = C x^2 - x \\)" },
-                        { key: "B", text: "\\( y^2 = x^2 - Cx \\)" },
-                        { key: "C", text: "\\( y = C x^2 - x \\)" },
-                        { key: "D", text: "\\( x^2 = y^2 + Cy \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "Using \\(y = vx\\), the equation becomes separable. After integration and simplification, we get \\(y^2 = x^2 - Cx\\), which can be verified by substitution back into the original equation."
-                },
-                {
-                    id: 10,
-                    question: "Determine the constants \\( h \\) and \\( k \\) for the substitution \\( x = X+h, y = Y+k \\) to make \\( (2x+3y-1)dx + (4x+6y+2)dy = 0 \\) homogeneous.",
-                    options: [
-                        { key: "A", text: "\\( h=1, k=0 \\)" },
-                        { key: "B", text: "\\( h=0, k=1 \\)" },
-                        { key: "C", text: "No such \\( h, k \\) exist as lines are parallel" },
-                        { key: "D", text: "This equation is of the form where \\( aB-Ab=0 \\), so \\( h, k \\) method is not applicable." }
-                    ],
-                    correct: "D",
-                    explanation: "Check: \\(aB - Ab = 2(6) - 3(4) = 12 - 12 = 0\\). Since the coefficients are proportional (parallel lines), the \\((h,k)\\) method doesn't apply. Instead, use substitution \\(z = 2x + 3y\\)."
-                },
-                {
-                    id: 11,
-                    question: "The solution to \\( (x^2+y^2)dx + xy dy = 0 \\) is:",
-                    options: [
-                        { key: "A", text: "\\( x^2(x^2+2y^2) = C \\)" },
-                        { key: "B", text: "\\( x^2(x^2+2y^2)^2 = C \\)" },
-                        { key: "C", text: "\\( x^2+2y^2 = C x \\)" },
-                        { key: "D", text: "\\( x^4+y^4 = C \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "This is a homogeneous equation. Using the substitution \\(y = vx\\) and solving the resulting separable equation leads to the solution \\(x^2(x^2+2y^2)^2 = C\\)."
-                },
-                {
-                    id: 12,
-                    question: "If a differential equation can be written in the form \\( \\frac{dy}{dx} = F\\left(\\frac{y}{x}\\right) \\), it is classified as:",
-                    options: [
-                        { key: "A", text: "Exact" },
-                        { key: "B", text: "Homogeneous" },
-                        { key: "C", text: "Linear" },
-                        { key: "D", text: "Bernoulli" }
-                    ],
-                    correct: "B",
-                    explanation: "An equation of the form \\(\\frac{dy}{dx} = F(y/x)\\) is the defining characteristic of a homogeneous first-order differential equation. The right side depends only on the ratio \\(y/x\\)."
-                },
-                {
-                    id: 13,
-                    question: "The transformation \\( x = X+h, y = Y+k \\) is used when the lines \\( ax+by+c=0 \\) and \\( Ax+By+C=0 \\) are:",
-                    options: [
-                        { key: "A", text: "Parallel" },
-                        { key: "B", text: "Intersecting" },
-                        { key: "C", text: "Perpendicular" },
-                        { key: "D", text: "Coincident" }
-                    ],
-                    correct: "B",
-                    explanation: "The transformation \\(x = X+h, y = Y+k\\) is used when \\(aB - Ab \\neq 0\\), meaning the lines intersect at a unique point \\((h, k)\\). This point becomes the new origin, eliminating the constant terms."
-                },
-                {
-                    id: 14,
-                    question: "Solve \\( \\frac{dy}{dx} = \\frac{y-x}{y+x} \\).",
-                    options: [
-                        { key: "A", text: "\\( x^2+y^2+2xy = C \\)" },
-                        { key: "B", text: "\\( \\ln|x^2+y^2| + 2 \\arctan(y/x) = C \\)" },
-                        { key: "C", text: "\\( \\ln|x^2+y^2| - 2 \\arctan(y/x) = C \\)" },
-                        { key: "D", text: "\\( x^2-y^2+2xy = C \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "Using \\(y = vx\\), we get \\(\\frac{v-1}{v+1} = v + x\\frac{dv}{dx}\\). After separation and integration (involving partial fractions), the solution is \\(\\ln|x^2+y^2| - 2\\arctan(y/x) = C\\)."
-                },
-                {
-                    id: 15,
-                    question: "Which substitution is appropriate for \\( \\frac{dy}{dx} = \\sin^2\\left(\\frac{y}{x}\\right) + \\frac{y}{x} \\)?",
-                    options: [
-                        { key: "A", text: "\\( y=vx^2 \\)" },
-                        { key: "B", text: "\\( y=vx \\)" },
-                        { key: "C", text: "\\( x=vy \\)" },
-                        { key: "D", text: "\\( y = e^v x \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "Since the equation involves \\(y/x\\), it's a homogeneous equation of the form \\(\\frac{dy}{dx} = F(y/x)\\). The standard substitution \\(y = vx\\) (where \\(v = y/x\\)) is appropriate."
-                },
-                {
-                    id: 16,
-                    question: "Consider the equation \\( (2x+3y+5)dx + (3x+2y+1)dy = 0 \\). What are the coordinates of the intersection point \\( (h,k) \\) for the related homogeneous form?",
-                    options: [
-                        { key: "A", text: "\\( (1, -1) \\)" },
-                        { key: "B", text: "\\( (-1, 1) \\)" },
-                        { key: "C", text: "\\( (7, -3) \\)" },
-                        { key: "D", text: "\\( (-7, 3) \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "Solve: \\(2h + 3k + 5 = 0\\) and \\(3h + 2k + 1 = 0\\). From these: \\(2h + 3k = -5\\) and \\(3h + 2k = -1\\). Solving: \\(h = 7, k = -3\\). Verify: \\(2(7) + 3(-3) + 5 = 14 - 9 + 5 = 10 \\neq 0\\)... Let me recalculate. Actually solving gives \\((7, -3)\\)."
-                },
-                {
-                    id: 17,
-                    question: "The general solution to \\( \\frac{dy}{dx} = \\frac{y}{x} + \\tan\\left(\\frac{y}{x}\\right) \\) is:",
-                    options: [
-                        { key: "A", text: "\\( \\sin(y/x) = Cx \\)" },
-                        { key: "B", text: "\\( \\cos(y/x) = Cx \\)" },
-                        { key: "C", text: "\\( \\sin(y/x) = C/x \\)" },
-                        { key: "D", text: "\\( \\tan(y/x) = Cx \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "Let \\(v = y/x\\). Then \\(v + x\\frac{dv}{dx} = v + \\tan v\\), giving \\(x\\frac{dv}{dx} = \\tan v\\). Separating: \\(\\cot v \\, dv = \\frac{dx}{x}\\). Integrating: \\(\\ln|\\sin v| = \\ln|x| + C'\\), so \\(\\sin(y/x) = Cx\\). Wait, checking... it should be \\(\\sin(y/x) = C/x\\)."
-                },
-                {
-                    id: 18,
-                    question: "Which of the following equations is *not* homogeneous?",
-                    options: [
-                        { key: "A", text: "\\( (x^2+xy)dx = y^2 dy \\)" },
-                        { key: "B", text: "\\( \\frac{dy}{dx} = \\frac{x^2+y^2}{xy} \\)" },
-                        { key: "C", text: "\\( (x+y+1)dx + (x-y)dy = 0 \\)" },
-                        { key: "D", text: "\\( x \\frac{dy}{dx} - y = \\sqrt{x^2+y^2} \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "Option C contains a constant term (+1), which means the functions are not homogeneous (degree doesn't remain consistent when scaling by \\(t\\)). Options A, B, and D can all be written in homogeneous form."
-                },
-                {
-                    id: 19,
-                    question: "The solution of \\( (2x-y)dx + (4x-2y+3)dy = 0 \\) can be found by which substitution?",
-                    options: [
-                        { key: "A", text: "\\( y=vx \\)" },
-                        { key: "B", text: "\\( x=X+h, y=Y+k \\)" },
-                        { key: "C", text: "\\( z=2x-y \\)" },
-                        { key: "D", text: "\\( z=4x-2y \\)" }
-                    ],
-                    correct: "C",
-                    explanation: "Note that \\(4x - 2y = 2(2x - y)\\), so the coefficients are proportional (\\(aB - Ab = 0\\)). Therefore, we use the substitution \\(z = 2x - y\\), which transforms the equation into a separable form."
-                },
-                {
-                    id: 20,
-                    question: "If \\( \\frac{dy}{dx} = F(ax+by) \\), what is the typical substitution used to solve it?",
-                    options: [
-                        { key: "A", text: "\\( y=vx \\)" },
-                        { key: "B", text: "\\( z=ax+by \\)" },
-                        { key: "C", text: "\\( x=vy \\)" },
-                        { key: "D", text: "\\( y = x^n \\)" }
-                    ],
-                    correct: "B",
-                    explanation: "For equations of the form \\(\\frac{dy}{dx} = F(ax + by)\\), the substitution \\(z = ax + by\\) is used. Then \\(\\frac{dz}{dx} = a + b\\frac{dy}{dx} = a + bF(z)\\), which becomes a separable equation in \\(z\\) and \\(x\\)."
-                }
-            ]
+{
+    id: 1,
+    question: "The order of the differential equation \\( \\left( \\frac{d^2y}{dx^2} \\right)^3 + \\left( \\frac{dy}{dx} \\right)^5 = x \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "3" },
+        { key: "D", text: "5" }
+    ],
+    correct: "B",
+    explanation: "The highest order derivative present is \\(\\frac{d^2y}{dx^2}\\). Hence, order = 2."
+},
+{
+    id: 2,
+    question: "The degree of the differential equation \\( \\left( \\frac{d^2y}{dx^2} \\right)^3 + \\left( \\frac{dy}{dx} \\right)^5 = x \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "3" },
+        { key: "D", text: "5" }
+    ],
+    correct: "C",
+    explanation: "The highest order derivative is \\(\\frac{d^2y}{dx^2}\\) and its power is 3. Hence, degree = 3."
+},
+{
+    id: 3,
+    question: "Find the order of the differential equation \\( \\frac{d^3y}{dx^3} + \\sin\\left( \\frac{d^2y}{dx^2} \\right) = 0 \\).",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "3" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "C",
+    explanation: "The highest order derivative present is \\(\\frac{d^3y}{dx^3}\\). Hence, order = 3."
+},
+{
+    id: 4,
+    question: "The degree of the equation \\( \\sin\\left( \\frac{dy}{dx} \\right) + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "0" },
+        { key: "C", text: "Not defined" },
+        { key: "D", text: "2" }
+    ],
+    correct: "C",
+    explanation: "The derivative appears inside a trigonometric function, so the equation is not a polynomial in derivatives. Degree is not defined."
+},
+{
+    id: 5,
+    question: "The order of the differential equation \\( \\left(1 + \\left( \\frac{dy}{dx} \\right)^2 \\right)^{1/2} = x \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "Not defined" },
+        { key: "D", text: "0" }
+    ],
+    correct: "A",
+    explanation: "Only the first derivative \\(\\frac{dy}{dx}\\) is present. Hence, order = 1."
+},
+{
+    id: 6,
+    question: "The degree of the differential equation \\( \\left( \\frac{d^2y}{dx^2} \\right)^{1/2} + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "Not defined" },
+        { key: "D", text: "1/2" }
+    ],
+    correct: "C",
+    explanation: "Fractional powers of derivatives mean the equation is not polynomial in derivatives. Degree is not defined."
+},
+{
+    id: 7,
+    question: "The order of the differential equation \\( \\frac{d}{dx}\\left( \\frac{dy}{dx} \\right) + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "0" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "B",
+    explanation: "Since \\(\\frac{d}{dx}(\\frac{dy}{dx}) = \\frac{d^2y}{dx^2}\\), the order is 2."
+},
+{
+    id: 8,
+    question: "The degree of the differential equation \\( \\left( \\frac{d^3y}{dx^3} \\right)^4 + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "3" },
+        { key: "B", text: "4" },
+        { key: "C", text: "1" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "B",
+    explanation: "The highest order derivative is \\(\\frac{d^3y}{dx^3}\\) and it appears to the power 4. Hence, degree = 4."
+},
+{
+    id: 9,
+    question: "For the equation \\( y = \\left( \\frac{dy}{dx} \\right)^3 \\), the order is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "3" },
+        { key: "C", text: "0" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "A",
+    explanation: "The highest derivative present is \\(\\frac{dy}{dx}\\). Hence, order = 1."
+},
+{
+    id: 10,
+    question: "The degree of the differential equation \\( y = \\left( \\frac{dy}{dx} \\right)^3 \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "3" },
+        { key: "C", text: "0" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "B",
+    explanation: "The highest order derivative is \\(\\frac{dy}{dx}\\) and its power is 3. Hence, degree = 3."
+},
+{
+    id: 11,
+    question: "The order of \\( \\frac{d^4y}{dx^4} + x\\frac{d^2y}{dx^2} + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "2" },
+        { key: "B", text: "3" },
+        { key: "C", text: "4" },
+        { key: "D", text: "1" }
+    ],
+    correct: "C",
+    explanation: "The highest order derivative present is \\(\\frac{d^4y}{dx^4}\\). Hence, order = 4."
+},
+{
+    id: 12,
+    question: "The degree of \\( \\frac{d^4y}{dx^4} + x\\frac{d^2y}{dx^2} + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "4" },
+        { key: "B", text: "2" },
+        { key: "C", text: "1" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "C",
+    explanation: "The highest order derivative \\(\\frac{d^4y}{dx^4}\\) appears with power 1. Hence, degree = 1."
+},
+{
+    id: 13,
+    question: "If the degree of a differential equation is defined, then the equation must be:",
+    options: [
+        { key: "A", text: "Linear" },
+        { key: "B", text: "Homogeneous" },
+        { key: "C", text: "Polynomial in derivatives" },
+        { key: "D", text: "Separable" }
+    ],
+    correct: "C",
+    explanation: "Degree is defined only when the equation is a polynomial in derivatives."
+},
+{
+    id: 14,
+    question: "The order of the equation \\( e^{\\frac{dy}{dx}} + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "0" },
+        { key: "B", text: "1" },
+        { key: "C", text: "Not defined" },
+        { key: "D", text: "2" }
+    ],
+    correct: "B",
+    explanation: "The highest derivative present is \\(\\frac{dy}{dx}\\). Hence, order = 1."
+},
+{
+    id: 15,
+    question: "The degree of \\( e^{\\frac{dy}{dx}} + y = 0 \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "0" },
+        { key: "C", text: "Not defined" },
+        { key: "D", text: "2" }
+    ],
+    correct: "C",
+    explanation: "The derivative occurs in an exponential function, so the equation is not polynomial in derivatives."
+},
+{
+    id: 16,
+    question: "The order of \\( (\\frac{d^2y}{dx^2})^2 + (\\frac{dy}{dx})^4 = 0 \\) is:",
+    options: [
+        { key: "A", text: "1" },
+        { key: "B", text: "2" },
+        { key: "C", text: "4" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "B",
+    explanation: "The highest order derivative present is \\(\\frac{d^2y}{dx^2}\\). Hence, order = 2."
+},
+{
+    id: 17,
+    question: "The degree of \\( (\\frac{d^2y}{dx^2})^2 + (\\frac{dy}{dx})^4 = 0 \\) is:",
+    options: [
+        { key: "A", text: "4" },
+        { key: "B", text: "2" },
+        { key: "C", text: "1" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "B",
+    explanation: "The highest order derivative is \\(\\frac{d^2y}{dx^2}\\) and its power is 2. Hence, degree = 2."
+},
+{
+    id: 18,
+    question: "The order of the equation \\( y = \\int \\left( \\frac{dy}{dx} \\right) dx \\) is:",
+    options: [
+        { key: "A", text: "0" },
+        { key: "B", text: "1" },
+        { key: "C", text: "2" },
+        { key: "D", text: "Not defined" }
+    ],
+    correct: "B",
+    explanation: "The highest derivative involved is \\(\\frac{dy}{dx}\\). Hence, order = 1."
+},
+{
+    id: 19,
+    question: "Which of the following equations has undefined degree?",
+    options: [
+        { key: "A", text: "\\( \\frac{dy}{dx} + y = 0 \\)" },
+        { key: "B", text: "\\( (\\frac{dy}{dx})^2 + y = 0 \\)" },
+        { key: "C", text: "\\( \\log(\\frac{dy}{dx}) + y = 0 \\)" },
+        { key: "D", text: "\\( \\frac{d^2y}{dx^2} + y = 0 \\)" }
+    ],
+    correct: "C",
+    explanation: "The derivative appears inside a logarithmic function, so the equation is not polynomial in derivatives."
+},
+{
+    id: 20,
+    question: "If a differential equation has order 3 and degree 1, then the highest derivative appears:",
+    options: [
+        { key: "A", text: "Linearly" },
+        { key: "B", text: "Quadratically" },
+        { key: "C", text: "Inside a trigonometric function" },
+        { key: "D", text: "Inside an exponential function" }
+    ],
+    correct: "A",
+    explanation: "Degree 1 implies the highest order derivative appears to the first power, i.e., linearly."
+}
+]
+
+                
         };
 
         // State
