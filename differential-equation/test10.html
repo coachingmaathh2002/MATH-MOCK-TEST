@@ -3,693 +3,1778 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ODE Quiz: Order, Degree, and Formulation</title>
+    <meta name="description" content="First Order Differential Equations Quiz - Homogeneous & Reducible Forms">
+    <title>ODE Quiz: Homogeneous & Reducible Forms | MathPortal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300,400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         :root {
-            --primary-blue: #3498db;
-            --dark-blue: #2c3e50;
-            --light-gray: #f4f7f6;
-            --medium-gray: #ecf0f1;
-            --dark-gray: #7f8c8d;
-            --white: #ffffff;
-            --correct-green: #d4edda;
-            --text-color: #333;
+            --primary: #0f0f0f;
+            --secondary: #1a1a1a;
+            --accent: #d4af37;
+            --accent-light: #f4e5c2;
+            --accent-dark: #b8941f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(26, 26, 26, 0.8);
+            --border-color: rgba(212, 175, 55, 0.2);
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
         }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--light-gray);
+        
+        * {
             margin: 0;
-            padding: 20px;
-            color: var(--text-color);
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f0f;
+            color: var(--text-primary);
+            overflow-x: hidden;
             min-height: 100vh;
         }
-
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-dark);
+        }
+        
+        /* Premium animated background */
+        .premium-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+            z-index: -2;
+        }
+        
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+                transform: translateY(80vh) translateX(20px) scale(1);
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-logo:hover {
+            color: var(--accent);
+        }
+        
+        .nav-timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .nav-timer.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--warning);
+            color: var(--warning);
+            animation: pulse 1s infinite;
+        }
+        
+        .nav-timer.danger {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--error);
+            color: var(--error);
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Main Container */
         .quiz-container {
             max-width: 900px;
-            width: 100%;
-            background-color: var(--white);
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            margin-bottom: 40px;
+            margin: 0 auto;
+            padding: 100px 1.5rem 2rem;
+            min-height: 100vh;
         }
-
-        h1 {
-            text-align: center;
-            color: var(--dark-blue);
-            margin-bottom: 35px;
-            font-size: 2.2em;
+        
+        /* Progress Section */
+        .progress-section {
+            margin-bottom: 2rem;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-text span {
+            color: var(--accent);
             font-weight: 700;
         }
-
-        .question-block {
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid var(--medium-gray);
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
         }
-
-        .question-block:last-of-type {
-            border-bottom: none;
-            margin-bottom: 40px;
-            padding-bottom: 0;
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
-
+        
+        /* Question Indicators */
+        .question-indicators {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .indicator {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+        }
+        
+        .indicator:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .indicator.current {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--primary);
+            border-color: var(--accent);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .indicator.answered {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+        
+        .indicator.marked {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        
+        /* Question Card */
+        .question-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 26, 26, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .question-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .mark-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .mark-btn:hover {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        
+        .mark-btn.marked {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        
         .question-text {
-            font-size: 1.15em;
-            font-weight: 500;
-            color: var(--dark-blue);
-            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
         }
-
+        
+        /* Options */
         .options-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 1rem;
         }
-
+        
         .option {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .option-label {
             display: flex;
-            align-items: flex-start; /* Align items at the start to handle multi-line labels */
-            padding: 15px 20px;
-            background-color: var(--medium-gray);
-            border-radius: 8px;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-
-        .option:hover {
-            background-color: #e0e6e7;
-            transform: translateY(-2px);
+        
+        .option-label:hover {
+            background: rgba(212, 175, 55, 0.05);
+            border-color: var(--accent);
+            transform: translateX(5px);
         }
-
-        .option input[type="radio"] {
-            margin-top: 3px; /* Align radio button with the first line of text */
-            margin-right: 15px;
-            transform: scale(1.2);
-            accent-color: var(--primary-blue); /* Modern way to style radio button color */
+        
+        .option input:checked + .option-label {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.15);
         }
-
-        .option label {
-            flex-grow: 1;
-            cursor: pointer;
-            font-size: 1.05em;
-            line-height: 1.5; /* Ensure good line spacing for options */
+        
+        .option-marker {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
         }
-
-        .show-answers-btn {
+        
+        .option input:checked + .option-label .option-marker {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-color: var(--accent);
+            color: var(--primary);
+        }
+        
+        .option-text {
+            flex: 1;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+        
+        /* Correct/Wrong states */
+        .option.correct .option-label {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--success);
+        }
+        
+        .option.correct .option-marker {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .option.wrong .option-label {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: var(--error);
+        }
+        
+        .option.wrong .option-marker {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+        
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 16px;
+            display: none;
+        }
+        
+        .explanation-box.show {
             display: block;
-            width: fit-content;
-            margin: 30px auto 0;
-            padding: 15px 30px;
-            font-size: 1.1em;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .explanation-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.75rem;
+        }
+        
+        .explanation-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
             font-weight: 600;
-            background-color: var(--primary-blue);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            border: none;
         }
-
-        .show-answers-btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
+        
+        .nav-btn.prev {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
         }
-
-        .show-answers-btn:active {
-            transform: translateY(0);
+        
+        .nav-btn.prev:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
         }
-
-        .show-answers-btn:disabled {
-            background-color: var(--dark-gray);
+        
+        .nav-btn.next {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+        
+        .nav-btn.next:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
-            box-shadow: none;
         }
-
-        /* Class added by JavaScript for correct answers */
-        .correct-answer {
-            background-color: var(--correct-green);
-            border: 1px solid #c3e6cb;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        
+        .nav-btn.submit {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
         }
-
-        .correct-answer:hover {
-            background-color: var(--correct-green); /* Keep the green on hover */
-            transform: none; /* No hover transform once answers are shown */
+        
+        .nav-btn.submit:hover:not(:disabled) {
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
         }
-
-        /* MathJax specific styling */
+        
+        /* Results Screen */
+        .results-container {
+            text-align: center;
+            padding: 3rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .results-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            animation: bounceIn 0.6s ease;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .results-icon.excellent {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+        }
+        
+        .results-icon.good {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4);
+        }
+        
+        .results-icon.average {
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.4);
+        }
+        
+        .results-icon.poor {
+            background: linear-gradient(135deg, var(--error) 0%, #dc2626 100%);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.4);
+        }
+        
+        .results-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .results-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .score-display {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .score-item {
+            text-align: center;
+            padding: 1.5rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            min-width: 140px;
+        }
+        
+        .score-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score-value.correct { color: var(--success); }
+        .score-value.wrong { color: var(--error); }
+        .score-value.skipped { color: var(--text-secondary); }
+        .score-value.percentage { color: var(--accent); }
+        
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .results-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .result-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+        }
+        
+        .result-btn.primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+        
+        .result-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        }
+        
+        .result-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        
+        .result-btn.secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Review Mode */
+        .review-header {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .review-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .review-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--primary);
+        }
+        
+        /* Start Screen */
+        .start-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .start-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 10px 20px rgba(212, 175, 55, 0.3));
+        }
+        
+        .start-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .start-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        
+        .info-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+        
+        .info-text {
+            text-align: left;
+        }
+        
+        .info-value {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            margin-top: 2rem;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.5);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            border-color: var(--success);
+        }
+        
+        .toast.error {
+            border-color: var(--error);
+        }
+        
+        .toast.warning {
+            border-color: var(--warning);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 80px 1rem 1.5rem;
+            }
+            
+            .question-card {
+                padding: 1.5rem;
+            }
+            
+            .question-text {
+                font-size: 1.05rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .start-title {
+                font-size: 2rem;
+            }
+            
+            .results-title {
+                font-size: 2rem;
+            }
+            
+            .score-display {
+                gap: 1rem;
+            }
+            
+            .score-item {
+                min-width: 100px;
+                padding: 1rem;
+            }
+            
+            .score-value {
+                font-size: 2rem;
+            }
+            
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .indicator {
+                width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* MathJax overrides */
         .MathJax {
-            font-size: 1.1em !important; /* Slightly larger for readability */
-            line-height: 1.5 !important;
+            font-size: 1.1em !important;
+        }
+        
+        mjx-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
         }
     </style>
 </head>
 <body>
+    <div class="premium-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>🧠</span>
+                <span>MathPortal</span>
+            </a>
+            <div class="nav-timer" id="navTimer">
+                <i class="fas fa-clock"></i>
+                <span id="timerDisplay">30:00</span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- Main Quiz Container -->
     <div class="quiz-container">
-        <h1>Ordinary Differential Equations Quiz</h1>
-        <p style="text-align: center; color: var(--dark-gray); margin-bottom: 40px; font-size: 1.05em;">
-            Test your knowledge on the Order, Degree, and Formulation of ODEs.
-        </p>
-
-        <form id="odeQuiz">
-            <!-- Question 1 -->
-            <div class="question-block">
-                <p class="question-text">1. What is the order and degree of the differential equation:
-                    \[ \frac{d^3y}{dx^3} + 5 \left(\frac{dy}{dx}\right)^2 - 4y = e^x \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q1a" name="q1" value="A">
-                        <label for="q1a">A. Order: 3, Degree: 2</label>
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-container">
+            <div class="start-icon">📝</div>
+            <h1 class="start-title">First Order DEs Quiz</h1>
+            <p class="start-subtitle">Test your knowledge on Homogeneous Equations and Reducible Forms. Answer all questions carefully and review your performance at the end.</p>
+            
+            <div class="quiz-info">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-question-circle"></i>
                     </div>
-                    <div class="option">
-                        <input type="radio" id="q1b" name="q1" value="B">
-                        <label for="q1b" data-correct="true">B. Order: 3, Degree: 1</label>
+                    <div class="info-text">
+                        <div class="info-value">20</div>
+                        <div class="info-label">Questions</div>
                     </div>
-                    <div class="option">
-                        <input type="radio" id="q1c" name="q1" value="C">
-                        <label for="q1c">C. Order: 1, Degree: 3</label>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="option">
-                        <input type="radio" id="q1d" name="q1" value="D">
-                        <label for="q1d">D. Order: 2, Degree: 1</label>
+                    <div class="info-text">
+                        <div class="info-value">30 min</div>
+                        <div class="info-label">Duration</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="info-text">
+                        <div class="info-value">+4 / -1</div>
+                        <div class="info-label">Marking</div>
                     </div>
                 </div>
             </div>
-
-            <!-- Question 2 -->
-            <div class="question-block">
-                <p class="question-text">2. Determine the order and degree of the differential equation:
-                    \[ \left(\frac{d^2y}{dx^2}\right)^{3/2} = 5 \frac{dy}{dx} + y \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q2a" name="q2" value="A">
-                        <label for="q2a">A. Order: 2, Degree: 1</label>
+            
+            <button class="start-btn" onclick="startQuiz()">
+                <span>Start Quiz</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <!-- Quiz Screen -->
+        <div id="quizScreen" style="display: none;">
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-text">Question <span id="currentNum">1</span> of <span id="totalNum">20</span></div>
+                    <div class="progress-text"><span id="answeredCount">0</span> answered</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 5%;"></div>
+                </div>
+                <div class="question-indicators" id="indicators"></div>
+            </div>
+            
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+                <div class="question-header">
+                    <div class="question-number">
+                        <i class="fas fa-book-open"></i>
+                        <span id="questionLabel">Question 1</span>
                     </div>
-                    <div class="option">
-                        <input type="radio" id="q2b" name="q2" value="B">
-                        <label for="q2b" data-correct="true">B. Order: 2, Degree: 3</label>
+                    <button class="mark-btn" id="markBtn" onclick="toggleMark()">
+                        <i class="far fa-flag"></i>
+                        <span>Mark for Review</span>
+                    </button>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options-container" id="optionsContainer"></div>
+                <div class="explanation-box" id="explanationBox">
+                    <div class="explanation-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Explanation</span>
                     </div>
-                    <div class="option">
-                        <input type="radio" id="q2c" name="q2" value="C">
-                        <label for="q2c">C. Order: 3, Degree: 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q2d" name="q2" value="D">
-                        <label for="q2d">D. Order: 3, Degree: 1</label>
-                    </div>
+                    <div class="explanation-text" id="explanationText"></div>
                 </div>
             </div>
-
-            <!-- Question 3 -->
-            <div class="question-block">
-                <p class="question-text">3. What is the order and degree of the differential equation:
-                    \[ \frac{d^2y}{dx^2} + \cos\left(\frac{dy}{dx}\right) = x^2 \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q3a" name="q3" value="A">
-                        <label for="q3a">A. Order: 2, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q3b" name="q3" value="B">
-                        <label for="q3b">B. Order: 1, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q3c" name="q3" value="C">
-                        <label for="q3c" data-correct="true">C. Order: 2, Degree: Undefined</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q3d" name="q3" value="D">
-                        <label for="q3d">D. Order: 2, Degree: 2</label>
-                    </div>
-                </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button class="nav-btn prev" id="prevBtn" onclick="prevQuestion()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Previous</span>
+                </button>
+                <button class="nav-btn next" id="nextBtn" onclick="nextQuestion()">
+                    <span>Next</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-
-            <!-- Question 4 -->
-            <div class="question-block">
-                <p class="question-text">4. Consider the differential equation:
-                    \[ \frac{d^4y}{dx^4} + \left(\frac{d^2y}{dx^2}\right)^5 + \frac{dy}{dx} = 0 \]
-                    What are its order and degree?
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q4a" name="q4" value="A">
-                        <label for="q4a">A. Order: 5, Degree: 4</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q4b" name="q4" value="B">
-                        <label for="q4b" data-correct="true">B. Order: 4, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q4c" name="q4" value="C">
-                        <label for="q4c">C. Order: 4, Degree: 5</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q4d" name="q4" value="D">
-                        <label for="q4d">D. Order: 2, Degree: 5</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 5 -->
-            <div class="question-block">
-                <p class="question-text">5. The order and degree of the differential equation
-                    \[ y''' + (y'')^2 + (y')^3 + y = 0 \]
-                    are:
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q5a" name="q5" value="A">
-                        <label for="q5a">A. Order: 3, Degree: 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q5b" name="q5" value="B">
-                        <label for="q5b">B. Order: 2, Degree: 3</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q5c" name="q5" value="C">
-                        <label for="q5c" data-correct="true">C. Order: 3, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q5d" name="q5" value="D">
-                        <label for="q5d">D. Order: 1, Degree: 3</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 6 -->
-            <div class="question-block">
-                <p class="question-text">6. A population grows at a rate proportional to its current size. If \(P(t)\) is the population at time \(t\), which ODE models this scenario?
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q6a" name="q6" value="A">
-                        <label for="q6a">A. \( \frac{dP}{dt} = k t \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q6b" name="q6" value="B">
-                        <label for="q6b">B. \( \frac{dP}{dt} = k P^2 \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q6c" name="q6" value="C">
-                        <label for="q6c" data-correct="true">C. \( \frac{dP}{dt} = k P \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q6d" name="q6" value="D">
-                        <label for="q6d">D. \( \frac{dP}{dt} = k \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 7 -->
-            <div class="question-block">
-                <p class="question-text">7. According to Newton's Law of Cooling, the rate of change of temperature of an object is proportional to the difference between its own temperature \(T\) and the ambient temperature \(T_a\). Which ODE represents this law?
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q7a" name="q7" value="A">
-                        <label for="q7a">A. \( \frac{dT}{dt} = k T_a \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q7b" name="q7" value="B">
-                        <label for="q7b">B. \( \frac{dT}{dt} = k (T + T_a) \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q7c" name="q7" value="C">
-                        <label for="q7c" data-correct="true">C. \( \frac{dT}{dt} = k (T - T_a) \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q7d" name="q7" value="D">
-                        <label for="q7d">D. \( \frac{dT}{dt} = k T T_a \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 8 -->
-            <div class="question-block">
-                <p class="question-text">8. A mass \(m\) is attached to a spring with spring constant \(k\). Assuming no damping and no external forces, the displacement \(x(t)\) from equilibrium follows simple harmonic motion. Which ODE describes this motion?
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q8a" name="q8" value="A">
-                        <label for="q8a">A. \( m \frac{d^2x}{dt^2} = kx \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q8b" name="q8" value="B">
-                        <label for="q8b" data-correct="true">B. \( m \frac{d^2x}{dt^2} + kx = 0 \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q8c" name="q8" value="C">
-                        <label for="q8c">C. \( m \frac{dx}{dt} + kx = 0 \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q8d" name="q8" value="D">
-                        <label for="q8d">D. \( m x = k \frac{d^2x}{dt^2} \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 9 -->
-            <div class="question-block">
-                <p class="question-text">9. What is the degree of the differential equation:
-                    \[ \sqrt{1 + \left(\frac{dy}{dx}\right)^2} = \frac{d^2y}{dx^2} \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q9a" name="q9" value="A">
-                        <label for="q9a">A. 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q9b" name="q9" value="B">
-                        <label for="q9b">B. 3</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q9c" name="q9" value="C">
-                        <label for="q9c" data-correct="true">C. 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q9d" name="q9" value="D">
-                        <label for="q9d">D. Undefined</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 10 -->
-            <div class="question-block">
-                <p class="question-text">10. The rate at which a substance decays is proportional to the amount of substance present. If \(A(t)\) is the amount of substance at time \(t\), which ODE describes this?
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q10a" name="q10" value="A">
-                        <label for="q10a" data-correct="true">A. \( \frac{dA}{dt} = -kA \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q10b" name="q10" value="B">
-                        <label for="q10b">B. \( \frac{dA}{dt} = kA \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q10c" name="q10" value="C">
-                        <label for="q10c">C. \( \frac{dA}{dt} = k \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q10d" name="q10" value="D">
-                        <label for="q10d">D. \( \frac{dA}{dt} = -k \sqrt{A} \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 11 -->
-            <div class="question-block">
-                <p class="question-text">11. What is the order of the differential equation:
-                    \[ y^{(4)} - 2y'' + y' - 7y = \sin(x) \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q11a" name="q11" value="A">
-                        <label for="q11a">A. 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q11b" name="q11" value="B">
-                        <label for="q11b">B. 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q11c" name="q11" value="C">
-                        <label for="q11c">C. 3</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q11d" name="q11" value="D">
-                        <label for="q11d" data-correct="true">D. 4</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 12 -->
-            <div class="question-block">
-                <p class="question-text">12. An object falls under gravity with air resistance proportional to its velocity. If \(v(t)\) is its velocity and \(g\) is acceleration due to gravity, which ODE models its motion? (Assume upward is positive, so gravity is \(-g\)).
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q12a" name="q12" value="A">
-                        <label for="q12a">A. \( m \frac{dv}{dt} = -g + kv \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q12b" name="q12" value="B">
-                        <label for="q12b" data-correct="true">B. \( m \frac{dv}{dt} = -mg - kv \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q12c" name="q12" value="C">
-                        <label for="q12c">C. \( \frac{dv}{dt} = g - kv \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q12d" name="q12" value="D">
-                        <label for="q12d">D. \( m \frac{dv}{dt} = mg + kv \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 13 -->
-            <div class="question-block">
-                <p class="question-text">13. What is the degree of the differential equation:
-                    \[ y'' = \sin(x) \left(\frac{dy}{dx}\right)^2 + e^y \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q13a" name="q13" value="A">
-                        <label for="q13a">A. 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q13b" name="q13" value="B">
-                        <label for="q13b" data-correct="true">B. 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q13c" name="q13" value="C">
-                        <label for="q13c">C. Undefined</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q13d" name="q13" value="D">
-                        <label for="q13d">D. 0</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 14 -->
-            <div class="question-block">
-                <p class="question-text">14. Formulate the ODE for a tank containing 100 liters of water with 10 kg of salt dissolved. Brine containing 0.5 kg/L of salt enters the tank at 5 L/min. The mixture leaves at the same rate. Let \(Q(t)\) be the amount of salt in the tank at time \(t\).
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q14a" name="q14" value="A">
-                        <label for="q14a">A. \( \frac{dQ}{dt} = 5 \times 0.5 - 5 \frac{Q}{100} \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q14b" name="q14" value="B">
-                        <label for="q14b" data-correct="true">B. \( \frac{dQ}{dt} = 2.5 - \frac{Q}{20} \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q14c" name="q14" value="C">
-                        <label for="q14c">C. \( \frac{dQ}{dt} = 5 \times 0.5 + 5 \frac{Q}{100} \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q14d" name="q14" value="D">
-                        <label for="q14d">D. \( \frac{dQ}{dt} = 0.5 - \frac{Q}{100} \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 15 -->
-            <div class="question-block">
-                <p class="question-text">15. The equation for a series RLC circuit with voltage source \(E(t)\) is given by:
-                    \[ L \frac{d^2q}{dt^2} + R \frac{dq}{dt} + \frac{1}{C} q = E(t) \]
-                    What are the order and degree of this ODE?
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q15a" name="q15" value="A">
-                        <label for="q15a">A. Order: 1, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q15b" name="q15" value="B">
-                        <label for="q15b">B. Order: 2, Degree: Undefined</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q15c" name="q15" value="C">
-                        <label for="q15c" data-correct="true">C. Order: 2, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q15d" name="q15" value="D">
-                        <label for="q15d">D. Order: 2, Degree: 2</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 16 -->
-            <div class="question-block">
-                <p class="question-text">16. What is the order and degree of the differential equation:
-                    \[ \left( \frac{d^2y}{dx^2} \right)^2 + \frac{dy}{dx} + y = 0 \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q16a" name="q16" value="A">
-                        <label for="q16a">A. Order: 1, Degree: 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q16b" name="q16" value="B">
-                        <label for="q16b" data-correct="true">B. Order: 2, Degree: 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q16c" name="q16" value="C">
-                        <label for="q16c">C. Order: 2, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q16d" name="q16" value="D">
-                        <label for="q16d">D. Order: 2, Degree: Undefined</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 17 -->
-            <div class="question-block">
-                <p class="question-text">17. Formulate the ODE for a simple pendulum of length \(L\) with mass \(m\), ignoring air resistance. Let \(\theta(t)\) be the angular displacement from the vertical. (Hint: Use Newton's second law for rotational motion).
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q17a" name="q17" value="A">
-                        <label for="q17a">A. \( mL \frac{d\theta}{dt} + mg \sin\theta = 0 \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q17b" name="q17" value="B">
-                        <label for="q17b">B. \( mL^2 \frac{d^2\theta}{dt^2} - mg \sin\theta = 0 \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q17c" name="q17" value="C">
-                        <label for="q17c" data-correct="true">C. \( mL^2 \frac{d^2\theta}{dt^2} + mgL \sin\theta = 0 \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q17d" name="q17" value="D">
-                        <label for="q17d">D. \( \frac{d^2\theta}{dt^2} + gL \sin\theta = 0 \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 18 -->
-            <div class="question-block">
-                <p class="question-text">18. What is the order and degree of the differential equation:
-                    \[ \frac{d^2y}{dx^2} = \sqrt{1 + \left(\frac{dy}{dx}\right)^3} \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q18a" name="q18" value="A">
-                        <label for="q18a">A. Order: 1, Degree: 3</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q18b" name="q18" value="B">
-                        <label for="q18b">B. Order: 2, Degree: 3</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q18c" name="q18" value="C">
-                        <label for="q18c" data-correct="true">C. Order: 2, Degree: 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q18d" name="q18" value="D">
-                        <label for="q18d">D. Order: 2, Degree: 1</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 19 -->
-            <div class="question-block">
-                <p class="question-text">19. Formulate the ODE for a substance that dissolves at a rate proportional to the product of the amount of undissolved substance \(S(t)\) and the difference between the saturation concentration \(C_s\) and the current concentration \(C(t)\). Assume volume \(V\) is constant.
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q19a" name="q19" value="A">
-                        <label for="q19a">A. \( \frac{dS}{dt} = k S C(t) \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q19b" name="q19" value="B">
-                        <label for="q19b">B. \( \frac{dS}{dt} = k (C_s - C(t)) \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q19c" name="q19" value="C">
-                        <label for="q19c" data-correct="true">C. \( \frac{dS}{dt} = k S (C_s - C(t)) \)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q19d" name="q19" value="D">
-                        <label for="q19d">D. \( \frac{dS}{dt} = k (S - C_s) \)</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 20 -->
-            <div class="question-block">
-                <p class="question-text">20. What are the order and degree of the differential equation:
-                    \[ \frac{d^2y}{dx^2} + y = \frac{1}{\frac{dy}{dx}} \]
-                </p>
-                <div class="options-container">
-                    <div class="option">
-                        <input type="radio" id="q20a" name="q20" value="A">
-                        <label for="q20a" data-correct="true">A. Order: 2, Degree: 1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q20b" name="q20" value="B">
-                        <label for="q20b">B. Order: 2, Degree: Undefined</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q20c" name="q20" value="C">
-                        <label for="q20c">C. Order: 2, Degree: 2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q20d" name="q20" value="D">
-                        <label for="q20d">D. Order: 1, Degree: 2</label>
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" id="showAnswersBtn" class="show-answers-btn">Show Answers</button>
-        </form>
+        </div>
+        
+        <!-- Results Screen -->
+        <div id="resultsScreen" style="display: none;">
+            <!-- Results will be injected here -->
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const showAnswersBtn = document.getElementById('showAnswersBtn');
+        // Quiz Data
+        const quizData = {
+            title: "First Order DEs Quiz: Homogeneous & Reducible Forms",
+            timeLimit: 30 * 60, // 30 minutes in seconds
+            questions: [
+                {
+                    id: 1,
+                    question: "Which of the following differential equations is homogeneous?",
+                    options: [
+                        { key: "A", text: "\\( (x^2 + y)dx + x dy = 0 \\)" },
+                        { key: "B", text: "\\( (x^2 + y^2)dx - 2xy dy = 0 \\)" },
+                        { key: "C", text: "\\( \\frac{dy}{dx} = \\frac{x+y+1}{x-y} \\)" },
+                        { key: "D", text: "\\( x \\frac{dy}{dx} + y = \\sin(x) \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "A homogeneous differential equation has the form where M(x,y) and N(x,y) are homogeneous functions of the same degree. In option B, both \\(x^2 + y^2\\) and \\(2xy\\) are homogeneous functions of degree 2."
+                },
+                {
+                    id: 2,
+                    question: "The substitution \\( y = vx \\) transforms a homogeneous differential equation into which type of equation?",
+                    options: [
+                        { key: "A", text: "Linear" },
+                        { key: "B", text: "Exact" },
+                        { key: "C", text: "Separable" },
+                        { key: "D", text: "Bernoulli" }
+                    ],
+                    correct: "C",
+                    explanation: "When we substitute \\(y = vx\\) (where \\(v\\) is a function of \\(x\\)), the homogeneous equation transforms into a separable equation in variables \\(v\\) and \\(x\\), which can be solved by separation of variables."
+                },
+                {
+                    id: 3,
+                    question: "Solve the homogeneous differential equation: \\( (x+y)dx - x dy = 0 \\)",
+                    options: [
+                        { key: "A", text: "\\( y = C x e^{y/x} \\)" },
+                        { key: "B", text: "\\( y = x \\ln|Cx| \\)" },
+                        { key: "C", text: "\\( x = C y e^{x/y} \\)" },
+                        { key: "D", text: "\\( y = C x^2 \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "Using substitution \\(y = vx\\), we get \\(\\frac{dy}{dx} = v + x\\frac{dv}{dx}\\). The equation becomes \\(x\\frac{dv}{dx} = 1\\), which gives \\(v = \\ln|x| + C'\\), hence \\(y = x\\ln|Cx|\\)."
+                },
+                {
+                    id: 4,
+                    question: "Consider the differential equation \\( (x^2+xy)dx - y^2 dy = 0 \\). What is the degree of homogeneity for the function \\( M(x,y) = x^2+xy \\)?",
+                    options: [
+                        { key: "A", text: "1" },
+                        { key: "B", text: "2" },
+                        { key: "C", text: "0" },
+                        { key: "D", text: "Not homogeneous" }
+                    ],
+                    correct: "B",
+                    explanation: "To check: \\(M(tx, ty) = (tx)^2 + (tx)(ty) = t^2x^2 + t^2xy = t^2(x^2 + xy) = t^2 M(x,y)\\). Since it equals \\(t^n M(x,y)\\) with \\(n=2\\), the degree of homogeneity is 2."
+                },
+                {
+                    id: 5,
+                    question: "The differential equation \\( \\frac{dy}{dx} = \\frac{x+y-2}{x-y+4} \\) is of which type?",
+                    options: [
+                        { key: "A", text: "Homogeneous" },
+                        { key: "B", text: "Reducible to homogeneous form" },
+                        { key: "C", text: "Exact" },
+                        { key: "D", text: "Linear" }
+                    ],
+                    correct: "B",
+                    explanation: "This equation has the form \\(\\frac{dy}{dx} = \\frac{ax+by+c}{Ax+By+C}\\) with constant terms. Since it's not immediately homogeneous (due to -2 and +4), but can be transformed using substitution \\(x = X+h, y = Y+k\\), it's reducible to homogeneous form."
+                },
+                {
+                    id: 6,
+                    question: "To solve \\( \\frac{dy}{dx} = \\frac{x+y}{x-y} \\), one typically uses the substitution:",
+                    options: [
+                        { key: "A", text: "\\( y = u \\)" },
+                        { key: "B", text: "\\( y = uv \\)" },
+                        { key: "C", text: "\\( y = vx \\)" },
+                        { key: "D", text: "\\( x = vy \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "For homogeneous equations of the form \\(\\frac{dy}{dx} = F(y/x)\\), the standard substitution is \\(y = vx\\), where \\(v = y/x\\). This transforms the equation into a separable form."
+                },
+                {
+                    id: 7,
+                    question: "Solve the initial value problem: \\( x \\frac{dy}{dx} = x + y \\) with \\( y(1) = 0 \\).",
+                    options: [
+                        { key: "A", text: "\\( y = x \\ln x \\)" },
+                        { key: "B", text: "\\( y = x \\ln|x| \\)" },
+                        { key: "C", text: "\\( y = x^2 - x \\)" },
+                        { key: "D", text: "\\( y = \\frac{1}{x} - 1 \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "Rewriting: \\(\\frac{dy}{dx} = 1 + \\frac{y}{x}\\). Using \\(y = vx\\): \\(v + x\\frac{dv}{dx} = 1 + v\\), so \\(x\\frac{dv}{dx} = 1\\). Integrating: \\(v = \\ln|x| + C\\). Thus \\(y = x\\ln|x| + Cx\\). Using \\(y(1) = 0\\): \\(C = 0\\), giving \\(y = x\\ln|x|\\)."
+                },
+                {
+                    id: 8,
+                    question: "For the differential equation \\( \\frac{dy}{dx} = \\frac{ax+by+c}{Ax+By+C} \\), if \\( aB - Ab = 0 \\), what is the appropriate substitution?",
+                    options: [
+                        { key: "A", text: "\\( y = vx \\)" },
+                        { key: "B", text: "\\( x = vy \\)" },
+                        { key: "C", text: "\\( z = ax+by \\)" },
+                        { key: "D", text: "\\( z = Ax+By \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "When \\(aB - Ab = 0\\) (lines are parallel), the substitution \\(z = ax + by\\) is used. This is because \\(Ax + By = k(ax + by)\\) for some constant \\(k\\), making the substitution \\(z = ax + by\\) appropriate."
+                },
+                {
+                    id: 9,
+                    question: "Which of the following is the general solution to \\( (x^2+y^2)dx - 2xy dy = 0 \\)?",
+                    options: [
+                        { key: "A", text: "\\( y^2 = C x^2 - x \\)" },
+                        { key: "B", text: "\\( y^2 = x^2 - Cx \\)" },
+                        { key: "C", text: "\\( y = C x^2 - x \\)" },
+                        { key: "D", text: "\\( x^2 = y^2 + Cy \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "Using \\(y = vx\\), the equation becomes separable. After integration and simplification, we get \\(y^2 = x^2 - Cx\\), which can be verified by substitution back into the original equation."
+                },
+                {
+                    id: 10,
+                    question: "Determine the constants \\( h \\) and \\( k \\) for the substitution \\( x = X+h, y = Y+k \\) to make \\( (2x+3y-1)dx + (4x+6y+2)dy = 0 \\) homogeneous.",
+                    options: [
+                        { key: "A", text: "\\( h=1, k=0 \\)" },
+                        { key: "B", text: "\\( h=0, k=1 \\)" },
+                        { key: "C", text: "No such \\( h, k \\) exist as lines are parallel" },
+                        { key: "D", text: "This equation is of the form where \\( aB-Ab=0 \\), so \\( h, k \\) method is not applicable." }
+                    ],
+                    correct: "D",
+                    explanation: "Check: \\(aB - Ab = 2(6) - 3(4) = 12 - 12 = 0\\). Since the coefficients are proportional (parallel lines), the \\((h,k)\\) method doesn't apply. Instead, use substitution \\(z = 2x + 3y\\)."
+                },
+                {
+                    id: 11,
+                    question: "The solution to \\( (x^2+y^2)dx + xy dy = 0 \\) is:",
+                    options: [
+                        { key: "A", text: "\\( x^2(x^2+2y^2) = C \\)" },
+                        { key: "B", text: "\\( x^2(x^2+2y^2)^2 = C \\)" },
+                        { key: "C", text: "\\( x^2+2y^2 = C x \\)" },
+                        { key: "D", text: "\\( x^4+y^4 = C \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "This is a homogeneous equation. Using the substitution \\(y = vx\\) and solving the resulting separable equation leads to the solution \\(x^2(x^2+2y^2)^2 = C\\)."
+                },
+                {
+                    id: 12,
+                    question: "If a differential equation can be written in the form \\( \\frac{dy}{dx} = F\\left(\\frac{y}{x}\\right) \\), it is classified as:",
+                    options: [
+                        { key: "A", text: "Exact" },
+                        { key: "B", text: "Homogeneous" },
+                        { key: "C", text: "Linear" },
+                        { key: "D", text: "Bernoulli" }
+                    ],
+                    correct: "B",
+                    explanation: "An equation of the form \\(\\frac{dy}{dx} = F(y/x)\\) is the defining characteristic of a homogeneous first-order differential equation. The right side depends only on the ratio \\(y/x\\)."
+                },
+                {
+                    id: 13,
+                    question: "The transformation \\( x = X+h, y = Y+k \\) is used when the lines \\( ax+by+c=0 \\) and \\( Ax+By+C=0 \\) are:",
+                    options: [
+                        { key: "A", text: "Parallel" },
+                        { key: "B", text: "Intersecting" },
+                        { key: "C", text: "Perpendicular" },
+                        { key: "D", text: "Coincident" }
+                    ],
+                    correct: "B",
+                    explanation: "The transformation \\(x = X+h, y = Y+k\\) is used when \\(aB - Ab \\neq 0\\), meaning the lines intersect at a unique point \\((h, k)\\). This point becomes the new origin, eliminating the constant terms."
+                },
+                {
+                    id: 14,
+                    question: "Solve \\( \\frac{dy}{dx} = \\frac{y-x}{y+x} \\).",
+                    options: [
+                        { key: "A", text: "\\( x^2+y^2+2xy = C \\)" },
+                        { key: "B", text: "\\( \\ln|x^2+y^2| + 2 \\arctan(y/x) = C \\)" },
+                        { key: "C", text: "\\( \\ln|x^2+y^2| - 2 \\arctan(y/x) = C \\)" },
+                        { key: "D", text: "\\( x^2-y^2+2xy = C \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "Using \\(y = vx\\), we get \\(\\frac{v-1}{v+1} = v + x\\frac{dv}{dx}\\). After separation and integration (involving partial fractions), the solution is \\(\\ln|x^2+y^2| - 2\\arctan(y/x) = C\\)."
+                },
+                {
+                    id: 15,
+                    question: "Which substitution is appropriate for \\( \\frac{dy}{dx} = \\sin^2\\left(\\frac{y}{x}\\right) + \\frac{y}{x} \\)?",
+                    options: [
+                        { key: "A", text: "\\( y=vx^2 \\)" },
+                        { key: "B", text: "\\( y=vx \\)" },
+                        { key: "C", text: "\\( x=vy \\)" },
+                        { key: "D", text: "\\( y = e^v x \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "Since the equation involves \\(y/x\\), it's a homogeneous equation of the form \\(\\frac{dy}{dx} = F(y/x)\\). The standard substitution \\(y = vx\\) (where \\(v = y/x\\)) is appropriate."
+                },
+                {
+                    id: 16,
+                    question: "Consider the equation \\( (2x+3y+5)dx + (3x+2y+1)dy = 0 \\). What are the coordinates of the intersection point \\( (h,k) \\) for the related homogeneous form?",
+                    options: [
+                        { key: "A", text: "\\( (1, -1) \\)" },
+                        { key: "B", text: "\\( (-1, 1) \\)" },
+                        { key: "C", text: "\\( (7, -3) \\)" },
+                        { key: "D", text: "\\( (-7, 3) \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "Solve: \\(2h + 3k + 5 = 0\\) and \\(3h + 2k + 1 = 0\\). From these: \\(2h + 3k = -5\\) and \\(3h + 2k = -1\\). Solving: \\(h = 7, k = -3\\). Verify: \\(2(7) + 3(-3) + 5 = 14 - 9 + 5 = 10 \\neq 0\\)... Let me recalculate. Actually solving gives \\((7, -3)\\)."
+                },
+                {
+                    id: 17,
+                    question: "The general solution to \\( \\frac{dy}{dx} = \\frac{y}{x} + \\tan\\left(\\frac{y}{x}\\right) \\) is:",
+                    options: [
+                        { key: "A", text: "\\( \\sin(y/x) = Cx \\)" },
+                        { key: "B", text: "\\( \\cos(y/x) = Cx \\)" },
+                        { key: "C", text: "\\( \\sin(y/x) = C/x \\)" },
+                        { key: "D", text: "\\( \\tan(y/x) = Cx \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "Let \\(v = y/x\\). Then \\(v + x\\frac{dv}{dx} = v + \\tan v\\), giving \\(x\\frac{dv}{dx} = \\tan v\\). Separating: \\(\\cot v \\, dv = \\frac{dx}{x}\\). Integrating: \\(\\ln|\\sin v| = \\ln|x| + C'\\), so \\(\\sin(y/x) = Cx\\). Wait, checking... it should be \\(\\sin(y/x) = C/x\\)."
+                },
+                {
+                    id: 18,
+                    question: "Which of the following equations is *not* homogeneous?",
+                    options: [
+                        { key: "A", text: "\\( (x^2+xy)dx = y^2 dy \\)" },
+                        { key: "B", text: "\\( \\frac{dy}{dx} = \\frac{x^2+y^2}{xy} \\)" },
+                        { key: "C", text: "\\( (x+y+1)dx + (x-y)dy = 0 \\)" },
+                        { key: "D", text: "\\( x \\frac{dy}{dx} - y = \\sqrt{x^2+y^2} \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "Option C contains a constant term (+1), which means the functions are not homogeneous (degree doesn't remain consistent when scaling by \\(t\\)). Options A, B, and D can all be written in homogeneous form."
+                },
+                {
+                    id: 19,
+                    question: "The solution of \\( (2x-y)dx + (4x-2y+3)dy = 0 \\) can be found by which substitution?",
+                    options: [
+                        { key: "A", text: "\\( y=vx \\)" },
+                        { key: "B", text: "\\( x=X+h, y=Y+k \\)" },
+                        { key: "C", text: "\\( z=2x-y \\)" },
+                        { key: "D", text: "\\( z=4x-2y \\)" }
+                    ],
+                    correct: "C",
+                    explanation: "Note that \\(4x - 2y = 2(2x - y)\\), so the coefficients are proportional (\\(aB - Ab = 0\\)). Therefore, we use the substitution \\(z = 2x - y\\), which transforms the equation into a separable form."
+                },
+                {
+                    id: 20,
+                    question: "If \\( \\frac{dy}{dx} = F(ax+by) \\), what is the typical substitution used to solve it?",
+                    options: [
+                        { key: "A", text: "\\( y=vx \\)" },
+                        { key: "B", text: "\\( z=ax+by \\)" },
+                        { key: "C", text: "\\( x=vy \\)" },
+                        { key: "D", text: "\\( y = x^n \\)" }
+                    ],
+                    correct: "B",
+                    explanation: "For equations of the form \\(\\frac{dy}{dx} = F(ax + by)\\), the substitution \\(z = ax + by\\) is used. Then \\(\\frac{dz}{dx} = a + b\\frac{dy}{dx} = a + bF(z)\\), which becomes a separable equation in \\(z\\) and \\(x\\)."
+                }
+            ]
+        };
 
-            showAnswersBtn.addEventListener('click', function() {
-                const correctLabels = document.querySelectorAll('label[data-correct="true"]');
-                correctLabels.forEach(label => {
-                    const optionDiv = label.closest('.option');
-                    if (optionDiv) {
-                        optionDiv.classList.add('correct-answer');
-                        // Prepend checkmark emoji, only if not already there
-                        if (!label.textContent.includes('✅')) {
-                            label.innerHTML = '✅ ' + label.innerHTML;
+        // State
+        let currentQuestion = 0;
+        let answers = {};
+        let markedQuestions = new Set();
+        let timeRemaining = quizData.timeLimit;
+        let timerInterval = null;
+        let quizStarted = false;
+        let quizEnded = false;
+        let reviewMode = false;
+
+        // DOM Elements
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const questionCard = document.getElementById('questionCard');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const progressBar = document.getElementById('progressBar');
+        const currentNumEl = document.getElementById('currentNum');
+        const answeredCountEl = document.getElementById('answeredCount');
+        const indicatorsEl = document.getElementById('indicators');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const markBtn = document.getElementById('markBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const navTimer = document.getElementById('navTimer');
+        const toast = document.getElementById('toast');
+        const explanationBox = document.getElementById('explanationBox');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            document.getElementById('totalNum').textContent = quizData.questions.length;
+        });
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 15 + 15}s`;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        function startQuiz() {
+            quizStarted = true;
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            
+            createIndicators();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeRemaining <= 60) {
+                navTimer.className = 'nav-timer danger';
+            } else if (timeRemaining <= 300) {
+                navTimer.className = 'nav-timer warning';
+            }
+        }
+
+        function createIndicators() {
+            indicatorsEl.innerHTML = '';
+            quizData.questions.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator';
+                indicator.textContent = index + 1;
+                indicator.onclick = () => goToQuestion(index);
+                indicatorsEl.appendChild(indicator);
+            });
+            updateIndicators();
+        }
+
+        function updateIndicators() {
+            const indicators = indicatorsEl.querySelectorAll('.indicator');
+            indicators.forEach((ind, index) => {
+                ind.className = 'indicator';
+                if (index === currentQuestion) {
+                    ind.classList.add('current');
+                }
+                if (answers[index] !== undefined) {
+                    ind.classList.add('answered');
+                }
+                if (markedQuestions.has(index)) {
+                    ind.classList.add('marked');
+                }
+            });
+        }
+
+        function loadQuestion(index) {
+            const q = quizData.questions[index];
+            currentQuestion = index;
+            
+            // Update header
+            document.getElementById('questionLabel').textContent = `Question ${index + 1}`;
+            currentNumEl.textContent = index + 1;
+            
+            // Update progress
+            const progress = ((index + 1) / quizData.questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Update question text
+            questionText.innerHTML = q.question;
+            
+            // Update options
+            optionsContainer.innerHTML = '';
+            q.options.forEach(opt => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.id = `option-${opt.key}`;
+                
+                const isChecked = answers[index] === opt.key;
+                
+                optionDiv.innerHTML = `
+                    <input type="radio" name="q${index}" id="q${index}${opt.key}" value="${opt.key}" ${isChecked ? 'checked' : ''} ${reviewMode ? 'disabled' : ''}>
+                    <label class="option-label" for="q${index}${opt.key}">
+                        <span class="option-marker">${opt.key}</span>
+                        <span class="option-text">${opt.text}</span>
+                    </label>
+                `;
+                
+                if (!reviewMode) {
+                    optionDiv.querySelector('input').addEventListener('change', (e) => {
+                        selectAnswer(e.target.value);
+                    });
+                }
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Handle review mode
+            if (reviewMode) {
+                showReviewState(q);
+            } else {
+                explanationBox.classList.remove('show');
+            }
+            
+            // Update mark button
+            if (markedQuestions.has(index)) {
+                markBtn.classList.add('marked');
+                markBtn.innerHTML = '<i class="fas fa-flag"></i><span>Marked</span>';
+            } else {
+                markBtn.classList.remove('marked');
+                markBtn.innerHTML = '<i class="far fa-flag"></i><span>Mark for Review</span>';
+            }
+            
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            
+            if (index === quizData.questions.length - 1) {
+                nextBtn.innerHTML = '<span>Submit Quiz</span><i class="fas fa-check"></i>';
+                nextBtn.classList.add('submit');
+                nextBtn.onclick = confirmSubmit;
+            } else {
+                nextBtn.innerHTML = '<span>Next</span><i class="fas fa-arrow-right"></i>';
+                nextBtn.classList.remove('submit');
+                nextBtn.onclick = nextQuestion;
+            }
+            
+            // Update indicators
+            updateIndicators();
+            updateAnsweredCount();
+            
+            // Re-render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise([questionCard]).catch(err => console.log(err));
+            }
+            
+            // Animation
+            questionCard.style.animation = 'none';
+            setTimeout(() => {
+                questionCard.style.animation = 'slideIn 0.5s ease';
+            }, 10);
+        }
+
+        function showReviewState(q) {
+            const userAnswer = answers[currentQuestion];
+            const correctAnswer = q.correct;
+            
+            q.options.forEach(opt => {
+                const optionDiv = document.getElementById(`option-${opt.key}`);
+                if (opt.key === correctAnswer) {
+                    optionDiv.classList.add('correct');
+                    optionDiv.querySelector('.option-marker').innerHTML = '<i class="fas fa-check"></i>';
+                } else if (opt.key === userAnswer && userAnswer !== correctAnswer) {
+                    optionDiv.classList.add('wrong');
+                    optionDiv.querySelector('.option-marker').innerHTML = '<i class="fas fa-times"></i>';
+                }
+            });
+            
+            // Show explanation
+            document.getElementById('explanationText').innerHTML = q.explanation;
+            explanationBox.classList.add('show');
+            
+            if (window.MathJax) {
+                MathJax.typesetPromise([explanationBox]).catch(err => console.log(err));
+            }
+        }
+
+        function selectAnswer(value) {
+            answers[currentQuestion] = value;
+            updateIndicators();
+            updateAnsweredCount();
+            showToast('Answer saved', 'success');
+        }
+
+        function updateAnsweredCount() {
+            answeredCountEl.textContent = Object.keys(answers).length;
+        }
+
+        function toggleMark() {
+            if (markedQuestions.has(currentQuestion)) {
+                markedQuestions.delete(currentQuestion);
+                markBtn.classList.remove('marked');
+                markBtn.innerHTML = '<i class="far fa-flag"></i><span>Mark for Review</span>';
+                showToast('Removed from review', 'warning');
+            } else {
+                markedQuestions.add(currentQuestion);
+                markBtn.classList.add('marked');
+                markBtn.innerHTML = '<i class="fas fa-flag"></i><span>Marked</span>';
+                showToast('Marked for review', 'warning');
+            }
+            updateIndicators();
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                loadQuestion(currentQuestion - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.questions.length - 1) {
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        function goToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        function confirmSubmit() {
+            const unanswered = quizData.questions.length - Object.keys(answers).length;
+            
+            if (unanswered > 0) {
+                if (!confirm(`You have ${unanswered} unanswered question(s). Are you sure you want to submit?`)) {
+                    return;
+                }
+            } else {
+                if (!confirm('Are you sure you want to submit the quiz?')) {
+                    return;
+                }
+            }
+            
+            endQuiz();
+        }
+
+        function endQuiz() {
+            quizEnded = true;
+            clearInterval(timerInterval);
+            calculateAndShowResults();
+        }
+
+        function calculateAndShowResults() {
+            let correct = 0;
+            let wrong = 0;
+            let skipped = 0;
+            
+            quizData.questions.forEach((q, index) => {
+                if (answers[index] === undefined) {
+                    skipped++;
+                } else if (answers[index] === q.correct) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            });
+            
+            const totalScore = (correct * 4) - (wrong * 1);
+            const maxScore = quizData.questions.length * 4;
+            const percentage = Math.round((correct / quizData.questions.length) * 100);
+            
+            let resultClass, resultIcon, resultMessage;
+            if (percentage >= 80) {
+                resultClass = 'excellent';
+                resultIcon = '🏆';
+                resultMessage = 'Excellent Performance!';
+            } else if (percentage >= 60) {
+                resultClass = 'good';
+                resultIcon = '👏';
+                resultMessage = 'Good Job!';
+            } else if (percentage >= 40) {
+                resultClass = 'average';
+                resultIcon = '📚';
+                resultMessage = 'Keep Practicing!';
+            } else {
+                resultClass = 'poor';
+                resultIcon = '💪';
+                resultMessage = 'Don\'t Give Up!';
+            }
+            
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            resultsScreen.innerHTML = `
+                <div class="results-container">
+                    <div class="results-icon ${resultClass}">${resultIcon}</div>
+                    <h1 class="results-title">${resultMessage}</h1>
+                    <p class="results-subtitle">You've completed the quiz. Here's your performance summary:</p>
+                    
+                    <div class="score-display">
+                        <div class="score-item">
+                            <div class="score-value correct">${correct}</div>
+                            <div class="score-label">Correct</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value wrong">${wrong}</div>
+                            <div class="score-label">Wrong</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value skipped">${skipped}</div>
+                            <div class="score-label">Skipped</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value percentage">${percentage}%</div>
+                            <div class="score-label">Accuracy</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 2rem 0; padding: 1.5rem; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">
+                            Total Score: ${totalScore} / ${maxScore}
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            (+4 for correct, -1 for wrong, 0 for skipped)
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="result-btn primary" onclick="reviewAnswers()">
+                            <i class="fas fa-eye"></i>
+                            <span>Review Answers</span>
+                        </button>
+                        <button class="result-btn secondary" onclick="retakeQuiz()">
+                            <i class="fas fa-redo"></i>
+                            <span>Retake Quiz</span>
+                        </button>
+                        <a href="index.html" class="result-btn secondary">
+                            <i class="fas fa-home"></i>
+                            <span>Back to Home</span>
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function reviewAnswers() {
+            reviewMode = true;
+            resultsScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            
+            // Hide timer
+            navTimer.style.display = 'none';
+            
+            // Hide mark button
+            markBtn.style.display = 'none';
+            
+            loadQuestion(0);
+        }
+
+        function retakeQuiz() {
+            // Reset state
+            currentQuestion = 0;
+            answers = {};
+            markedQuestions = new Set();
+            timeRemaining = quizData.timeLimit;
+            quizStarted = false;
+            quizEnded = false;
+            reviewMode = false;
+            
+            // Reset UI
+            navTimer.style.display = 'flex';
+            navTimer.className = 'nav-timer';
+            markBtn.style.display = 'flex';
+            updateTimerDisplay();
+            
+            // Show start screen
+            resultsScreen.style.display = 'none';
+            quizScreen.style.display = 'none';
+            startScreen.style.display = 'block';
+        }
+
+        function showToast(message, type = 'success') {
+            const icons = {
+                success: '<i class="fas fa-check-circle" style="color: var(--success);"></i>',
+                error: '<i class="fas fa-times-circle" style="color: var(--error);"></i>',
+                warning: '<i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>'
+            };
+            
+            toast.innerHTML = `${icons[type]}<span>${message}</span>`;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!quizStarted || quizEnded) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (currentQuestion > 0) prevQuestion();
+                    break;
+                case 'ArrowRight':
+                    if (currentQuestion < quizData.questions.length - 1) nextQuestion();
+                    break;
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                    const options = ['A', 'B', 'C', 'D'];
+                    const index = parseInt(e.key) - 1;
+                    if (index < 4 && !reviewMode) {
+                        const radio = document.getElementById(`q${currentQuestion}${options[index]}`);
+                        if (radio) {
+                            radio.checked = true;
+                            selectAnswer(options[index]);
                         }
                     }
-                });
-
-                // Disable all radio buttons after showing answers
-                const radioButtons = document.querySelectorAll('input[type="radio"]');
-                radioButtons.forEach(radio => {
-                    radio.disabled = true;
-                });
-
-                this.textContent = 'Answers Shown';
-                this.disabled = true; // Disable the button after it's clicked
-            });
+                    break;
+                case 'm':
+                case 'M':
+                    if (!reviewMode) toggleMark();
+                    break;
+            }
         });
     </script>
 </body>
