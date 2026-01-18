@@ -953,7 +953,7 @@
     <!-- Navigation Bar -->
     <nav class="nav-bar">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">
+            <a href="../index.html" class="nav-logo">
                 <span>🧠</span>
                 <span>MathPortal</span>
             </a>
@@ -1669,7 +1669,7 @@
                     
                     <div style="margin: 2rem 0; padding: 1.5rem; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
                         <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">
-                            Total Score:  ${totalScore} / ${maxScore}
+                            Total Score: ${totalScore} / ${maxScore}
                         </div>
                         <div style="color: var(--text-secondary); font-size: 0.9rem;">
                             (+4 for correct, -1 for wrong, 0 for skipped)
@@ -1677,15 +1677,15 @@
                     </div>
                     
                     <div class="results-actions">
-                        <button class="result-btn primary" onclick="startReview()">
-                            <i class="fas fa-search"></i>
+                        <button class="result-btn primary" onclick="reviewAnswers()">
+                            <i class="fas fa-eye"></i>
                             <span>Review Answers</span>
                         </button>
-                        <button class="result-btn secondary" onclick="retryQuiz()">
+                        <button class="result-btn secondary" onclick="retakeQuiz()">
                             <i class="fas fa-redo"></i>
-                            <span>Retry Quiz</span>
+                            <span>Retake Quiz</span>
                         </button>
-                        <a href="index.html" class="result-btn secondary">
+                        <a href="../index.html" class="result-btn secondary">
                             <i class="fas fa-home"></i>
                             <span>Back to Home</span>
                         </a>
@@ -1694,156 +1694,22 @@
             `;
         }
 
-        function startReview() {
+        function reviewAnswers() {
             reviewMode = true;
             resultsScreen.style.display = 'none';
             quizScreen.style.display = 'block';
             
-            // Hide timer in review mode
+            // Hide timer
             navTimer.style.display = 'none';
             
-            // Update UI for review mode
+            // Hide mark button
             markBtn.style.display = 'none';
             
-            // Add review header
-            const existingHeader = document.querySelector('.review-header');
-            if (existingHeader) existingHeader.remove();
-            
-            const reviewHeader = document.createElement('div');
-            reviewHeader.className = 'review-header';
-            reviewHeader.innerHTML = `
-                <div class="review-title">
-                    <i class="fas fa-search"></i>
-                    Review Mode - Check your answers
-                </div>
-                <div class="review-filters">
-                    <button class="filter-btn active" onclick="filterQuestions('all')">All</button>
-                    <button class="filter-btn" onclick="filterQuestions('correct')">Correct</button>
-                    <button class="filter-btn" onclick="filterQuestions('wrong')">Wrong</button>
-                    <button class="filter-btn" onclick="filterQuestions('skipped')">Skipped</button>
-                </div>
-            `;
-            
-            document.querySelector('.progress-section').insertAdjacentElement('beforebegin', reviewHeader);
-            
-            // Update next button
-            nextBtn.innerHTML = '<span>Next</span><i class="fas fa-arrow-right"></i>';
-            nextBtn.classList.remove('submit');
-            nextBtn.onclick = nextQuestion;
-            
-            // Show back to results button
-            const navButtons = document.querySelector('.nav-buttons');
-            const existingResultsBtn = document.getElementById('backToResultsBtn');
-            if (!existingResultsBtn) {
-                const backBtn = document.createElement('button');
-                backBtn.id = 'backToResultsBtn';
-                backBtn.className = 'nav-btn next';
-                backBtn.innerHTML = '<i class="fas fa-chart-bar"></i><span>Back to Results</span>';
-                backBtn.onclick = backToResults;
-                navButtons.appendChild(backBtn);
-            }
-            
             loadQuestion(0);
-            updateReviewIndicators();
         }
 
-        function updateReviewIndicators() {
-            const indicators = indicatorsEl.querySelectorAll('.indicator');
-            indicators.forEach((ind, index) => {
-                ind.className = 'indicator';
-                if (index === currentQuestion) {
-                    ind.classList.add('current');
-                }
-                
-                const q = quizData.questions[index];
-                const userAnswer = answers[index];
-                
-                if (userAnswer === undefined) {
-                    ind.style.background = 'rgba(160, 160, 160, 0.2)';
-                    ind.style.borderColor = 'var(--text-secondary)';
-                    ind.style.color = 'var(--text-secondary)';
-                } else if (userAnswer === q.correct) {
-                    ind.style.background = 'rgba(16, 185, 129, 0.2)';
-                    ind.style.borderColor = 'var(--success)';
-                    ind.style.color = 'var(--success)';
-                } else {
-                    ind.style.background = 'rgba(239, 68, 68, 0.2)';
-                    ind.style.borderColor = 'var(--error)';
-                    ind.style.color = 'var(--error)';
-                }
-            });
-        }
-
-        function filterQuestions(filter) {
-            // Update filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Get filtered question indices
-            let filteredIndices = [];
-            quizData.questions.forEach((q, index) => {
-                const userAnswer = answers[index];
-                
-                if (filter === 'all') {
-                    filteredIndices.push(index);
-                } else if (filter === 'correct' && userAnswer === q.correct) {
-                    filteredIndices.push(index);
-                } else if (filter === 'wrong' && userAnswer !== undefined && userAnswer !== q.correct) {
-                    filteredIndices.push(index);
-                } else if (filter === 'skipped' && userAnswer === undefined) {
-                    filteredIndices.push(index);
-                }
-            });
-            
-            // Update indicators visibility
-            const indicators = indicatorsEl.querySelectorAll('.indicator');
-            indicators.forEach((ind, index) => {
-                if (filteredIndices.includes(index)) {
-                    ind.style.display = 'flex';
-                } else {
-                    ind.style.display = 'none';
-                }
-            });
-            
-            // Go to first visible question
-            if (filteredIndices.length > 0) {
-                loadQuestion(filteredIndices[0]);
-            } else {
-                showToast(`No ${filter} questions found`, 'warning');
-            }
-        }
-
-        function backToResults() {
-            reviewMode = false;
-            quizScreen.style.display = 'none';
-            
-            // Remove review header
-            const reviewHeader = document.querySelector('.review-header');
-            if (reviewHeader) reviewHeader.remove();
-            
-            // Remove back to results button
-            const backBtn = document.getElementById('backToResultsBtn');
-            if (backBtn) backBtn.remove();
-            
-            // Show mark button again
-            markBtn.style.display = 'flex';
-            
-            // Reset indicator styles
-            const indicators = indicatorsEl.querySelectorAll('.indicator');
-            indicators.forEach(ind => {
-                ind.style.display = 'flex';
-                ind.style.background = '';
-                ind.style.borderColor = '';
-                ind.style.color = '';
-            });
-            
-            calculateAndShowResults();
-        }
-
-        function retryQuiz() {
-            // Reset all state
+        function retakeQuiz() {
+            // Reset state
             currentQuestion = 0;
             answers = {};
             markedQuestions = new Set();
@@ -1856,57 +1722,27 @@
             navTimer.style.display = 'flex';
             navTimer.className = 'nav-timer';
             markBtn.style.display = 'flex';
+            updateTimerDisplay();
             
-            // Remove review header if exists
-            const reviewHeader = document.querySelector('.review-header');
-            if (reviewHeader) reviewHeader.remove();
-            
-            // Remove back to results button if exists
-            const backBtn = document.getElementById('backToResultsBtn');
-            if (backBtn) backBtn.remove();
-            
-            // Reset indicator styles
-            const indicators = indicatorsEl.querySelectorAll('.indicator');
-            indicators.forEach(ind => {
-                ind.style.display = 'flex';
-                ind.style.background = '';
-                ind.style.borderColor = '';
-                ind.style.color = '';
-            });
-            
-            // Hide results, show start
+            // Show start screen
             resultsScreen.style.display = 'none';
             quizScreen.style.display = 'none';
             startScreen.style.display = 'block';
-            
-            // Reset timer display
-            updateTimerDisplay();
         }
 
         function showToast(message, type = 'success') {
-            toast.textContent = message;
-            toast.className = `toast ${type}`;
+            const icons = {
+                success: '<i class="fas fa-check-circle" style="color: var(--success);"></i>',
+                error: '<i class="fas fa-times-circle" style="color: var(--error);"></i>',
+                warning: '<i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>'
+            };
             
-            // Add icon based on type
-            let icon = '';
-            switch(type) {
-                case 'success':
-                    icon = '<i class="fas fa-check-circle" style="color: var(--success);"></i>';
-                    break;
-                case 'error':
-                    icon = '<i class="fas fa-times-circle" style="color: var(--error);"></i>';
-                    break;
-                case 'warning':
-                    icon = '<i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>';
-                    break;
-            }
-            
-            toast.innerHTML = `${icon}<span>${message}</span>`;
-            toast.classList.add('show');
+            toast.innerHTML = `${icons[type]}<span>${message}</span>`;
+            toast.className = `toast ${type} show`;
             
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 2500);
+            }, 2000);
         }
 
         // Keyboard navigation
@@ -1924,68 +1760,20 @@
                 case '2':
                 case '3':
                 case '4':
-                    if (!reviewMode) {
-                        const optionIndex = parseInt(e.key) - 1;
-                        const options = ['A', 'B', 'C', 'D'];
-                        if (optionIndex < quizData.questions[currentQuestion].options.length) {
-                            selectAnswer(options[optionIndex]);
-                            const radio = document.getElementById(`q${currentQuestion}${options[optionIndex]}`);
-                            if (radio) radio.checked = true;
+                    const options = ['A', 'B', 'C', 'D'];
+                    const index = parseInt(e.key) - 1;
+                    if (index < 4 && !reviewMode) {
+                        const radio = document.getElementById(`q${currentQuestion}${options[index]}`);
+                        if (radio) {
+                            radio.checked = true;
+                            selectAnswer(options[index]);
                         }
-                    }
-                    break;
-                case 'a':
-                case 'A':
-                    if (!reviewMode) {
-                        selectAnswer('A');
-                        const radioA = document.getElementById(`q${currentQuestion}A`);
-                        if (radioA) radioA.checked = true;
-                    }
-                    break;
-                case 'b':
-                case 'B':
-                    if (!reviewMode) {
-                        selectAnswer('B');
-                        const radioB = document.getElementById(`q${currentQuestion}B`);
-                        if (radioB) radioB.checked = true;
-                    }
-                    break;
-                case 'c':
-                case 'C':
-                    if (!reviewMode) {
-                        selectAnswer('C');
-                        const radioC = document.getElementById(`q${currentQuestion}C`);
-                        if (radioC) radioC.checked = true;
-                    }
-                    break;
-                case 'd':
-                case 'D':
-                    if (!reviewMode) {
-                        selectAnswer('D');
-                        const radioD = document.getElementById(`q${currentQuestion}D`);
-                        if (radioD) radioD.checked = true;
                     }
                     break;
                 case 'm':
                 case 'M':
                     if (!reviewMode) toggleMark();
                     break;
-            }
-        });
-
-        // Prevent accidental page close during quiz
-        window.addEventListener('beforeunload', (e) => {
-            if (quizStarted && !quizEnded) {
-                e.preventDefault();
-                e.returnValue = '';
-                return '';
-            }
-        });
-
-        // Handle visibility change (tab switching)
-        document.addEventListener('visibilitychange', () => {
-            if (quizStarted && !quizEnded && document.hidden) {
-                showToast('Quiz is paused when tab is hidden', 'warning');
             }
         });
     </script>
